@@ -1,3 +1,3 @@
 ## Koyabu Framework
 
-```composer create-project koyabu/webapi```
+```composer require koyabu/webapi```

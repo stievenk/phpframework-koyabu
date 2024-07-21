@@ -2,6 +2,9 @@
     "name": "koyabu/webapi",
     "description": "Koyabu API Framework",
     "type": "library",
+    "homepage": "https://github.com/stievenk/phpframework-koyabu",
+    "version": "2.5.2",
+    "license":"MIT",
     "autoload": {
         "psr-4": {
             "Koyabu\\Webapi\\": "class/"
