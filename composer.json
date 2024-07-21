@@ -14,6 +14,10 @@
         {
             "name": "stievenk",
             "email": "stieven.kalengkian@gmail.com"
+        },
+        {
+            "name": "richard",
+            "email": "richard.kalengkian@gmail.com"
         }
     ],
     "require": {
@@ -29,5 +33,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
