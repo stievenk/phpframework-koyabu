@@ -1,13 +1,18 @@
-## Koyabu Framework
+# Koyabu Framework
 
+## Installation
 ```composer require koyabu/webapi```
 
+## composer.json
 If your get error about minimum-stability, edit your composer.json add add/edit this param
-```"minimum-stability": "dev",
+```
+    "minimum-stability": "dev",
     "prefer-stable": false
 ```
-For configuration example you can see file: config.sample.php
-```<?php 
+
+## config.php
+For configuration example you can see file: vendor/koyabu/webapi/config.sample.php
+```
 namespace Koyabu\Webapi;
 require_once 'vendor/autoload.php';
 
@@ -34,7 +39,7 @@ $filename = 'test.txt';
 var_dump($API->save_dbx($filename));
 ```
 
-# MySQL/MariaDB Query
+## MySQL/MariaDB Query
 ```
 // INSERT
 $params = array(
