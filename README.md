@@ -31,7 +31,7 @@ $API = new Koyabu($config);
 ?>
 ```
 
-Dropbox Save, don't forget to setup your Dropbox secret key & token at $config['dropbox'], you see can see example
+Dropbox Save, don't forget to setup your Dropbox secret key & token at $config['dropbox'], see example
 config.sample.php
 ```
 $API = new Koyabu($config);
@@ -66,7 +66,24 @@ Use $params index name same as table coloumn name
 and query will delete data where db_colname = $value
 
 ```
-// Select
+// Get Single Record
+$value_id = 2;
+$table_name = 'member';
+$colname = 'id';
+
+$result = $API->get($value_id,$table_name,$colname);
+var_dump($result);
+
+// Get single record with multiple filter
+$value_id = 2;
+$table_name = 'member';
+$colname = array('gender' => 'male', 'category' => 'student', 'city' => 'Manado');
+
+$result = $API->get($value_id,$table_name,$colname);
+var_dump($result);
+```
+```
+// Select with query
 $qry = $API->select("select * from test");
 while($result = $API->fetch()) {
     print_r($result);

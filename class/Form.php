@@ -24,7 +24,7 @@ class Form {
             if ($config['mysql']) {
                 $this->Database = new Connection($config['mysql']);
             } else {
-                throw new \Exception("Mysql config error:".$this->Database->error, 1);
+                throw new \Exception("Mysql config error:". json_encode($config['mysql']), 1);
                 
             }
         } catch (\Exception $e) {
@@ -188,7 +188,54 @@ class Form {
 		} else { return false; }
 	}
 
-    function ignoreParams($data,$chars='') {
+	// Alias for Old version
+	public function form_select_array($array,$val='') {
+		$this->form_select($array,$val);
+	}
+
+	public function form_select($array,$val='') {
+		if (is_array($array)) {
+			$arrays = $array;
+		} else if (is_file($array)){
+			if (file_exists($array)) {
+				$data = file_get_contents($array);
+				$arrays = explode("\n",$data);
+			}
+		}
+		if (array_is_list($arrays)) {
+			foreach($arrays as $v) {
+				$v = trim($v);
+				$val = trim($val);
+				if (is_array($v)) {
+					echo '<option value="'.$v['id'].'" '. ($v['id'] == $val ? 'selected="selected"' : '') .'>'.$v['name'].'</option>';
+				} else {
+					echo '<option value="'.$v.'" '. ($v == $val ? 'selected="selected"' : '') .'>'.$v.'</option>';
+				}
+			}
+		} else {
+			foreach($arrays as $k => $v) {
+				$val = trim($val);
+				echo '<option value="'.$v.'" '. ($v == $val ? 'selected="selected"' : '') .'>'.str_replace("_"," ",$k).'</option>';
+			}
+		}
+	}
+
+	public function select_option_list($table,$fld,$default_value='',$orderby='') {
+		if (is_array($fld)) {
+			$x = explode("|",$fld[1]);
+			if (count($x) > 1) {
+				$cc = ", concat_ws(' ',".implode(",",$x).") as name";
+				$fld[1] = 'name';
+			}
+			$SQL = "select * {$cc} from {$table} {$orderby}";
+			$g = $this->Database->query($SQL);
+			while($t = $this->Database->fetch_assoc($g)) {
+				echo '<option value="'.trim($t[$fld[0]]).'" '. (trim($t[$fld[0]]) == $default_value ? 'selected="selected"' : '') .'>'.trim($t[$fld[1]]).'</option>';
+			}
+		} else { echo "Invalid type"; }
+	}
+
+    public function ignoreParams($data,$chars='') {
 		$p = array();
 		foreach($data as $k => $v) {
 			if (preg_match("#{$chars}#",$k)) {
@@ -201,7 +248,7 @@ class Form {
 		return $p;
 	}
 	
-	function stripHTML($m) {
+	public function stripHTML($m) {
 			
 		if ($this->stripHTMLEnable == 1) {
 			if ($this->disableHTML == 1) { $m = strip_tags($m); }
@@ -260,6 +307,297 @@ class Form {
             return false;
         }
 	}
+
+    function delete_dbx($url,$dir = '') {
+		if ($this->config['dropbox']['access_token']) {
+			$DBX = new Dropbox($this->config['dropbox']['access_token']);
+			$d = $DBX->get_shared_link_file($url);
+			$x = $DBX->delete($this->config['dropbox']['home_dir'].$dir.'/'.$d['name']);
+			// file_put_contents($this->config['HOME_DIR'] . 'cache/dbx.txt',json_encode($d).json_encode($xx));
+			return $d;
+		} else { return false; }
+	}
+
+    public function serverURL() {
+        /* Thanks to phpBB for this Script */
+		// We have to generate a full HTTP/1.1 header here since we can't guarantee to have any of the information
+		// available as used by the redirect function
+		$server_name = (!empty($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : getenv('SERVER_NAME');
+		$server_port = (!empty($_SERVER['SERVER_PORT'])) ? (int) $_SERVER['SERVER_PORT'] : (int) getenv('SERVER_PORT');
+		$secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0;
+		$script_name = (!empty($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : getenv('PHP_SELF');
+		if (!$script_name)
+		{
+			$script_name = (!empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : getenv('REQUEST_URI');
+		}
+	
+		// Replace any number of consecutive backslashes and/or slashes with a single slash
+		// (could happen on some proxy setups and/or Windows servers)
+		$script_path = trim(dirname($script_name)) . '/';
+		$script_path = preg_replace('#[\\\\/]{2,}#', '/', $script_path);
+		if ($n == 1) {
+			$url = $server_name;
+		} else {
+			$url = (($secure) ? 'https://' : 'http://') . $server_name;
+		}
+	
+		if ($server_port && (($secure && $server_port <> 443) || (!$secure && $server_port <> 80)))
+		{
+			$url .= ':' . $server_port;
+		}
+	
+		$url .= $script_path;
+		$SERVER_URL = $url;
+		unset($url);
+		return $SERVER_URL;
+		/* End of phpBB Script */
+    }
+
+	function resize($file,$w=900, $h=900,$newfile='',$reso=80) {
+		if (file_exists($file)) {
+			$img=getimagesize($file);
+			list($origin_width,$origin_height)=$img;
+			$orien = $origin_width > $origin_height ? 'L' : 'P';
+			$attribut = array('width' => $origin_width, 'height' => $origin_height, 'orientasi' => $orien);
+			// Resize 
+			$w = $origin_width < $w ? $origin_width : $w;
+			$h = $origin_height < $h ? $origin_height : $h;
+			$resizeW = $w;
+			$resizeH = $h;
+			
+			if ($origin_width > $w) {
+				$origin_height=round(($w/$origin_width)*$origin_height,0);
+				$origin_width=$w;
+			}
+			if ($origin_height > $h) {
+					$origin_width=round(($h/$origin_height)*$origin_width,0);
+					$origin_height=$h;
+			}
+			//$newfile = $newfile != '' ? $newfile : dirname($file).DIRECTORY_SEPARATOR.basename($newfile);
+			$img_src=imagecreatetruecolor($origin_width,$origin_height);
+			$white = imagecolorallocate($img_src,255,255,255);
+			imagefill($img_src,0,0,$white);
+			$des_src=@imagecreatefromjpeg($file);
+			
+			if ($this->Watermark and file_exists($this->Watermark)) {
+			/**/
+				$img_logo=getimagesize($this->Watermark);
+				if (preg_match("#png#si",$img_logo['mime'])) {
+					$logo = imagecreatefrompng($this->Watermark);
+				} else {
+					$logo = imagecreatefromjpeg($this->Watermark);
+				}
+				list($logo_width,$logo_height)=$img_logo;
+			/**/
+			}
+			
+			@imagecopyresampled($img_src,$des_src,0,0,0,0,$origin_width,$origin_height,$attribut['width'],$attribut['height']); 
+			
+			if ($this->Watermark and file_exists($this->Watermark)) {
+				//echo $this->Watermark_size; exit;
+			/**/
+			switch ($this->Watermark_pos) {
+				default : 
+				case 'top-left' :
+					$lw = 3; $lh = 3; 
+				break;	
+				case 'center' :
+					$lw = ($origin_width - ($logo_width * $this->Watermark_size)) / 2;
+					$lh = (($origin_height - ($logo_height * $this->Watermark_size)) / 2); // + ($origin_height * $this->Watermark_size);
+				break;
+				case 'top-right' :
+					$lw = $origin_width - ($logo_width * $this->Watermark_size) - 3;
+					$lh = 3;
+				break;
+				case 'bottom-right' :
+					$lw = $origin_width - ($logo_width * $this->Watermark_size) - 3;
+					$lh = $lh = (($origin_height - ($logo_height * $this->Watermark_size)) - 3);
+				break;
+				case 'bottom-left' :
+					$lw = 3;
+					$lh = $lh = (($origin_height - ($logo_height * $this->Watermark_size)) - 3);
+				break;
+			}
+			
+			imagecopyresampled($img_src,$logo,$lw,$lh,0,0,($logo_width * $this->Watermark_size),($logo_height * $this->Watermark_size),$logo_width,$logo_height); 
+			/**/
+			}
+			
+			$newfile = $newfile != '' ? $newfile : $file;
+			@imagejpeg($img_src,$newfile,$reso);
+		}
+	}
+
+	function imgThumbs($FILESRC,$THUMBS='',$w=100,$h=0,$ratio=true,$color='#FFFFFF') {
+		if ($THUMBS == '') { $THUMBS=$FILESRC; }
+        if (file_exists($FILESRC)) {
+                $img=@getimagesize($FILESRC);
+				list($imagewidth,$imageheight)=$img;
+				//$w = $imagewidth < $w ? $imagewidth : $w;
+				//$h = $imageheight < $h ? $imageheight : $h;
+				switch($img['mime']) {
+					default : $ext = ''; break;
+					case 'image/jpg' :
+					case 'image/jpeg' : $ext = 'jpg'; break;
+					case 'image/png' : $ext = 'png'; break;
+					case 'image/gif' : $ext = 'gif'; break;
+				}
+
+                $ow=$imagewidth;
+                $oh=$imageheight;
+				$twidth = $w;
+				$theight = $h;
+                if ($imagewidth > $w) {
+                        $imageheight=round(($w/$imagewidth)*$imageheight,0);
+                        $imagewidth=$w;
+                }
+				if ($h > 0) {
+					if ($imageheight >= $h) {
+							$imagewidth=round(($h/$imageheight)*$imagewidth,0);
+							$imageheight=$h;
+					}
+				}
+                $cc=floor(($h-$imageheight)/2);
+                $ch=floor(($w-$imagewidth)/2);
+				
+                if ($ratio === true) {  
+					 $img_src=@imagecreatetruecolor($imagewidth,$imageheight);
+               		 if ($ext == 'png') { $des_src=@imagecreatefrompng($FILESRC); } 
+					 else { 
+					 	$des_src=@imagecreatefromjpeg($FILESRC); 
+					 }
+					 @imagecopyresampled($img_src,$des_src,0,0,0,0,$imagewidth,$imageheight,$ow,$oh);
+				}
+				else if ($ratio == 'box') {
+					 $img_src=imagecreatetruecolor($w,$h);
+					 $warna = $this->html2rgb($color);
+					 $white = imagecolorallocate($img_src,$warna[0],$warna[1],$warna[2]);
+					 imagefill($img_src,0,0,$white);
+               		 if ($ext == 'png') { $des_src=@imagecreatefrompng($FILESRC); } 
+					 else { $des_src=imagecreatefromjpeg($FILESRC); }
+					 $wss = round(($w - $imagewidth) / 2);
+					 $hss = round(($h - $imageheight) / 2);
+					 imagecopyresampled($img_src,$des_src,$wss,$hss,0,0,$imagewidth,$imageheight,$ow,$oh);
+				}
+				else {
+					$img_src=@imagecreatetruecolor($twidth,$theight);
+               		if ($ext == 'png') { $des_src=@imagecreatefrompng($FILESRC); }
+					else { $des_src=@imagecreatefromjpeg($FILESRC); }
+					$sx=round(($ow-$twidth)/4);
+					$sy=round(($oh-$theight)/4);
+					@imagecopyresampled($img_src,$des_src,0,0,$sx,$sy,$twidth+$sx,$theight+$sy,$ow,$oh);
+					
+				}
+                if ($ext == 'png') {
+					$black = imagecolorallocate($img_src, 0, 0, 0);
+					imagecolortransparent($img_src, $black);
+					//imagealphablending($img_src, false);
+					//imagesavealpha($img_src, true);
+					@imagepng($img_src,$THUMBS,9,PNG_ALL_FILTERS);
+				} else { 
+					@imagejpeg($img_src,$THUMBS,80);
+					//@imagejpeg($print_src,dirname($THUMBS).'/print-'.basename($THUMBS),100);
+				}
+                @imagedestroy($img_src);
+				@imagedestroy($des_src);
+        }
+	}
+	
+	function html2rgb($color)
+	{
+		if ($color[0] == '#')
+			$color = substr($color, 1);
+	
+		if (strlen($color) == 6)
+			list($r, $g, $b) = array($color[0].$color[1],
+									 $color[2].$color[3],
+									 $color[4].$color[5]);
+		elseif (strlen($color) == 3)
+			list($r, $g, $b) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
+		else
+			return false;
+	
+		$r = hexdec($r); $g = hexdec($g); $b = hexdec($b);
+	
+		return array($r, $g, $b);
+	}
+
+	function geoDistance($lat1,$lon1,$lat2,$lon2) {
+		$R = 6371; // Radius of the earth in km
+		$dLat = deg2rad($lat2-$lat1);  // deg2rad below
+		$dLon = deg2rad($lon2-$lon1); 
+		$a = 
+		  sin($dLat/2) * sin($dLat/2) +
+		  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * 
+		  sin($dLon/2) * sin($dLon/2)
+		  ; 
+		$c = 2 * atan2(sqrt($a), sqrt(1-$a)); 
+		$d = $R * $c; // Distance in km
+		return $d;
+	}
+	  
+	function timeShort($u) {
+		$c = strtotime($u);
+		$n = date("U");
+		if ($n > $c) { $time = ($n - $c); }
+		else { $time = ($c - $n); }
+		return $this->timeToShort($time);
+	}
+	
+	function timeToShort($time) {
+		if ($time > (3600 * 24)) { $d = ceil($time / (3600 * 24)) ." hari"; }
+		else if ($time > (3600)) { $d = ceil($time / 3600) ." jam"; }
+		else if ($time > (60)) { $d = ceil($time / 60) ." menit"; }
+		else if ($time > 15) { $d = $time ." detik"; }
+		else { $d = $time.' detik'; }
+		return $d;
+	}
+
+	function umur($tgl) {
+		$tgl = date("Y-m-d",strtotime($tgl));
+		list($y,$m,$d)=explode("-",$tgl);
+		$umur = date("Y") - $y;
+		if ($m > date("m")) { $umur = $umur - 1; }
+		if ($m == date("m") and $d > date("d")) { $umur = $umur - 1; }
+		return $umur;
+	}
+
+    public function cekKTP($nik,$tanggal_lahir){
+		if(strlen($nik) != 16){
+		  return false;
+		}
+		$d = substr($nik, 6, 2);
+		$m = substr($nik, 8, 2);
+		$y = substr($nik, 10, 2);
+		
+		$tahun = date("y",strtotime($tanggal_lahir));
+		$bulan = date("m",strtotime($tanggal_lahir));
+		$tanggal = date("d",strtotime($tanggal_lahir));
+		//jika tahun full, ambil 2 digit terakhir
+		if(strlen($tahun==4)){
+		  $tahun = substr($tahun,2,2);
+		}
+		if (intval($d) > 40) {
+		  //Wanita
+		  $d = intval($d) - 40; 
+		}
+		if($tanggal/$d != 1){
+			//echo $tanggal_lahir. 'tanggal '.($tanggal/$d)." {$tanggal}/{$d}";
+		  return false;
+		}
+		
+		if($bulan/$m != 1){
+			//echo 'bulan';
+		  return false;
+		}
+		
+		if($tahun/$y != 1){
+			//echo 'tahun';
+		  return false;
+		}
+		//setelah berhasil melewati rintangan, berarti nomornya valid (tidak 100% valid)
+		return true;
+	  }
 
     function __destruct() {
 

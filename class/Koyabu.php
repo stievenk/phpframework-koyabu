@@ -11,12 +11,15 @@ class Koyabu extends Form {
     public $Params = array();
     public $token_expire = "+1 weeks";
     public $Headers;
+    public $HOME_ROOT = '';
+    public $USER = array();
 
     function __construct($config) {
         $this->config = $config;
         $this->SQLConnection($config);
         $this->Headers = getallheaders();
         $this->Params = $_POST;
+        $this->HOME_ROOT = $this->config['HOME_DIR'] ? $this->config['HOME_DIR'] : '';
         // print_r($this->Headers); exit;
     }
 
@@ -47,14 +50,14 @@ class Koyabu extends Form {
                 if ($t['tipe'] == 'BANNED') { 
                     throw new \Exception("Your account is BANNED", 1);
                 }
-
                 if ($t['token'] == $this->Headers['token']) {
                     $token_expire = strtotime($t['token_expire']);
-                    if (date("U") < $token_expire) {
+                    if (date("U") > $token_expire) {
                         throw new \Exception("Token expired, silahkan login kembali", 1);
                     }
                     $this->updateUserData($t['id']);
-                    return $t;
+                    $this->USER = $t;
+                    return true;
                 } else {
                     throw new \Exception("Login expired, silahkan login kembali", 1);
                 }
@@ -94,6 +97,82 @@ class Koyabu extends Form {
         $this->token_expire = $expire;
     }
 
+    public function loadPage() {
+        $error = array('done' => 0, 'response' => '');
+        $_GET['call'] = $_GET['call'] ? $_GET['call'] : 'home';
+        $_GET['mod'] = $_GET['mod'] ? $_GET['mod'] : $_GET['m'];
+        $_GET['m'] = $_GET['m'] ? $_GET['m'] : $_GET['mod'];
+        $MOD_URL = $_GET['call']."&mod=".$_GET['mod'];
+        $SERVER_REQUEST_STR = parse_url($_SERVER['REQUEST_URI']);
+        $REF_URL = $_REQUEST['ref'] ? $_REQUEST['ref'].'&ref='.$_REQUEST['call'] : 'home&'.str_replace('&ref='.$_REQUEST['call'],'',str_replace('call','ref',$SERVER_REQUEST_STR['query']));
+        $RELOAD_URL = trim(preg_replace(array('#call=#','#app_version=(.+?)&#'),'',$SERVER_REQUEST_STR['query']),'&');
+        $buttonHome = true;
+        try {
+            // var_dump($this->isUserLogin($this->Params['username'])); exit;
+            if ($this->isUserLogin($this->Params['username'])) {
+                // FCM Token update
+                if ($_REQUEST['fcm_token']) {
+                    $this->save(array( 'id' => $this->USER['id'], 'fcm_token' => $_REQUEST['fcm_token']),'t_member');
+                }
+                // echo "Logged";
+                if ($_GET['call'] == 'module' || $_GET['call'] == 'modules' || $_GET['call'] == 'mod') {
+                    $mod = $_GET['mod'] ? $_GET['mod'] : $_GET['m'];
+                    if ($this->USER['id']) {
+                        $CALL = $this->HOME_ROOT . 'modules' . DIRECTORY_SEPARATOR . $mod . DIRECTORY_SEPARATOR;
+                        if ($_GET['f']) { $CALL = $CALL . basename($_GET['f']) . '.php'; }
+                        else { $CALL = $CALL . 'index.php'; }
+                    }
+                } else {
+                    $CALL = $this->HOME_ROOT . 'call/' . basename($_GET['call']) . '.php';
+                }
+                if (file_exists($CALL)) {
+                     include_once $CALL;
+                } else {
+                    throw new \Exception(basename($CALL)." not found", 1);
+                }
+            } else {
+                if (!$_GET['call']) {
+                    // echo 'login';
+                    include_once $this->HOME_ROOT . 'call/login.php';
+                } else {
+                    if (file_exists($this->HOME_ROOT.'call/'.basename($_GET['call']).'.php')) {
+                         include_once $this->HOME_ROOT.'call/'.basename($_GET['call']).'.php';
+                    } else {
+                        throw new \Exception("{$_GET['call']} not found", 1);
+                    }
+                }
+            }
+            if ($buttonHome and $BottomControllerHidden != true and $ControllerHidden != true) { 
+                include_once $this->HOME_ROOT.'include/bottom-controler.php'; 
+            }
+            if ($_GET['call'] == 'home' and !$_REQUEST['fcm_token']) { 
+                include_once $this->HOME_ROOT.'include/firebase-controler.php'; 
+            }
+            //$this->loadFooter();
+        } catch(\Exception $e) {
+            $error['response'] = $e->getMessage();
+            //echo json_encode($error); exit;
+            echo '<div class="p-3">
+            <p>Error: '. $error['response'] .'</p>
+            <a href="index.html" class="btn btn-default">Back <i class="fa fa-home"></i></a>
+            </div>';
+        }
+    }
+
+    public function loadFooter() {
+        $fileinclude = $this->HOME_ROOT.'include/html-footer.php';
+        if (file_exists($fileinclude)) {
+            include_once $fileinclude;
+       }
+    }
+
+    public function bodyHeader($MOD_URL,$TITLE, $ICON = '') {
+        $fileinclude = $this->HOME_ROOT.'include/body-header.php';
+        if (file_exists($fileinclude)) {
+            include_once $fileinclude;
+       }
+    }
+
     /*
     $msg = array(
         'title' => '',
@@ -101,6 +180,27 @@ class Koyabu extends Form {
         'image' => ''
     )
     */
+
+    function notif($m,$tipe='ALL',$cmd = 'send',$data=NULL,$pfx=NULL) {
+		global $config;
+		$PREFIX = $pfx ? $pfx : $this->config['APPS_NAME'];
+		if ($tipe == 'ALL') { $topic = 'notif_'.md5($PREFIX); }
+		else {
+			$topic = strtolower($tipe).'_'.md5($PREFIX);
+		}
+		if (is_array($m)) {
+			/**/
+			if ($cmd == 'send') {
+				return $this->fcm($m,$topic,'topic');
+			} else {
+				return $topic;
+			}
+			/**/
+		} else {
+			return $topic;
+		}
+	}
+
     function fcm($msg,$topicToken = 'test',$tipe ='topic') {
         //echo $this->config['HOME_DIR'];
         $data = array('done' => 0, 'response' => '');
