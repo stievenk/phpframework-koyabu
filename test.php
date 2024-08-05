@@ -36,5 +36,30 @@ $API = new Koyabu($config);
 // var_dump($API->save_dbx('test.txt'));
 
 
+// $prov = json_decode(file_get_contents('province.txt'),true);
+// $city = json_decode(file_get_contents('city.txt'),true);
+
+// print_r($city['rajaongkir']['results']);
+
+// foreach($city['rajaongkir']['results'] as $v) {
+    
+    // $API->save(array(
+    //     'id' => $v['province_id'],
+    //     'nama' => $v['province']
+    // ),'ro_province');
+    // $API->query("insert into ro_province set id='{$v['province_id']}', nama='{$v['province']}'");
+    // $API->query("insert into ro_city set id='{$v['city_id']}', nama='{$v['city_name']}', tipe='{$v['type']}', id_provinsi='{$v['province_id']}', kodepos='{$v['postal_code']}'");
+    // print_r($v);
+// }
 echo $API->error;
+
+
+// $ONGKIR = new RajaOngkir($config);
+// print_r($ONGKIR->getProvince());
+// print_r($ONGKIR->getCity());
+// $origin=501;
+// $destination=114;
+// $weight=17000;
+// $courier='jne';
+// print_r($ONGKIR->getCost($origin,$destination,$weight,$courier));
 ?>
