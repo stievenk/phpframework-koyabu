@@ -35,13 +35,40 @@ class Koyabu extends Form {
                     throw new \Exception("Error: Username not found", 1);
                 }
             } else {
-                throw new \Exception("Error: Invalid Username", 1);
+                throw new \Exception("Please login", 1);
             }
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             //echo json_encode(array('done' => 0, 'response' => $this->error)); exit;
             return false;
         }
+    }
+
+    public function login() {
+        try {
+            if (trim($_POST['uname']) and trim($_POST['passwd'])) {
+                $g = $this->select("select * from t_member where `username`='". $this->escape_string($_POST['uname']) ."' or `email`='". $this->escape_string($_POST['uname']) ."'");
+                $t = $this->fetch($g);
+                if ($t['id']) {
+                    if (md5(trim($_POST['passwd'])) == $t['password']) {
+                        $t['user_token'] = md5(uniqid().$t['id'].$_SERVER['REMOTE_ADDR']);
+                        $this->updateUserData($t['id'],$t['user_token'],date("Y-m-d H:i:s",strtotime("+1 week")));
+                        return $t;
+                    } else {
+                         throw new \Exception("Password tidak tepat!");
+                        return false;
+                    }
+                } else {
+                    throw new \Exception("Username tidak terdaftar", 1);
+                }
+            } else {
+                throw new \Exception("Username atau password belum diisi", 1);
+            }
+        } catch( \Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+        
     }
 
     public function isUserLogin($username) {
