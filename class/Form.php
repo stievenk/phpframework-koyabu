@@ -235,7 +235,7 @@ class Form {
 		} else { echo "Invalid type"; }
 	}
 
-    public function ignoreParams($data,$chars='') {
+    public function ignoreParams($data,$chars='^userid$|^lat$|^lng$|^username$|^token|^app_') {
 		$p = array();
 		foreach($data as $k => $v) {
 			if (preg_match("#{$chars}#",$k)) {
