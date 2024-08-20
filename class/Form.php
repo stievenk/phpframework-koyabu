@@ -162,7 +162,7 @@ class Form {
             if ($tipe == 'assoc') {
                 $o = $this->Database->fetch_assoc($object);
             } else {
-                $o = $this->Database->fetch_assoc($object);
+                $o = $this->Database->fetch_row($object);
             }
             return $o;
         } catch (\Exception $e) {
