@@ -204,9 +204,10 @@ class Form {
 		}
 		if (array_is_list($arrays)) {
 			foreach($arrays as $v) {
-				$v = trim($v);
+				// $v = trim($v);
 				$val = trim($val);
 				if (is_array($v)) {
+					// print_r($v);
 					echo '<option value="'.$v['id'].'" '. ($v['id'] == $val ? 'selected="selected"' : '') .'>'.$v['name'].'</option>';
 				} else {
 					echo '<option value="'.$v.'" '. ($v == $val ? 'selected="selected"' : '') .'>'.$v.'</option>';
