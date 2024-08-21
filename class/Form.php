@@ -1,5 +1,6 @@
 <?php
 namespace Koyabu\Webapi;
+use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
  * version: 8.1.0
@@ -29,7 +30,7 @@ class Form {
             }
         } catch (\Exception $e) {
             $error['response'] = $e->getMessage();
-            echo json_encode($error); exit;
+            echo json_encode($error);
         }
     }
 
@@ -51,7 +52,7 @@ class Form {
             return $this->Database->fetch_assoc($g);
          } catch (\Exception $e) {
             $this->error = $e->getMessage();
-            echo json_encode(array('done' => 0, 'response' => $this->error)); exit;
+            echo json_encode(array('done' => 0, 'response' => $this->error));
          }
 	}
 
@@ -107,7 +108,7 @@ class Form {
             }
         } catch (\Exception $e) {
             $error['response'] = $e->getMessage();
-            echo json_encode($error); exit;
+            echo json_encode($error);
         }
 	}
 
@@ -138,7 +139,7 @@ class Form {
 				} else { throw new \Exception("Invalid Arguments", 1); }
 			} catch (\Exception $e) {
 				$this->error = $e->getMessage();
-                echo json_encode(array('response' => $this->error, 'done' => 0)); exit;
+                echo json_encode(array('response' => $this->error, 'done' => 0));
 			}
 			
 		}
@@ -598,6 +599,30 @@ class Form {
 		}
 		//setelah berhasil melewati rintangan, berarti nomornya valid (tidak 100% valid)
 		return true;
+	  }
+
+	  function QRcode($data,$base64 = true) {
+		$options = new QROptions;
+		// $options->version      = 7;
+		$options->outputBase64 = $base64;
+		$qrcode = (new QRCode($options))->render($data);
+		return $qrcode;
+	  }
+
+	  function QRcodeRead($file) {
+		try{
+			$result = (new QRCode)->readFromFile($file); // -> DecoderResult
+		
+			// you can now use the result instance...
+			$content = $result->data;
+		
+			// ...or simply cast the result instance to string to get the content
+			// $content = (string)$result;
+			return $content;
+		}
+		catch(Throwable $exception){
+			// handle exception...
+		}
 	  }
 
     function __destruct() {
