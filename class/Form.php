@@ -281,7 +281,8 @@ class Form {
         return $this->Database->escape_string($string);
     }
 
-    function save_dbx($file,$dir='') {
+    function save_dbx($file,$dir='',$removeFile=true) {
+		global $config;
         $data = array('done' => 0, 'response' => '');
         $HOME_DIR = $config['dropbox']['home_dir'].$dir;
 		$HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
@@ -297,11 +298,21 @@ class Form {
 			$d = $DBX->create_shared_link($HOME_DIR.basename($file));
             if ($d['url']) {
 				$url = str_replace("dl=0","raw=1",$d['url']);
-				if (file_exists($file)) { unlink($file); }
+				if ($removeFile == true) { if (file_exists($file)) { unlink($file); } }
 				return $url;
 			} else {
-                throw new \Exception("Dropbox Error, file can not upload", 1);
-                return false; 
+				if (preg_match("#already_exists#si",$d['error_summary'])) {
+					$d = $DBX->get_shared_link($HOME_DIR.basename($file));
+					// echo $HOME_DIR;
+					// echo '<pre>'; print_r($d); echo '</pre>';
+					$url = str_replace("dl=0","raw=1",$d['links'][0]['url']);
+					if ($removeFile == true) { if (file_exists($file)) { unlink($file); } }
+					return $url;
+				}
+                else { 
+					throw new \Exception("Dropbox Error, file can not upload ".json_encode($d), 1);
+                	return false; 
+				}
             }
         } catch(\Exception $e) {
             $this->error = $e->getMessage();
@@ -311,6 +322,7 @@ class Form {
 	}
 
     function delete_dbx($url,$dir = '') {
+		global $config;
 		if ($this->config['dropbox']['access_token']) {
 			$DBX = new Dropbox($this->config['dropbox']['access_token']);
 			$d = $DBX->get_shared_link_file($url);

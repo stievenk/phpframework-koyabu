@@ -13,6 +13,7 @@ class Koyabu extends Form {
     public $Headers;
     public $HOME_ROOT = '';
     public $USER = array();
+    public $banned = false;
 
     function __construct($config) {
         $this->config = $config;
@@ -50,6 +51,9 @@ class Koyabu extends Form {
                 $g = $this->select("select * from t_member where `username`='". $this->escape_string($_POST['uname']) ."' or `email`='". $this->escape_string($_POST['uname']) ."'");
                 $t = $this->fetch($g);
                 if ($t['id']) {
+                    if ($t['tipe'] == 'BANNED') {
+                        throw new \Exception("Your account is BANNED", 1);
+                    }
                     if (md5(trim($_POST['passwd'])) == $t['password']) {
                         $t['user_token'] = md5(uniqid().$t['id'].$_SERVER['REMOTE_ADDR']);
                         $this->updateUserData($t['id'],$t['user_token'],date("Y-m-d H:i:s",strtotime("+1 week")));
@@ -74,9 +78,12 @@ class Koyabu extends Form {
     public function isUserLogin($username) {
         try {
             if ($t = $this->getUserData($username)) {
-                if ($t['tipe'] == 'BANNED') { 
-                    throw new \Exception("Your account is BANNED", 1);
+                
+                if ($t['tipe'] == 'BANNED') {
+                    $this->banned = true; 
+                    // throw new \Exception("Your account is BANNED", 1);
                 }
+                // print_r($this->Headers);
                 if ($t['token'] == $this->Headers['token']) {
                     $token_expire = strtotime($t['token_expire']);
                     if (date("U") > $token_expire) {
@@ -135,7 +142,7 @@ class Koyabu extends Form {
         $RELOAD_URL = trim(preg_replace(array('#call=#','#app_version=(.+?)&#'),'',$SERVER_REQUEST_STR['query']),'&');
         $buttonHome = true;
         try {
-            // var_dump($this->isUserLogin($this->Params['username'])); exit;
+            // var_dump($this->isUserLogin($this->Params['username']));
             if ($this->isUserLogin($this->Params['username'])) {
                 // FCM Token update
                 if ($_REQUEST['fcm_token']) {
@@ -169,11 +176,15 @@ class Koyabu extends Form {
                     }
                 }
             }
-            if ($buttonHome and $BottomControllerHidden != true and $ControllerHidden != true) { 
-                include_once $this->HOME_ROOT.'include/bottom-controler.php'; 
+            if ($buttonHome and $BottomControllerHidden != true and $ControllerHidden != true and $HideController != true) { 
+                if (file_exists($this->HOME_ROOT.'include/bottom-controler.php')) {
+                    include_once $this->HOME_ROOT.'include/bottom-controler.php'; 
+                }
             }
-            if ($_GET['call'] == 'home' and !$_REQUEST['fcm_token']) { 
-                include_once $this->HOME_ROOT.'include/firebase-controler.php'; 
+            if ($_GET['call'] == 'home' and !$_REQUEST['fcm_token']) {
+                if (file_exists($this->HOME_ROOT.'include/firebase-controler.php')) {
+                    include_once $this->HOME_ROOT.'include/firebase-controler.php'; 
+                }
             }
             //$this->loadFooter();
         } catch(\Exception $e) {
