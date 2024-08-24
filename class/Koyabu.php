@@ -252,6 +252,25 @@ class Koyabu extends Form {
 		}
 	}
 
+    function googleServicesJSON() {
+        $google_json = $this->config['HOME_DIR'].'data/google-services.json';
+        if (file_exists($google_json)) {
+            $json = json_decode(file_get_contents($google_json),true);
+            if (is_array($json['client'] )) {
+                foreach($json['client'] as $v) {
+                    $apk = $v['client_info']['android_client_info']['package_name'];
+                    
+                    if ($apk == $this->config['APK'][0]) {
+                        $data = $v;
+                    }
+                }
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
     function fcm($msg,$topicToken = 'test',$tipe ='topic') {
         //echo $this->config['HOME_DIR'];
         $data = array('done' => 0, 'response' => '');
