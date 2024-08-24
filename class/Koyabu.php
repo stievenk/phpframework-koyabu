@@ -21,7 +21,20 @@ class Koyabu extends Form {
         $this->Headers = getallheaders();
         $this->Params = $_POST;
         $this->HOME_ROOT = $this->config['HOME_DIR'] ? $this->config['HOME_DIR'] : '';
-        // print_r($this->Headers); exit;
+        //print_r($this->Headers); exit;
+        $this->cekPHPversion();
+    }
+
+    function cekPHPversion() {
+        // echo version_compare(PHP_VERSION, '8.0');
+        if (version_compare(PHP_VERSION, '8.2') > 0) { 
+            throw new \Exception(PHP_VERSION." PHP version not compatible, please use PHP 8.1.x", 1);
+            exit;
+        }
+        if (version_compare(PHP_VERSION, '8.0') < 0) { 
+            throw new \Exception(PHP_VERSION." PHP version not compatible, please use PHP 8.1.x", 1);
+            exit;
+        }
     }
 
     public function getUserData($username = "") {

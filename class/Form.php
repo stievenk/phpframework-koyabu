@@ -1,5 +1,6 @@
 <?php
 namespace Koyabu\Webapi;
+use Koyabu\Webapi;
 use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
