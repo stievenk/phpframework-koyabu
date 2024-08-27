@@ -67,12 +67,12 @@ echo '<h3>Double QRCode</h3>';
 echo $API->error;
 
 
-// $ONGKIR = new RajaOngkir($config);
+$ONGKIR = new RajaOngkir($config);
 // print_r($ONGKIR->getProvince());
 // print_r($ONGKIR->getCity());
-// $origin=501;
-// $destination=114;
-// $weight=17000;
-// $courier='jne';
-// print_r($ONGKIR->getCost($origin,$destination,$weight,$courier));
+$origin=501;
+$destination=114;
+$weight=17000;
+$courier='jne';
+print_r($ONGKIR->getCost($origin,$destination,$weight,$courier));
 ?>
