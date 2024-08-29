@@ -255,6 +255,23 @@ class Koyabu extends Form {
 		}
 	}
 
+    function notif_to_inbox($m,$tipe,$pengirim='SYSTEM') {
+        $params = $m;
+        $params['message'] = $m;
+        $g = $this->select("INSERT INTO t_member_inbox (tanggal, id_member, pengirim, pesan, params) 
+        SELECT '".date("Y-m-d H:i:s")."', id, '{$pengirim}', '".$m['title']."', '". json_encode($params) ."' from t_member where tipe='{$tipe}'");
+    }
+
+    function save_to_inbox($msg,$id_member,$pengirim='SYSTEM') {
+        $this->save(array(
+            'tanggal' => date("Y-m-d H:i:s"),
+            'id_member' => $id_member,
+            'pengirim' => $pengirim,
+            'pesan' => $msg['title'],
+            'params' => json_encode($msg)
+        ),'t_member_inbox');
+    }
+
     function googleServicesJSON() {
         $google_json = $this->config['HOME_DIR'].'data/google-services.json';
         if (file_exists($google_json)) {
@@ -273,6 +290,8 @@ class Koyabu extends Form {
             return false;
         }
     }
+
+
 
     function fcm($msg,$topicToken = 'test',$tipe ='topic') {
         //echo $this->config['HOME_DIR'];
@@ -309,9 +328,11 @@ class Koyabu extends Form {
                         "notification" => $msg
                     )
                 );
+                // print_r($message);
             }
             $response = $httpClient->post("https://fcm.googleapis.com/v1/projects/{$project}/messages:send", array('json' => $message));
-		    return $response;
+		    // echo $response;
+            return $response;
         } catch(\Exception $e) {
             $data['response'] = $e->getMessage();
             echo json_encode($data); exit;
