@@ -223,12 +223,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Koyabu\\Webapi\\Form\u003A\u003Aform_select_array\u0028\u0029",
             "name": "form_select_array",
-            "summary": "",
+            "summary": "Alias\u0020for\u0020old\u0020version",
             "url": "classes/Koyabu-Webapi-Form.html#method_form_select_array"
         },                {
             "fqsen": "\\Koyabu\\Webapi\\Form\u003A\u003Aform_select\u0028\u0029",
             "name": "form_select",
-            "summary": "",
+            "summary": "Generate\u0020OPTION\u0020list\u0020for\u0020SELECT\u0020form\nfilename\u0020or\u0020string\u0020pipe\u0020or\u0020array\u0020object",
             "url": "classes/Koyabu-Webapi-Form.html#method_form_select"
         },                {
             "fqsen": "\\Koyabu\\Webapi\\Form\u003A\u003Aselect_option_list\u0028\u0029",
@@ -496,6 +496,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Koyabu-Webapi-MidtransBackend.html#method_getOrderStatus"
         },                {
+            "fqsen": "\\Koyabu\\Webapi\\MidtransBackend\u003A\u003Asignature_key\u0028\u0029",
+            "name": "signature_key",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-MidtransBackend.html#method_signature_key"
+        },                {
             "fqsen": "\\Koyabu\\Webapi\\MidtransBackend\u003A\u003A\u0024api_url",
             "name": "api_url",
             "summary": "",
@@ -510,6 +515,11 @@ Search.appendIndex(
             "name": "client",
             "summary": "",
             "url": "classes/Koyabu-Webapi-MidtransBackend.html#property_client"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\MidtransBackend\u003A\u003A\u0024config",
+            "name": "config",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-MidtransBackend.html#property_config"
         },                {
             "fqsen": "\\Koyabu\\Webapi\\RajaOngkir",
             "name": "RajaOngkir",

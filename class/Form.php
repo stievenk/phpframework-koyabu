@@ -190,11 +190,25 @@ class Form {
 		} else { return false; }
 	}
 
-	// Alias for Old version
+	/** 
+	 * Alias for old version
+	*/
 	public function form_select_array($array,$val='') {
 		$this->form_select($array,$val);
 	}
 
+	
+	/**
+	 * Generate OPTION list for SELECT form
+	 * filename or string pipe or array object
+	 * 
+	 * * $array String filename : kategori.txt
+	 * * $array String Pipe : 'FATHER|MOTHER|SON|DAUGTHER|GRANDMA|GRANDPA'
+	 * * $array Object : ['MAN','WOMAN','BOY','GIRL']
+	 * 
+	 * @param string|array	$array	Option name and value
+	 * @param mixed	$val	default value for selected
+	 */
 	public function form_select($array,$val='') {
 		if (is_array($array)) {
 			$arrays = $array;
@@ -203,6 +217,8 @@ class Form {
 				$data = file_get_contents($array);
 				$arrays = explode("\n",$data);
 			}
+		} else {
+			$arrays = explode("|",$array);
 		}
 		if (array_is_list($arrays)) {
 			foreach($arrays as $v) {
@@ -210,15 +226,15 @@ class Form {
 				$val = trim($val);
 				if (is_array($v)) {
 					// print_r($v);
-					echo '<option value="'.$v['id'].'" '. ($v['id'] == $val ? 'selected="selected"' : '') .'>'.$v['name'].'</option>';
+					echo '<option value="'.trim($v['id']).'" '. (trim($v['id']) == trim($val) ? 'selected="selected"' : '') .'>'.$v['name'].'</option>';
 				} else {
-					echo '<option value="'.$v.'" '. ($v == $val ? 'selected="selected"' : '') .'>'.$v.'</option>';
+					echo '<option value="'. trim($v).'" '. (trim($v) == trim($val) ? 'selected="selected"' : '') .'>'.$v.'</option>';
 				}
 			}
 		} else {
 			foreach($arrays as $k => $v) {
 				$val = trim($val);
-				echo '<option value="'.$v.'" '. ($v == $val ? 'selected="selected"' : '') .'>'.str_replace("_"," ",$k).'</option>';
+				echo '<option value="'.trim($v).'" '. (trim($v) == trim($val) ? 'selected="selected"' : '') .'>'.str_replace("_"," ",$k).'</option>';
 			}
 		}
 	}
