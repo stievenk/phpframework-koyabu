@@ -28,6 +28,9 @@ class Koyabu extends Form {
         $this->cekPHPversion();
     }
 
+    /** 
+     * Check PHP Version must in 8.1.x
+    */
     function cekPHPversion() {
         // echo version_compare(PHP_VERSION, '8.0');
         if (version_compare(PHP_VERSION, '8.2') > 0) { 
