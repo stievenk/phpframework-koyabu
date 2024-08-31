@@ -111,9 +111,9 @@ class Dropbox {
 	}
 	
 	function get_shared_link_file($url) {
-		$data = array( 'path' => $url );
+		$data = array( 'url' => $url );
 		$this->headers = array(
-			'Authorization: Basic '. $this->token,
+			'Authorization: Bearer '. $this->token,
 			'Content-Type: application/json'
 			);
 		$this->init('https://api.dropboxapi.com/2/sharing/get_shared_link_metadata');

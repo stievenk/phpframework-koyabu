@@ -343,7 +343,7 @@ class Form {
 		if ($this->config['dropbox']['access_token']) {
 			$DBX = new Dropbox($this->config['dropbox']['access_token']);
 			$d = $DBX->get_shared_link_file($url);
-			$x = $DBX->delete($this->config['dropbox']['home_dir'].$dir.'/'.$d['name']);
+			if ($d['name']) { $x = $DBX->delete($this->config['dropbox']['home_dir'].$dir.'/'.$d['name']); }
 			// file_put_contents($this->config['HOME_DIR'] . 'cache/dbx.txt',json_encode($d).json_encode($xx));
 			return $d;
 		} else { return false; }
