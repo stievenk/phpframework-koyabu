@@ -123,6 +123,9 @@ class Koyabu extends Form {
     }
 
     public function updateUserData($id, $token = '', $token_expired = '') {
+        $this->Headers = getallheaders();
+        $devparam = array_merge($_POST,$_GET);
+        $devparam['app_version'] = $this->Headers['app_version'];
         $params = array(
             'id' => $id,
             'token' => $this->Headers['token'],
@@ -130,7 +133,8 @@ class Koyabu extends Form {
             'user_agent' => $_SERVER['HTTP_USER_AGENT'],
             'ip_address' => $_SERVER['REMOTE_ADDR'],
             'lat' => $_REQUEST['lat'],
-            'lng' => $_REQUEST['lng']
+            'lng' => $_REQUEST['lng'],
+            'device_params' => json_encode($devparam)
         );
         if ($token) { $params['token'] = $token; }
         $params['token_expire'] = $token_expired ? $token_expired : date("Y-m-d H:i:s",strtotime("{$this->token_expire}"));
@@ -391,7 +395,7 @@ class Koyabu extends Form {
             if ($option['bcc']) {
                 $mail->addBCC($option['bcc']);
             }
-            if ($option['bcc']) {
+            if ($option['cc']) {
                 $mail->addCC($option['cc']);
             }
             if ($option['attachment']) {
