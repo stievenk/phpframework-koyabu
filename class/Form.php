@@ -338,14 +338,28 @@ class Form {
         }
 	}
 
-    function delete_dbx($url,$dir = '') {
+    function delete_dbx($url,$dir = '',$replace_dir='') {
 		global $config;
+		$HOME_DIR = $config['dropbox']['home_dir'].$dir;
+		$HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
+		if ($replace_dir != '') { $HOME_DIR = $replace_dir; }
 		if ($this->config['dropbox']['access_token']) {
 			$DBX = new Dropbox($this->config['dropbox']['access_token']);
 			$d = $DBX->get_shared_link_file($url);
-			if ($d['name']) { $x = $DBX->delete($this->config['dropbox']['home_dir'].$dir.'/'.$d['name']); }
+			if ($d['name']) { 
+				$x = $DBX->delete($HOME_DIR.$d['name']); 
+				// $path = dirname($d['path_lower']);
+				// $path = strlen($path) <= 1 ? '' : $path;
+				// if ($d['path_lower']) {
+				// 	$x = $DBX->delete($path.$d['name']); 
+				// } else {
+				// 	$x = $DBX->delete($this->config['dropbox']['home_dir'].$dir.'/'.$d['name']); 
+				// }
+				// $x['hh'] = $d['path_lower'];
+				// $x['path'] = $path.$d['name'];
+			}
 			// file_put_contents($this->config['HOME_DIR'] . 'cache/dbx.txt',json_encode($d).json_encode($xx));
-			return $d;
+			return $x;
 		} else { return false; }
 	}
 
