@@ -199,7 +199,7 @@ class Koyabu extends Form {
                     }
                 }
             }
-            if ($buttonHome and $BottomControllerHidden != true and $ControllerHidden != true and $HideController != true) { 
+            if ($buttonHome and $BottomControllerHidden != true and $ButtonControllerHidden != true and $ControllerHidden != true and $HideController != true) { 
                 if (file_exists($this->HOME_ROOT.'include/bottom-controler.php')) {
                     include_once $this->HOME_ROOT.'include/bottom-controler.php'; 
                 }
