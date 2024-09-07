@@ -668,6 +668,29 @@ class Form {
 		}
 	  }
 
+	  /** 
+	   * Generate list <option></option> for <select></select>
+	   * @param	mixed	$tipe	Tipe option: year|month
+	   * @param string	$default	Default value for selected option
+	  */
+	  function option_list($tipe,$default='') {
+		$year = date("Y");
+		switch($tipe) {
+			case 'bulan' :
+			case 'month' :
+				for($i = 1; $i <= 12; $i++) {
+					echo '<option value="'.$i.'" '. ($i == $default ? 'selected' : '') .'>'. date("F",mktime(0,0,0,$i,1,$year)) .'</option>';
+				}
+			break;
+			case 'year' :
+			case 'tahun' :
+				for($i = 2020; $i<=$year+2; $i++) {
+					echo '<option value="'.$i.'" '. ($i == $default ? 'selected' : '') .'>'. $i .'</option>';
+				}
+			break;
+		}
+	  }
+
     function __destruct() {
 
     }

@@ -316,6 +316,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Koyabu-Webapi-Form.html#method_QRcodeRead"
         },                {
+            "fqsen": "\\Koyabu\\Webapi\\Form\u003A\u003Aoption_list\u0028\u0029",
+            "name": "option_list",
+            "summary": "Generate\u0020list\u0020\u003Coption\u003E\u003C\/option\u003E\u0020for\u0020\u003Cselect\u003E\u003C\/select\u003E",
+            "url": "classes/Koyabu-Webapi-Form.html#method_option_list"
+        },                {
             "fqsen": "\\Koyabu\\Webapi\\Form\u003A\u003A__destruct\u0028\u0029",
             "name": "__destruct",
             "summary": "",
@@ -520,6 +525,76 @@ Search.appendIndex(
             "name": "config",
             "summary": "",
             "url": "classes/Koyabu-Webapi-MidtransBackend.html#property_config"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada",
+            "name": "Panada",
+            "summary": "Koyabu\u0020Framework\nversion\u003A\u00208.1.0\nlast\u0020update\u003A\u002021\u0020Juli\u00202024\nmin\u002Drequire\u003A\u0020PHP\u00208.1\nMariaDB\u003A\u002010\u002B\u0020\u0028recommended\u0029\u0020or\u0020MySQL\u0020\u003A\u00208\u002B\nAuthor\u003A\u0020stieven.kalengkian\u0040gmail.com",
+            "url": "classes/Koyabu-Webapi-Panada.html"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AgetConfig\u0028\u0029",
+            "name": "getConfig",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_getConfig"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AgetUser\u0028\u0029",
+            "name": "getUser",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_getUser"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AupdateUser\u0028\u0029",
+            "name": "updateUser",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_updateUser"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AloadPage\u0028\u0029",
+            "name": "loadPage",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_loadPage"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AloadLayout\u0028\u0029",
+            "name": "loadLayout",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_loadLayout"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AloginPage\u0028\u0029",
+            "name": "loginPage",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_loginPage"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003ApageHeader\u0028\u0029",
+            "name": "pageHeader",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_pageHeader"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003ApageBottom\u0028\u0029",
+            "name": "pageBottom",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_pageBottom"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AgetLogin\u0028\u0029",
+            "name": "getLogin",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_getLogin"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AlogoutAndReload\u0028\u0029",
+            "name": "logoutAndReload",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_logoutAndReload"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AgetLogout\u0028\u0029",
+            "name": "getLogout",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_getLogout"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003AreturnData\u0028\u0029",
+            "name": "returnData",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#method_returnData"
+        },                {
+            "fqsen": "\\Koyabu\\Webapi\\Panada\u003A\u003A\u0024USER",
+            "name": "USER",
+            "summary": "",
+            "url": "classes/Koyabu-Webapi-Panada.html#property_USER"
         },                {
             "fqsen": "\\Koyabu\\Webapi\\RajaOngkir",
             "name": "RajaOngkir",
