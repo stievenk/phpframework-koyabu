@@ -93,10 +93,11 @@ class Panada extends Form {
         $RELOAD_URL = trim(preg_replace(array('#call=#','#app_version=(.+?)&#'),'',$SERVER_REQUEST_STR['query']),'&');
         $this->pageHeader();
         echo '<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">';
+        echo '<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>';
         echo '<div class="app-wrapper">';
         include 'html/navbar.php';
         include 'html/sidebar.php';
-        echo '<main class="app-main" id="layout">';
+        echo '<main class="app-main d-print-block" id="layout" style="margin-top:50px">';
         if ($include) { include 'call/'.$include.'.php'; }
         echo '</main>';
         echo '</div>';

@@ -109,7 +109,7 @@ class Form {
             }
         } catch (\Exception $e) {
             $error['response'] = $e->getMessage();
-            echo json_encode($error);
+            // echo json_encode($error);
         }
 	}
 
@@ -140,7 +140,7 @@ class Form {
 				} else { throw new \Exception("Invalid Arguments", 1); }
 			} catch (\Exception $e) {
 				$this->error = $e->getMessage();
-                echo json_encode(array('response' => $this->error, 'done' => 0));
+                // echo json_encode(array('response' => $this->error, 'done' => 0));
 			}
 			
 		}
@@ -153,7 +153,8 @@ class Form {
             }
             return $result;
         } catch (\Exception $e) {
-            echo json_encode(array('done' => 0, 'response' => $e->getMessage())); exit;
+			$this->error = $e->getMessage();
+            // echo json_encode(array('done' => 0, 'response' => $e->getMessage())); exit;
         }
     }
     
@@ -168,7 +169,8 @@ class Form {
             }
             return $o;
         } catch (\Exception $e) {
-            echo json_encode(array('done' => 0, 'response' => $e->getMessage())); exit;
+			$this->error = $e->getMessage();
+            // echo json_encode(array('done' => 0, 'response' => $e->getMessage())); exit;
         }
     }
 
