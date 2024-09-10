@@ -242,7 +242,7 @@ class Koyabu extends Form {
     )
     */
 
-    function notif($m,$tipe='ALL',$cmd = 'send',$data=NULL,$pfx=NULL) {
+    function notif($m,$tipe='ALL',$cmd = 'send',$data=array('notif' => '1'),$pfx=NULL) {
 		global $config;
 		$PREFIX = $pfx ? $pfx : $this->config['APPS_NAME'];
 		if ($tipe == 'ALL') { $topic = 'notif_'.md5($PREFIX); }
@@ -252,7 +252,7 @@ class Koyabu extends Form {
 		if (is_array($m)) {
 			/**/
 			if ($cmd == 'send') {
-				return $this->fcm($m,$topic,'topic');
+				return $this->fcm($m,$topic,'topic',$data);
 			} else {
 				return $topic;
 			}
@@ -300,11 +300,13 @@ class Koyabu extends Form {
 
 
 
-    function fcm($msg,$topicToken = 'test',$tipe ='topic') {
-        //echo $this->config['HOME_DIR'];
+    function fcm($msg,$topicToken = 'test',$tipe ='topic',$param = array('hwm' => '1')) {
         $data = array('done' => 0, 'response' => '');
         $project = $this->config['fcm_project_id'];
-        // echo $project; exit;
+        foreach($param as $k => $v) {
+            $params[$k] = (string) $v;
+        }
+        $param = $params;
         try {
             if (!is_array($msg)) {
                 throw new \Exception("\$msg invalid arguments", 1);
@@ -325,24 +327,25 @@ class Koyabu extends Form {
                 $message = array(
                     "message" => array(
                         "topic" => $topicToken,
-                        "notification" => $msg
+                        "notification" => $msg,
+                        "data" => $param
                     )
                 );
             } else {
                 $message = array(
                     "message" => array(
                         "token" => $topicToken,
-                        "notification" => $msg
+                        "notification" => $msg,
+                        "data" => $param
                     )
                 );
-                // print_r($message);
             }
             $response = $httpClient->post("https://fcm.googleapis.com/v1/projects/{$project}/messages:send", array('json' => $message));
 		    // echo $response;
             return $response;
         } catch(\Exception $e) {
             $data['response'] = $e->getMessage();
-            echo json_encode($data); exit;
+            // echo json_encode($data); exit;
         }
     }
 
