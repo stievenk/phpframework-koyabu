@@ -185,7 +185,8 @@ class Koyabu extends Form {
                 if (file_exists($CALL)) {
                      include_once $CALL;
                 } else {
-                    throw new \Exception($CALL." not found", 1);
+                    $gg = explode("\\",trim($CALL,".php"));
+                    throw new \Exception(implode("::",$gg)." not found", 1);
                 }
             } else {
                 if (!$_GET['call']) {
