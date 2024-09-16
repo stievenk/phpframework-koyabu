@@ -629,20 +629,20 @@ class Form {
 		  $d = (int) $d - 40; 
 		}
 		if((int) $tanggal / (int) $d != 1){
-			//echo $tanggal_lahir. 'tanggal '.($tanggal/$d)." {$tanggal}/{$d}";
+			
 		  return false;
 		}
 		
 		if((int) $bulan / (int) $m != 1){
-			//echo 'bulan';
+			
 		  return false;
 		}
 		
 		if((int) $tahun / (int) $y != 1){
-			//echo 'tahun';
+			
 		  return false;
 		}
-		//setelah berhasil melewati rintangan, berarti nomornya valid (tidak 100% valid)
+		
 		return true;
 	  }
 
