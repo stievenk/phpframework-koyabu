@@ -4,12 +4,17 @@ namespace Koyabu\Webapi;
 class Panada extends Form {
 
     public $USER = array();
+    public $default_userTipeAllow = 'ALL';
 
     function getConfig() {
         $g = $this->select("select * from z_config");
         while($t = $this->fetch($g)) {
             $this->config[trim($t['name'])] = trim($t['value']);
         }
+    }
+
+    function setUserTipeAllow($data) {
+        $this->setUserTipeAllow = $data;
     }
 
     function getUser($id = '') {
@@ -135,10 +140,16 @@ class Panada extends Form {
                 if (md5(trim($_POST['passwd'])) == $t['password']) {
                     $t['user_token'] = md5(uniqid().$t['id'].$_SERVER['REMOTE_ADDR']);
                     // $this->updateUserData($t['id'],$t['user_token'],date("Y-m-d H:i:s",strtotime("+1 week")));
-                    $data = $t;
-                    $data['done'] = 1;
-                    unset($t['password']);
-                    $_SESSION['panada'] = $t;
+                    $this->config['userTipeAllow'] = $this->config['userTipeAllow'] ? $this->config['userTipeAllow'] : $this->default_userTipeAllow;
+                    $allowUser = explode("|",$this->config['userTipeAllow']);
+                    if (in_array($t['tipe'],$allowUser) or $this->config['userTipeAllow'] == 'ALL') {
+                        $data = $t;
+                        $data['done'] = 1;
+                        unset($t['password']);
+                        $_SESSION['panada'] = $t;
+                    } else {
+                        throw new \Exception("Anda tidak bisa mengakses fitur ini");
+                    }
                 } else {
                         throw new \Exception("Password tidak tepat!");
                     return false;
