@@ -624,7 +624,7 @@ class Form {
 		if(strlen($tahun) ==4){
 		  $tahun = substr($tahun,2,2);
 		}
-		if (intval($d) > 40) {
+		if ((int) $d > 40) {
 		  //Wanita
 		  $d = (int) $d - 40; 
 		}
