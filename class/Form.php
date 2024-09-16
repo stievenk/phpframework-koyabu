@@ -621,24 +621,24 @@ class Form {
 		$bulan = date("m",strtotime($tanggal_lahir));
 		$tanggal = date("d",strtotime($tanggal_lahir));
 		//jika tahun full, ambil 2 digit terakhir
-		if(strlen($tahun==4)){
+		if(strlen($tahun) ==4){
 		  $tahun = substr($tahun,2,2);
 		}
 		if (intval($d) > 40) {
 		  //Wanita
-		  $d = intval($d) - 40; 
+		  $d = (int) $d - 40; 
 		}
-		if($tanggal/$d != 1){
+		if((int) $tanggal / (int) $d != 1){
 			//echo $tanggal_lahir. 'tanggal '.($tanggal/$d)." {$tanggal}/{$d}";
 		  return false;
 		}
 		
-		if($bulan/$m != 1){
+		if((int) $bulan / (int) $m != 1){
 			//echo 'bulan';
 		  return false;
 		}
 		
-		if($tahun/$y != 1){
+		if((int) $tahun / (int) $y != 1){
 			//echo 'tahun';
 		  return false;
 		}
