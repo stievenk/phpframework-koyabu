@@ -173,6 +173,56 @@ class Panada extends Form {
         exit;
     }
 
+    function fcm($msg,$topicToken = 'test',$tipe ='topic',$param = array('hwm' => '1')) {
+        $data = array('done' => 0, 'response' => '');
+        $project = $this->config['fcm_project_id'];
+        foreach($param as $k => $v) {
+            $params[$k] = (string) $v;
+        }
+        $param = $params;
+        try {
+            if (!is_array($msg)) {
+                throw new \Exception("\$msg invalid arguments", 1);
+            }
+            if (!$project) { throw new \Exception("FCM Project ID not set", 1); }
+
+            if (!file_exists($this->config['HOME_DIR'].'data/credentials.json')) {
+                throw new \Exception("Credentials not found", 1);
+            }
+            $client = new \Google_Client();
+		    putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->config['HOME_DIR'].'data/credentials.json');
+		    $client->setAuthConfig($this->config['HOME_DIR'].'data/credentials.json');
+            $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+		    $httpClient = $client->authorize();
+
+            if ($tipe == 'topic') {
+                // Creates a notification for subscribers to the debug topic
+                $message = array(
+                    "message" => array(
+                        "topic" => $topicToken,
+                        "notification" => $msg,
+                        "data" => $param
+                    )
+                );
+            } else {
+                $message = array(
+                    "message" => array(
+                        "token" => $topicToken,
+                        "notification" => $msg,
+                        "data" => $param
+                    )
+                );
+            }
+            $response = $httpClient->post("https://fcm.googleapis.com/v1/projects/{$project}/messages:send", array('json' => $message));
+		    // echo $response;
+            return $response;
+        } catch(\Exception $e) {
+            $data['response'] = $e->getMessage();
+            return $data;
+            // echo json_encode($data); exit;
+        }
+    }
+
     function returnData($data = array()) {
         $data = $data ? $data :  array('done' => 0, 'response' => '');
         echo json_encode($data); exit;

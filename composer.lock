@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f4d095ff9b26f126d587889b0c5e97d",
+    "content-hash": "e5a80e6d0a7812aa13bbb06351226cc2",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1814,6 +1814,58 @@
                 }
             ],
             "time": "2024-08-26T01:10:38+00:00"
+        },
+        {
+            "name": "pragmarx/google2fa",
+            "version": "9.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/antonioribeiro/google2fa.git",
+                "reference": "dd7630b8fdd83edaab240de5169e4179df2d4c70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/dd7630b8fdd83edaab240de5169e4179df2d4c70",
+                "reference": "dd7630b8fdd83edaab240de5169e4179df2d4c70",
+                "shasum": ""
+            },
+            "require": {
+                "paragonie/constant_time_encoding": "^1.0|^2.0|^3.0",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^7.5.15|^8.5|^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PragmaRX\\Google2FA\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio Carlos Ribeiro",
+                    "email": "acr@antoniocarlosribeiro.com",
+                    "role": "Creator & Designer"
+                }
+            ],
+            "description": "A One Time Password Authentication package, compatible with Google Authenticator.",
+            "keywords": [
+                "2fa",
+                "Authentication",
+                "Two Factor Authentication",
+                "google2fa"
+            ],
+            "support": {
+                "issues": "https://github.com/antonioribeiro/google2fa/issues",
+                "source": "https://github.com/antonioribeiro/google2fa/tree/9.x"
+            },
+            "time": "2024-09-07T20:00:18+00:00"
         },
         {
             "name": "psr/cache",
