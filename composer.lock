@@ -66,12 +66,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-qrcode.git",
-                "reference": "9b71dadd937be2b3a743b449dc53241e5c9f2006"
+                "reference": "81291a4b6b336a08468de827d24ec5f13be7cb3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/9b71dadd937be2b3a743b449dc53241e5c9f2006",
-                "reference": "9b71dadd937be2b3a743b449dc53241e5c9f2006",
+                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/81291a4b6b336a08468de827d24ec5f13be7cb3f",
+                "reference": "81291a4b6b336a08468de827d24ec5f13be7cb3f",
                 "shasum": ""
             },
             "require": {
@@ -83,7 +83,7 @@
                 "chillerlan/php-authenticator": "^4.3.1 || ^5.2.1",
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
                 "ext-fileinfo": "*",
-                "phan/phan": "^5.4",
+                "phan/phan": "^5.4.5",
                 "phpcompatibility/php-compatibility": "10.x-dev",
                 "phpmd/phpmd": "^2.15",
                 "phpunit/phpunit": "^9.6",
@@ -152,7 +152,7 @@
                     "type": "Ko-Fi"
                 }
             ],
-            "time": "2024-07-22T13:34:34+00:00"
+            "time": "2024-09-24T13:11:35+00:00"
         },
         {
             "name": "chillerlan/php-settings-container",
@@ -559,16 +559,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.370.0",
+            "version": "v0.374.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "25ad8515701dd832313d0f5f0a828670d60e541a"
+                "reference": "5f6060df419f4f72dcc970197f9a9b1613cecc62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/25ad8515701dd832313d0f5f0a828670d60e541a",
-                "reference": "25ad8515701dd832313d0f5f0a828670d60e541a",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/5f6060df419f4f72dcc970197f9a9b1613cecc62",
+                "reference": "5f6060df419f4f72dcc970197f9a9b1613cecc62",
                 "shasum": ""
             },
             "require": {
@@ -597,9 +597,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.370.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.374.0"
             },
-            "time": "2024-08-26T01:04:18+00:00"
+            "time": "2024-09-23T01:02:23+00:00"
         },
         {
             "name": "google/auth",
@@ -1248,21 +1248,22 @@
         },
         {
             "name": "midtrans/midtrans-php",
-            "version": "2.5.2",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Midtrans/midtrans-php.git",
-                "reference": "a1ad0c824449ca8c68c4cf11b3417ad518311d2b"
+                "reference": "ebbe9127f925d9588bb4ab6b1d48bf27ce14a1ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Midtrans/midtrans-php/zipball/a1ad0c824449ca8c68c4cf11b3417ad518311d2b",
-                "reference": "a1ad0c824449ca8c68c4cf11b3417ad518311d2b",
+                "url": "https://api.github.com/repos/Midtrans/midtrans-php/zipball/ebbe9127f925d9588bb4ab6b1d48bf27ce14a1ad",
+                "reference": "ebbe9127f925d9588bb4ab6b1d48bf27ce14a1ad",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
+                "ext-openssl": "*",
                 "php": ">=5.4"
             },
             "require-dev": {
@@ -1297,9 +1298,9 @@
             "homepage": "https://midtrans.com",
             "support": {
                 "issues": "https://github.com/Midtrans/midtrans-php/issues",
-                "source": "https://github.com/Midtrans/midtrans-php/tree/2.5.2"
+                "source": "https://github.com/Midtrans/midtrans-php/tree/v2.6.0"
             },
-            "time": "2021-08-23T08:52:05+00:00"
+            "time": "2024-09-24T12:46:40+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1711,12 +1712,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "ce0aeec4023bb984b497ab1e97cd258e84b12fee"
+                "reference": "a3ef82e2819472fa4b3aee73313ba3956271f8ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ce0aeec4023bb984b497ab1e97cd258e84b12fee",
-                "reference": "ce0aeec4023bb984b497ab1e97cd258e84b12fee",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/a3ef82e2819472fa4b3aee73313ba3956271f8ed",
+                "reference": "a3ef82e2819472fa4b3aee73313ba3956271f8ed",
                 "shasum": ""
             },
             "require": {
@@ -1813,7 +1814,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-26T01:10:38+00:00"
+            "time": "2024-09-26T02:54:55+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -2088,12 +2089,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "79dff0b268932c640297f5208d6298f71855c03e"
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/79dff0b268932c640297f5208d6298f71855c03e",
-                "reference": "79dff0b268932c640297f5208d6298f71855c03e",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
                 "shasum": ""
             },
             "require": {
@@ -2129,9 +2130,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/3.0.1"
+                "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
-            "time": "2024-08-21T13:31:24+00:00"
+            "time": "2024-09-11T13:17:53+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -2235,12 +2236,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MyIntervals/PHP-CSS-Parser.git",
-                "reference": "895f7ad5493256dae58ac5cafdbdc5f4b34aa7f4"
+                "reference": "df0ac7c8e57833fab5a53f212435a4f87e9dd085"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/895f7ad5493256dae58ac5cafdbdc5f4b34aa7f4",
-                "reference": "895f7ad5493256dae58ac5cafdbdc5f4b34aa7f4",
+                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/df0ac7c8e57833fab5a53f212435a4f87e9dd085",
+                "reference": "df0ac7c8e57833fab5a53f212435a4f87e9dd085",
                 "shasum": ""
             },
             "require": {
@@ -2248,7 +2249,7 @@
                 "php": "^5.6.20 || ^7.0.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7.27"
+                "phpunit/phpunit": "5.7.27 || 6.5.14 || 7.5.20 || 8.5.40"
             },
             "suggest": {
                 "ext-mbstring": "for parsing UTF-8 CSS"
@@ -2292,7 +2293,7 @@
                 "issues": "https://github.com/MyIntervals/PHP-CSS-Parser/issues",
                 "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.x"
             },
-            "time": "2024-08-28T21:45:31+00:00"
+            "time": "2024-09-20T16:55:59+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -2367,7 +2368,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "chillerlan/php-qrcode": 20
+        "chillerlan/php-qrcode": 20,
+        "pragmarx/google2fa": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

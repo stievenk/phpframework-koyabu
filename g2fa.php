@@ -1,10 +1,5 @@
 <?php
 namespace Koyabu\Webapi;
-// use PragmaRX\Google2FA\Google2FA;
-// use BaconQrCode\Renderer\ImageRenderer;
-// use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
-// use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-// use BaconQrCode\Writer;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 require_once  $MASTER_PATH . 'autoload.php';

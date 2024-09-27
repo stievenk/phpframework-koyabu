@@ -670,6 +670,30 @@ class Form {
 		}
 	  }
 
+	  function G2FA_genQRcode($company,$user) {
+			$google2fa = new \PragmaRX\Google2FA\Google2FA();
+			$secret = $google2fa->generateSecretKey();
+			$g2faUrl = $google2fa->getQRCodeUrl(
+			    $company,
+			    $user,
+			    $secret
+			);
+			$QRcode = $this->QRcode($g2faUrl);
+			$r =  array(
+				'secret' => $secret,
+				'url' => $g2faUrl,
+				'qrcode' => $QRcode
+			);
+			return $r;
+	  }
+
+	  function G2FA_getCurrentOTP($secret) {
+		$google2fa = new \PragmaRX\Google2FA\Google2FA();
+		$currentOTP = $google2fa->getCurrentOtp($secret);
+		return $currentOTP;
+	  }
+
+	  
 	  /** 
 	   * Generate list <option></option> for <select></select>
 	   * @param	mixed	$tipe	Tipe option: year|month

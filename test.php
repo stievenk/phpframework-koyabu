@@ -5,6 +5,9 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 require_once  $MASTER_PATH . 'autoload.php';
 
 $API = new Koyabu($config);
+// $r = $API->G2FA_genQRcode('HWM','stieven');
+$r = $API->G2FA_getCurrentOTP('23K74EPHPTVGZMPE');
+print_r($r);
 // $codes = array();
 // echo '<h3>Double QRCode</h3>';
 //     for($i=0;$i<54;$i++) {
