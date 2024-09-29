@@ -154,7 +154,7 @@ class Koyabu extends Form {
         $this->token_expire = $expire;
     }
 
-    public function loadPage() {
+    public function loadPage() {    
         $error = array('done' => 0, 'response' => '');
         $_GET['call'] = $_GET['call'] ? $_GET['call'] : 'home';
         $_GET['mod'] = $_GET['mod'] ? $_GET['mod'] : $_GET['m'];

@@ -475,6 +475,93 @@ class Form {
 		}
 	}
 
+	function imgWatermark($FILESRC,$watermark,$pos = 'center') {
+		
+		if (file_exists($FILESRC)) {
+			$img=getimagesize($FILESRC);
+			list($imagewidth,$imageheight)=$img;
+			$ow = $imagewidth;
+			$oh = $imageheight;
+			$img_src = imagecreatetruecolor($imagewidth,$imageheight);
+			$black = imagecolorallocate($img_src, 0, 0, 0);
+			$white = imagecolorallocate($img_src, 255, 255, 255);
+			$des_src = imagecreatefromjpeg($FILESRC);
+			imagecopyresampled($img_src,$des_src,0,0,0,0,$imagewidth,$imageheight,$imagewidth,$imageheight);
+			if ($watermark and file_exists($watermark)) {
+				list($wt_w,$wt_h)=getimagesize($watermark);
+				$wt_src = imagecreatefrompng($watermark);
+				imagealphablending( $wt_src, false );
+				imagesavealpha( $wt_src, true );
+				$wt_ww = $wt_w;
+				$wt_hh = $wt_h;
+				if ($wt_w > $ow) {
+					$wt_ww = $ow / $wt_w * $wt_w;
+					$wt_hh = $ow / $wt_w * $wt_h; 
+				}
+				
+				switch ($pos) {
+					default : 
+					case 'center' :
+						$wt_y = round(($oh - $wt_hh) / 2);
+						$wt_x = round(($ow - $wt_ww) / 2);
+					break;
+					case 'top-left' :
+						$wt_x = 5; $wt_y = 5; 
+					break;	
+					
+					case 'top-right' :
+						$wt_x = $ow - $wt_ww - 5;
+						$wt_y = 5;
+					break;
+					case 'bottom-right' :
+						$wt_x = $ow - $wt_ww - 5;
+						$wt_y = $oh - $wt_hh - 5;
+					break;
+					case 'bottom-left' :
+						$wt_x = 5;
+						$wt_y = $oh - $wt_hh - 5;
+					break;
+				}
+				imagecopyresampled($img_src,$wt_src,$wt_x,$wt_y,0,0,$wt_ww,$wt_hh,$wt_w,$wt_h);
+				imagejpeg($img_src,$FILESRC,100);
+				imagedestroy($img_src);
+				imagedestroy($des_src);
+				imagedestroy($wt_src);
+			}
+		}
+	}
+
+	function imgText($FILESRC,$text, $extraHeight = 0.20, $extraWidth = 0.02) {
+		$teks = explode("\n",$text);
+		if (file_exists($FILESRC)) {
+			$img=getimagesize($FILESRC);
+			list($imagewidth,$imageheight)=$img;
+			$ow = $imagewidth;
+			$oh = $imageheight;
+			$ee = ($imageheight * $extraHeight);
+			$ww = $imagewidth + ($imagewidth * $extraWidth);
+			$hh = $imageheight + ($ee < 150 ? 150 : $ee);
+			$x = ($ww - $ow) / 2;
+			$y = ($ww - $ow) / 2;
+			$img_src = imagecreatetruecolor($ww,$hh);
+			$black = imagecolorallocate($img_src, 0, 0, 0);
+			$white = imagecolorallocate($img_src, 255, 255, 255);
+			imagefill($img_src,0,0,$black);
+			$des_src = imagecreatefromjpeg($FILESRC);
+			imagecopyresampled($img_src,$des_src,$x,$y,0,0,$imagewidth,$imageheight,$ow,$oh);
+			
+			for($i = 0; $i < count($teks); $i++) {
+				if (trim($teks[$i])) {
+					imagestring($img_src, 5, $x, $oh + $y + 5 + ($i * 20), trim($teks[$i]), $white);
+				}
+			}
+			imagejpeg($img_src,$FILESRC,100);
+			imagedestroy($img_src);
+			imagedestroy($des_src);
+			return true;
+		}
+	}
+
 	function imgThumbs($FILESRC,$THUMBS='',$w=100,$h=0,$ratio=true,$color='#FFFFFF') {
 		if ($THUMBS == '') { $THUMBS=$FILESRC; }
         if (file_exists($FILESRC)) {
