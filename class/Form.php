@@ -225,7 +225,7 @@ class Form {
 		if (array_is_list($arrays)) {
 			foreach($arrays as $v) {
 				// $v = trim($v);
-				$val = trim($val);
+				// $val = trim($v);
 				if (is_array($v)) {
 					// print_r($v);
 					echo '<option value="'.trim($v['id']).'" '. (trim($v['id']) == trim($val) ? 'selected="selected"' : '') .'>'.$v['name'].'</option>';
@@ -802,7 +802,68 @@ class Form {
 				}
 			break;
 		}
-	  }
+	}
+
+	public function pagination_bs5($page,$ap,$link) {
+		echo '<nav>
+		<div class="d-flex justify-content-between gap-1">
+		<ul class="pagination justify-content-start">
+		<li class="page-item">
+			<a class="page-link" href="'.$link.'&p='. ($page - 1) .'" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+			</li>
+		</ul>
+		<ul class="pagination justify-content-between">';
+
+			if ($ap <= 9) {
+				for ($i = 1; $i <= $ap; $i++) {
+					echo '<li class="page-item '.($page == $i ? 'active' : '').'"><a class="page-link" href="'.$link.'&p='. $i .'">'.$i.'</a></li>';
+				}
+			} else {
+				
+				for ($i = 1; $i < 3; $i++) {
+					echo '<li class="page-item '.($page == $i ? 'active' : '').'"><a class="page-link" href="'.$link.'&p='. $i .'">'.$i.'</a></li>';
+				}
+				if ($page+1 > 2 and $page < $ap) {
+						$p = $page <= 2 ? $page+1 : $page;
+						$ep = ($page+2);
+						$ep = $ep > $ap - 1 ? $ap - 1 : $ep;
+						if ($page > 3) {
+							echo '<li class="page-item"><a class="page-link">..</a></li>';
+						}
+						for ($i = $p; $i < $ep; $i++) {
+							echo '<li class="page-item '.($page == $i ? 'active' : '').'"><a class="page-link" href="'.$link.'&p='. $i .'">'.$i.'</a></li>';
+						}
+						if ($page < $ap-2) {
+							echo '<li class="page-item"><a class="page-link">..</a></li>';
+						}
+				} else {
+					echo '<li class="page-item"><a class="page-link">..</a></li>';
+				}
+				// if ($ap >= 7) {
+				// 	if ($page >= 3) {
+				// 		for ($i = $page; $i <= $ap-3; $i++) {
+				// 			echo '<li class="page-item '.($page == $i ? 'active' : '').'"><a class="page-link" href="'.$link.'&p='. ($i) .'">'. ($i).'</a></li>';
+				// 		}
+				// 	}
+				// 	echo '<li class="page-item"><a class="page-link">...</a></li>';
+				// }
+				for ($i = $ap-1; $i <= $ap; $i++) {
+					echo '<li class="page-item '.($page == $i ? 'active' : '').'"><a class="page-link" href="'.$link.'&p='. $i .'">'.$i.'</a></li>';
+				}
+			}
+			
+			echo '
+		</ul>
+		<ul class="pagination"><li class="page-item">
+			<a class="page-link" href="'.$link.'&p='. ($page + 1) .'" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+			</li></ul>
+		</div>
+		</nav>';
+	}
 
     function __destruct() {
 
