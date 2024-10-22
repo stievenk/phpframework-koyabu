@@ -687,6 +687,20 @@ class Form {
 		return $d;
 	}
 
+	function SecTimeStamp($time) {
+		$hari = floor($time / 3600 / 24);
+		if ($hari > 0) {
+			$h = "{$hari}d ";
+		}
+		$time = $time - (3600 * 24 * $hari);
+		$jam = floor($time / 3600);
+		$time = $time - (3600 * $jam);
+		$menit = floor($time / 60);
+		$time = $time - (60 * $menit);
+
+		return "{$h}". str_pad($jam,2,'0',STR_PAD_LEFT).":".str_pad($menit,2,'0',STR_PAD_LEFT).":".str_pad($time,2,'0',STR_PAD_LEFT)."";
+	}
+
 	function umur($tgl) {
 		$tgl = date("Y-m-d",strtotime($tgl));
 		list($y,$m,$d)=explode("-",$tgl);
