@@ -1,5 +1,8 @@
 <?php
 namespace Koyabu\Webapi;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 class Panada extends Form {
 
@@ -281,6 +284,70 @@ class Panada extends Form {
             $data['response'] = $e->getMessage();
             return $data;
             // echo json_encode($data); exit;
+        }
+    }
+
+    function sendMail($option) {
+        global $config;
+    
+        $mail = new PHPMailer(true);
+        try {
+            //Server settings
+            // $mail->SMTPDebug = PHPMailer\PHPMailer\SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = $config['smtp_host'];                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = $config['smtp_user'];                     //SMTP username
+            $mail->Password   = $config['smtp_pass'];                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+            //Recipients
+            // $mail->setFrom('info@example.com', 'Mailer');
+            // $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
+            // $mail->addAddress('ellen@example.com');               //Name is optional
+            // $mail->addReplyTo('info@example.com', 'Information');
+            // $mail->addCC('cc@example.com');
+            // $mail->addBCC('bcc@example.com');
+
+            //Attachments
+            // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+            // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+            //Content
+            if (is_array($option['to'])) {
+                foreach($option['to'] as $v) {
+                    $mail->addAddress($v); 
+                }
+            }
+            else { $mail->addAddress($option['to']); }
+
+            if ($option['from']) {
+                $mail->setFrom($option['from']['email'], $option['from']['name']);
+            }
+            if ($option['replyTo']) {
+                $mail->addReplyTo($option['replyTo']['email'], $option['replyTo']['name']);
+            }
+            if ($option['bcc']) {
+                $mail->addBCC($option['bcc']);
+            }
+            if ($option['cc']) {
+                $mail->addCC($option['cc']);
+            }
+            if ($option['attachment']) {
+                $mail->addAttachment($option['attachment']); 
+            }
+            $mail->isHTML($option['isHTML'] ? $option['isHTML'] : false);                                 //Set email format to HTML
+            $mail->Subject = $option['subject'];
+            $mail->Body    = $option['body'];
+            // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+            //echo 'Message has been sent';
+            return true;
+        } catch (Exception $e) {
+            $this->error = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            return false;
         }
     }
 

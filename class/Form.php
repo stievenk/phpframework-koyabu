@@ -4,14 +4,14 @@ use Koyabu\Webapi;
 use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
- * version: 8.1.0
- * last update: 21 Juli 2024
+ * version: 8.1.1
+ * last update: 27 Oktober 2024
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
 */
 class Form {
-    public $Version = '8.1.0'; // 21 Juli 2024
+    public $Version = '8.1.1'; // 27 Oktober 2024
     public $Database;
     public $config;
     public $error;
@@ -251,7 +251,11 @@ class Form {
 			$SQL = "select * {$cc} from {$table} {$orderby}";
 			$g = $this->Database->query($SQL);
 			while($t = $this->Database->fetch_assoc($g)) {
-				echo '<option value="'.trim($t[$fld[0]]).'" '. (trim($t[$fld[0]]) == $default_value ? 'selected="selected"' : '') .'>'.trim($t[$fld[1]]).'</option>';
+				$attrib = array();
+				foreach($t as $k => $v) {
+					$attrib[] = 'data-'.$k.'="'.trim($v).'"';
+				}
+				echo '<option '. implode(" ",$attrib) .' value="'.trim($t[$fld[0]]).'" '. (trim($t[$fld[0]]) == $default_value ? 'selected="selected"' : '') .'>'.trim($t[$fld[1]]).'</option>';
 			}
 		} else { echo "Invalid type"; }
 	}
