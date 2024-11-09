@@ -6,21 +6,28 @@ require_once  $MASTER_PATH . 'autoload.php';
 
 $API = new Koyabu($config);
 // $r = $API->G2FA_genQRcode('HWM','stieven');
-$r = $API->G2FA_getCurrentOTP('23K74EPHPTVGZMPE');
-print_r($r);
-// $codes = array();
-// echo '<h3>Double QRCode</h3>';
-//     for($i=0;$i<54;$i++) {
-//         $code = $codes[$i] ? $codes[$i] : 'HWM'.date("ymd").rand(1,99);
-//         echo '<div style="float:left; width:2cm; margin:2px;">';
-//         echo '<img src="'.$API->QRcode($code,true).'" width="100%">';
-//         echo '<div style="font-family:arial; font-size:8px; text-align:center">'.$code.'</div>';
-//         echo '</div>';
-//         echo '<div style="float:left; width:2cm; margin:2px;">';
-//         echo '<img src="'.$API->QRcode($code,true).'" width="100%">';
-//         echo '<div style="font-family:arial; font-size:8px; text-align:center">'.$code.'</div>';
-//         echo '</div>';
-//     }
+// $r = $API->G2FA_getCurrentOTP('23K74EPHPTVGZMPE');
+// print_r($r);
+
+
+$codes = array();
+$start = 100;
+$end = 200;
+echo '<h3>QRCode</h3>';
+    for($i=$start;$i<$end;$i++) {
+        $code = $codes[$i] ? $codes[$i] : 'HWM'.date("ymd").str_pad($i,4,'0',STR_PAD_LEFT);
+        $codes[$i] = $code;
+        echo '<div style="float:left; width:2cm; margin:2px;">';
+        echo '<img src="'.$API->QRcode($code,true).'" width="100%">';
+        echo '<div style="font-family:arial; font-size:8px; text-align:center">'.$code.'</div>';
+        echo '</div>';
+        // echo '<div style="float:left; width:2cm; margin:2px;">';
+        // echo '<img src="'.$API->QRcode($code,true).'" width="100%">';
+        // echo '<div style="font-family:arial; font-size:8px; text-align:center">'.$code.'</div>';
+        // echo '</div>';
+    }
+
+
 // $t = $API->get(1,'t_member');
 // $g = $Database->query("select * from t_member limit 1");
 // $t = $Database->fetch_assoc($g);

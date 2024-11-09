@@ -67,8 +67,8 @@ class Koyabu extends Form {
     public function login() {
         try {
             if (trim($_POST['uname']) and trim($_POST['passwd'])) {
-                $g = $this->select("select * from t_member where `username`='". $this->escape_string($_POST['uname']) ."' or `email`='". $this->escape_string($_POST['uname']) ."'");
-                $t = $this->fetch($g);
+                    $g = $this->select("select * from t_member where `username`='". $this->escape_string($_POST['uname']) ."' or `email`='". $this->escape_string($_POST['uname']) ."'");
+                    $t = $this->fetch($g);
                 if ($t['id']) {
                     if ($t['tipe'] == 'BANNED') {
                         throw new \Exception("Your account is BANNED", 1);

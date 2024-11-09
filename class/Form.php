@@ -883,6 +883,26 @@ class Form {
 		</nav>';
 	}
 
+	public function getServerInfo($url,$Headers,$params,$return = 'json') {
+		$option = array(
+			'curl' => array( CURLOPT_SSL_VERIFYPEER => false),
+			'verify' => false
+		);
+		$client = new \GuzzleHttp\Client($option);
+		$res = $client->request('POST',$url,array(
+            'headers' => array(
+                'app_id' => $Headers['app_id'],
+				'Authorization' => $Headers['app_key'], // base64
+                'content-type' => 'application/x-www-form-urlencoded'),
+            'form_params' => $params
+        ));
+        $result = $res->getBody();
+		// echo $result;
+		if ($return == 'json') {
+			return json_decode($result,true);
+		} else { return $result; }
+	}
+
     function __destruct() {
 
     }
