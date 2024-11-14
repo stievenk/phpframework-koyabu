@@ -212,31 +212,35 @@ class Form {
 	 * @param mixed	$val	default value for selected
 	 */
 	public function form_select($array,$val='') {
-		if (is_array($array)) {
-			$arrays = $array;
-		} else if (is_file($array)){
-			if (file_exists($array)) {
-				$data = file_get_contents($array);
-				$arrays = explode("\n",$data);
-			}
+		if (in_array($array,array("MONTH","YEAR"))) {
+			$this->option_list($array,$val);
 		} else {
-			$arrays = explode("|",$array);
-		}
-		if (array_is_list($arrays)) {
-			foreach($arrays as $v) {
-				// $v = trim($v);
-				// $val = trim($v);
-				if (is_array($v)) {
-					// print_r($v);
-					echo '<option value="'.trim($v['id']).'" '. (trim($v['id']) == trim($val) ? 'selected="selected"' : '') .'>'.$v['name'].'</option>';
-				} else {
-					echo '<option value="'. trim($v).'" '. (trim($v) == trim($val) ? 'selected="selected"' : '') .'>'.$v.'</option>';
+			if (is_array($array)) {
+				$arrays = $array;
+			} else if (is_file($array)){
+				if (file_exists($array)) {
+					$data = file_get_contents($array);
+					$arrays = explode("\n",$data);
 				}
+			} else {
+				$arrays = explode("|",$array);
 			}
-		} else {
-			foreach($arrays as $k => $v) {
-				$val = trim($val);
-				echo '<option value="'.trim($v).'" '. (trim($v) == trim($val) ? 'selected="selected"' : '') .'>'.str_replace("_"," ",$k).'</option>';
+			if (array_is_list($arrays)) {
+				foreach($arrays as $v) {
+					// $v = trim($v);
+					// $val = trim($v);
+					if (is_array($v)) {
+						// print_r($v);
+						echo '<option value="'.trim($v['id']).'" '. (trim($v['id']) == trim($val) ? 'selected="selected"' : '') .'>'.$v['name'].'</option>';
+					} else {
+						echo '<option value="'. trim($v).'" '. (trim($v) == trim($val) ? 'selected="selected"' : '') .'>'.$v.'</option>';
+					}
+				}
+			} else {
+				foreach($arrays as $k => $v) {
+					$val = trim($val);
+					echo '<option value="'.trim($v).'" '. (trim($v) == trim($val) ? 'selected="selected"' : '') .'>'.str_replace("_"," ",$k).'</option>';
+				}
 			}
 		}
 	}
@@ -805,6 +809,7 @@ class Form {
 	   * @param string	$default	Default value for selected option
 	  */
 	  function option_list($tipe,$default='') {
+		$tipe = strtolower($tipe);
 		$year = date("Y");
 		switch($tipe) {
 			case 'bulan' :
