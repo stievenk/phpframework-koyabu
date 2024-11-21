@@ -60,53 +60,57 @@ class Panada extends Form {
         $SERVER_REQUEST_STR = parse_url($_SERVER['REQUEST_URI']);
         $REF_URL = $_REQUEST['ref'] ? $_REQUEST['ref'].'&ref='.$_REQUEST['call'] : 'home&'.str_replace('&ref='.$_REQUEST['call'],'',str_replace('call','ref',$SERVER_REQUEST_STR['query']));
         $RELOAD_URL = trim(preg_replace(array('#call=#','#app_version=(.+?)&#'),'',$SERVER_REQUEST_STR['query']),'&');
-        if (!$_SESSION[$this->sesname]) {
-            // echo $_GET['cmd'];
-            $this->loginPage();
-            // $this->loadLayout('home');
+        if ($_REQUEST['printpage'] ==  1) {
+            $this->printLayout();
         } else {
-            if ($_GET['call'] || $_GET['mod']) {
-                $this->USER = $this->getUser();
-                $this->updateUser();
-                $_GET['mod'] = $_GET['mod'] ? $_GET['mod'] : $_GET['m'];
-                $CALL = '';
-                if ($_GET['mod']) {
-                    $mod = $_GET['mod'];
-                    $CALL = $this->HOME_ROOT . 'modules' . DIRECTORY_SEPARATOR . $mod . DIRECTORY_SEPARATOR;
-                    if ($_GET['f']) { $CALL = $CALL . basename($_GET['f']) . '.php'; }
-                    else { $CALL = $CALL . 'index.php'; }
-                } else if ($_GET['call']) {
-                    $CALL = $this->HOME_ROOT . 'call' . DIRECTORY_SEPARATOR . $_GET['call'] . '.php';
-                }
-
-                try {
-                    if ($CALL != '') {
-                        if (file_exists($CALL)) {
-                            include_once $CALL;
-                        } else {
-                            throw new \Exception("{$CALL} not found", 1);
-                        }
-                    } else { 
-                        $page = $_GET['page'] ? $_GET['page'] : 'home';
-                        $this->loadLayout($page); 
+            if (!$_SESSION[$this->sesname]) {
+                // echo $_GET['cmd'];
+                $this->loginPage();
+                // $this->loadLayout('home');
+            } else {
+                if ($_GET['call'] || $_GET['mod']) {
+                    $this->USER = $this->getUser();
+                    $this->updateUser();
+                    $_GET['mod'] = $_GET['mod'] ? $_GET['mod'] : $_GET['m'];
+                    $CALL = '';
+                    if ($_GET['mod']) {
+                        $mod = $_GET['mod'];
+                        $CALL = $this->HOME_ROOT . 'modules' . DIRECTORY_SEPARATOR . $mod . DIRECTORY_SEPARATOR;
+                        if ($_GET['f']) { $CALL = $CALL . basename($_GET['f']) . '.php'; }
+                        else { $CALL = $CALL . 'index.php'; }
+                    } else if ($_GET['call']) {
+                        $CALL = $this->HOME_ROOT . 'call' . DIRECTORY_SEPARATOR . $_GET['call'] . '.php';
                     }
 
-                } catch(\Exception $e) {
-                    $error['response'] = $e->getMessage();
-                    //echo json_encode($error); exit;
-                    // echo __FILE__ .' '.__LINE__;
-                    echo '<div class="p-3">
-                    <p>Error: '. $error['response'] .'</p>
-                    <a href="./" class="btn btn-default">Back <i class="fa fa-home"></i></a>
-                    </div>';    
-                }
-            } else {
-                if ($_GET['page']) {
-                    $this->loadLayout($_GET['page'],true);
+                    try {
+                        if ($CALL != '') {
+                            if (file_exists($CALL)) {
+                                include_once $CALL;
+                            } else {
+                                throw new \Exception("{$CALL} not found", 1);
+                            }
+                        } else { 
+                            $page = $_GET['page'] ? $_GET['page'] : 'home';
+                            $this->loadLayout($page); 
+                        }
+
+                    } catch(\Exception $e) {
+                        $error['response'] = $e->getMessage();
+                        //echo json_encode($error); exit;
+                        // echo __FILE__ .' '.__LINE__;
+                        echo '<div class="p-3">
+                        <p>Error: '. $error['response'] .'</p>
+                        <a href="./" class="btn btn-default">Back <i class="fa fa-home"></i></a>
+                        </div>';    
+                    }
                 } else {
-                    $this->loadLayout('home',false);
+                    if ($_GET['page']) {
+                        $this->loadLayout($_GET['page'],true);
+                    } else {
+                        $this->loadLayout('home',false);
+                    }
+                    
                 }
-                
             }
         }
 
@@ -131,6 +135,19 @@ class Panada extends Form {
     //     echo '</div>';
     //     $this->pageBottom();
     // }
+
+    function printLayout() {
+        $this->pageHeader();
+        echo '<body class="layout-fixed sidebar-expand-lg bg-body-tertiary sidebar-collapse" onload="window.print()">';
+        if ($_GET['mod']) {
+            $MOD_URL = "module&mod=".$_GET['mod'];
+            $f = $_GET['f'] ? $_GET['f'] : 'index';
+            $fileinclude = 'modules/'.basename($_GET['mod']).'/'.basename($f).'.php';
+            include $fileinclude;
+        }
+        include 'html/footer.php';
+        $this->pageBottom();
+    }
 
     function loadLayout($include='',$mod = false) {
         if ($mod == true) {
