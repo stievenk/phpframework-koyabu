@@ -151,9 +151,9 @@ class Panada extends Form {
 
     function loadLayout($include='',$mod = false) {
         if ($mod == true) {
-            $MOD_URL = "mod=".$_GET['mod'];
+            $MOD_URL = "mod=".($_GET['mod'] ? $_GET['mod'] : $_GET['page']);
         } else {
-            $MOD_URL = "module&mod=".$include;
+            $MOD_URL = "module&mod=".($include ? $include : ($_GET['mod'] ? $_GET['mod'] : $_GET['page']));
         }
         $SERVER_REQUEST_STR = parse_url($_SERVER['REQUEST_URI']);
         $REF_URL = $_REQUEST['ref'] ? $_REQUEST['ref'].'&ref='.$_REQUEST['call'] : 'home&'.str_replace('&ref='.$_REQUEST['call'],'',str_replace('call','ref',$SERVER_REQUEST_STR['query']));

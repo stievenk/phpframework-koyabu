@@ -245,6 +245,10 @@ class Form {
 		}
 	}
 
+	public function form_option_list($table,$fld,$default_value='',$orderby='') {
+		$this->select_option_list($table,$fld,$default_value,$orderby);
+	}
+
 	public function select_option_list($table,$fld,$default_value='',$orderby='') {
 		if (is_array($fld)) {
 			$x = explode("|",$fld[1]);
