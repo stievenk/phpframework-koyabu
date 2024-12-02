@@ -4,7 +4,7 @@ use Koyabu\Webapi;
 use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
- * version: 8.1.1
+ * version: 8.1.2
  * last update: 27 Oktober 2024
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
@@ -245,6 +245,23 @@ class Form {
 		}
 	}
 
+	/** 
+	 * Alias for version 8.1.2
+	*/
+	public function form_option($array,$val='') {
+		$this->form_select($array,$val);
+	}
+
+	/** 
+	 * Alias for version 8.1.2
+	*/
+	function form_option_query($table,$fld,$default_value='',$orderby='') {
+		$this->select_option_list($table,$fld,$default_value,$orderby);
+	}
+
+	function select_query($table,$fld,$default_value='',$orderby='') {
+		$this->select_option_list($table,$fld,$default_value,$orderby);
+	}
 	public function form_option_list($table,$fld,$default_value='',$orderby='') {
 		$this->select_option_list($table,$fld,$default_value,$orderby);
 	}
@@ -256,7 +273,11 @@ class Form {
 				$cc = ", concat_ws(' ',".implode(",",$x).") as name";
 				$fld[1] = 'name';
 			}
-			$SQL = "select * {$cc} from {$table} {$orderby}";
+			if (preg_match("#^select#si",$table)) {
+				$SQL = $table;
+			} else {
+				$SQL = "select * {$cc} from {$table} {$orderby}";
+			}
 			$g = $this->Database->query($SQL);
 			while($t = $this->Database->fetch_assoc($g)) {
 				$attrib = array();
@@ -759,12 +780,18 @@ class Form {
 		return true;
 	  }
 
-	  function QRcode($data,$base64 = true) {
+	  function QRcode($data,$base64 = true, $filename='') {
 		$options = new QROptions;
 		// $options->version      = 7;
 		$options->outputBase64 = $base64;
-		$qrcode = (new QRCode($options))->render($data);
-		return $qrcode;
+		if ($filename) { 
+			$options->outputBase64 = false;
+			$options->cachefile = $filename;
+			$qrcode = (new QRCode($options))->render($data);
+		} else {
+			$qrcode = (new QRCode($options))->render($data);
+			return $qrcode;
+		}
 	  }
 
 	  function QRcodeRead($file) {

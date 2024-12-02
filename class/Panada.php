@@ -208,6 +208,10 @@ class Panada extends Form {
         include 'html/bottom.php';
     }
 
+    function pageFooter() {
+        include 'html/footer.php';
+    }
+
     function getLogin() {
         try {
             if (!$_POST['uname']) { throw new \Exception("Please enter your username", 1); }
