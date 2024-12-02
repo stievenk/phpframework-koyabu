@@ -4,10 +4,12 @@
 ```composer require koyabu/webapi```
 
 ## composer.json
-If your get error about minimum-stability, edit your composer.json add add/edit this param
+If your get error about minimum-stability, edit your ```composer.json```
 ```
+{
     "minimum-stability": "dev",
     "prefer-stable": false
+}
 ```
 
 ## config.php
@@ -16,8 +18,6 @@ For configuration example you can see file: vendor/koyabu/webapi/config.sample.p
 namespace Koyabu\Webapi;
 require_once 'vendor/autoload.php';
 
-$config = [];
-$config = [];
 $config['APPS_NAME'] = 'KOYABU PHP FRAMEWORK';
 $config['HOME_DIR'] = __DIR__ . DIRECTORY_SEPARATOR;
 
