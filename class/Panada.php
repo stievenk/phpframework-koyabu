@@ -143,9 +143,11 @@ class Panada extends Form {
             $MOD_URL = "module&mod=".$_GET['mod'];
             $f = $_GET['f'] ? $_GET['f'] : 'index';
             $fileinclude = 'modules/'.basename($_GET['mod']).'/'.basename($f).'.php';
-            include $fileinclude;
+            if (file_exists($fileinclude)) {
+                include $fileinclude;
+            }
         }
-        include 'html/footer.php';
+        // include 'html/footer.php';
         $this->pageBottom();
     }
 

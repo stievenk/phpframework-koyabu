@@ -43,6 +43,13 @@ class Koyabu extends Form {
         }
     }
 
+    function getConfig() {
+        $g = $this->select("select * from z_config");
+        while($t = $this->fetch($g)) {
+            $this->config[trim($t['name'])] = trim($t['value']);
+        }
+    }
+
     public function getUserData($username = "") {
         $username = $username ? $username : $this->Params['username'];
         try {
