@@ -62,7 +62,7 @@ class Form {
         try {
             if (is_array($data)) {
                 $datas = $data;
-                $f = $this->parse($data);
+               	$f = $this->parse($data);
                 $fl = array();
                 if (is_array($primary)) {
                     $new = $method == 'REPLACE' ? 1 : 0;
@@ -70,7 +70,7 @@ class Form {
                         $fl[] = "`{$v}` = '". $this->Database->escape_string($datas[$v]) ."'";
                         if (!trim($datas[$v])) { $new = 1; }
                     }
-                    if ($new == 0) { 
+                    if ($new == 0 or $method == 'UPDATE') { 
                         $NEW = 0; 
                         $SQL = "UPDATE `{$table}` SET {$f['field']} WHERE ". implode(" and ",$fl) .""; 
                         $ID = $datas[$primary[0]];
@@ -937,6 +937,22 @@ class Form {
 		if ($return == 'json') {
 			return json_decode($result,true);
 		} else { return $result; }
+	}
+
+	function table_attrib($data, $prefix = '',$quote='"') {
+		if (is_array($data)) {
+			foreach($data as $k => $v) {
+				if ($quote == '"') {
+					$att[] = "{$prefix}{$k}=\"{$v}\"";
+				} else {
+					$att[] = "{$prefix}{$k}='{$v}'";
+				}
+			}
+			$attrib=implode(" ",$att);
+			return $attrib;
+		} else {
+			return '';
+		}
 	}
 
     function __destruct() {
