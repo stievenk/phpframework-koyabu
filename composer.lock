@@ -558,16 +558,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.385.0",
+            "version": "v0.386.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "d6a89ec1883ecd1de145179d44cb274cf4927da9"
+                "reference": "cd08601dd729977f7198c72cd10d05901833bec0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/d6a89ec1883ecd1de145179d44cb274cf4927da9",
-                "reference": "d6a89ec1883ecd1de145179d44cb274cf4927da9",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/cd08601dd729977f7198c72cd10d05901833bec0",
+                "reference": "cd08601dd729977f7198c72cd10d05901833bec0",
                 "shasum": ""
             },
             "require": {
@@ -596,9 +596,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.385.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.386.0"
             },
-            "time": "2024-12-09T01:08:31+00:00"
+            "time": "2024-12-16T01:04:20+00:00"
         },
         {
             "name": "google/auth",
@@ -1063,12 +1063,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "92bae6e762afcb6d5e7e898d0a43881f6fdf8c37"
+                "reference": "ffd6ccd45dd613736cb6b9b4d0a5a61c6e679135"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/92bae6e762afcb6d5e7e898d0a43881f6fdf8c37",
-                "reference": "92bae6e762afcb6d5e7e898d0a43881f6fdf8c37",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/ffd6ccd45dd613736cb6b9b4d0a5a61c6e679135",
+                "reference": "ffd6ccd45dd613736cb6b9b4d0a5a61c6e679135",
                 "shasum": ""
             },
             "require": {
@@ -1132,7 +1132,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2024-12-14T07:27:56+00:00"
+            "time": "2024-12-16T14:40:54+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
