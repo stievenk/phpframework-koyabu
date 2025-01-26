@@ -11,8 +11,8 @@ $API = new Koyabu($config);
 
 
 $codes = array();
-$start = 100;
-$end = 200;
+$start = 200;
+$end = 600;
 echo '<h3>QRCode</h3>';
     for($i=$start;$i<$end;$i++) {
         $code = $codes[$i] ? $codes[$i] : 'HWM'.date("ymd").str_pad($i,4,'0',STR_PAD_LEFT);

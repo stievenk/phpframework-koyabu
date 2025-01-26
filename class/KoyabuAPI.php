@@ -65,7 +65,7 @@ class KoyabuAPI extends Form {
                throw new \Exception("Error Processing Request");
             }
          } else {
-            $include = $this->HOME_ROOt . 'call' . DIRECTORY_SEPARATOR . basename($page) . '.php';
+            $include = $this->HOME_ROOT . 'call' . DIRECTORY_SEPARATOR . basename($page) . '.php';
          }
         //  echo $include;
          if (file_exists($include)) {
@@ -80,7 +80,7 @@ class KoyabuAPI extends Form {
             include_once $include;
             $this->getScriptBottom([]);
          } else {
-            throw new \Exception("Invalid filename");  
+            throw new \Exception("Invalid filename {$include}");  
          }
       } catch(\Exception $e) {
          $this->error = $e->getMessage();
@@ -253,7 +253,7 @@ class KoyabuAPI extends Form {
         echo json_encode($data); exit;
     }
    
-   public function getLoginPage() {
+   public function getLoginPage($logout = 0) {
       include_once $this->HOME_ROOT . 'call/login.php';
    }
 
@@ -268,7 +268,7 @@ class KoyabuAPI extends Form {
    public function getNavBar($option=array()) {
       include_once $this->HOME_ROOT . 'html/navbar.php';
       if ($option['sidebar'] == true and $option['sidebar_auto'] == true) {
-        $this->getSideBar([]);
+        $this->getSideBar($option);
       }
    }
 

@@ -337,7 +337,7 @@ class Form {
 		global $config;
         $data = array('done' => 0, 'response' => '');
         $HOME_DIR = $config['dropbox']['home_dir'].$dir;
-		$HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
+		  $HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
         try {
             if (!$this->config['dropbox']['access_token']) {
                 throw new \Exception("Dropbox Access Token not set", 1);
