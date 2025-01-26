@@ -9,6 +9,9 @@ class TarsiusServer extends Form {
       parent::__construct($config);
       // print_r($_SERVER['REQUEST_METHOD']);
       // print_r($_POST);
+      if ($config['FIRSTKEY'] and $config['SECONDKEY']) {
+         $this->setKeySecret($config['FIRSTKEY'],$config['SECONDKEY']);
+      }
       try {
          if (method_exists($this,$_POST['command'])) { 
                $this->{$_POST['command']}($_POST['params']);
@@ -18,6 +21,11 @@ class TarsiusServer extends Form {
       }  catch (\Exception $e) {
                echo 'Caught exception: ',  $e->getMessage(), "\n";
       }
+   }
+
+   function setKeySecret($FIRSTKEY,$SECONDKEY) {
+      $this->FIRSTKEY = $FIRSTKEY;
+      $this->SECONDKEY = $SECONDKEY;
    }
 
    function returnData ($data) {
@@ -86,7 +94,7 @@ class TarsiusServer extends Form {
    }
 
    function billingProcess($client_id) {
-
+      
    }
 }
 ?>
