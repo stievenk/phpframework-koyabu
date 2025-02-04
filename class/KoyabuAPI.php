@@ -40,7 +40,7 @@ class KoyabuAPI extends Form {
          $this->REF_URL = $REF_URL = $_REQUEST['ref'] ? $_REQUEST['ref'].'&ref='.$_REQUEST['call'] : '?call=home&'.str_replace('&ref='.$_REQUEST['call'],'',str_replace('call','ref',$SERVER_REQUEST_STR['query']));
          $this->RELOAD_URL = $RELOAD_URL = '?'.$SERVER_REQUEST_STR['query'];
          // trim(preg_replace(array('#call=#','#app_version=(.+?)&#'),'',$SERVER_REQUEST_STR['query']),'&');
-
+        // echo '<section class="top-section">'.$module.'</section>';
          if ($_GET['call'] == 'module' || $_GET['call'] == 'modules' || $_GET['call'] == 'mod') {
             if ($module) {
                if ($option['isUserLogin']) {
@@ -84,7 +84,7 @@ class KoyabuAPI extends Form {
          }
       } catch(\Exception $e) {
          $this->error = $e->getMessage();
-         echo json_encode(['response' => $this->error ]); exit;
+         echo json_encode(['response' => $this->error, 'error_code' => 404, 'done' => -1 ]); exit;
       }
    }
 
@@ -414,6 +414,53 @@ class KoyabuAPI extends Form {
             $this->error = $e->getMessage();
             // echo json_encode($data); exit;
         }
+    }
+
+    function save_to_inbox($msg,$id_member,$pengirim='SYSTEM') {
+        $this->save(array(
+            'tanggal' => date("Y-m-d H:i:s"),
+            'id_member' => $id_member,
+            'pengirim' => $pengirim,
+            'pesan' => $msg['title'],
+            'params' => json_encode($msg)
+        ),'t_member_inbox');
+    }
+
+    /** 
+     * User Notification save notif to Inbox and Send FCM Notification
+     * 
+     * * Require Google-api-library
+     * 
+     * @param int $id_member  from t_member for get FMC Token \n
+     * @param array   $msg     (require)
+     * * string $title (require)
+     * * string $body (require)
+     * * string $image
+     * * array $metadata = order|product|link (optional)
+     * * Meta Data: order [id,nama,tanggal,...,etc]
+     * * Meta Data: product [id,nama,tanggal,...,etc]
+     * * Meta Data: link [name,url]
+     * * Meta Data: image [name,url] 
+     * 
+     * @param int|string    $from   From name
+     * 
+     * 
+    */
+    function userNotif($id_member,$msg,$from) : bool {
+
+        $t = $this->get($id_member,'t_member');
+        if ($t['id']) {
+            $this->save_to_inbox($msg,$id_member,$from);
+            if ($t['fcm_token']) {
+                $pesan = array(
+                    'title' => $msg['title'],
+                    'body' => $msg['body'],
+                    'image' => $msg['image']
+                );
+                $this->fcm($pesan,$t['fcm_token'],'person');
+            }
+            return true;
+        } else { return false; }
     }
 
 }

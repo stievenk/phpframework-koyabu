@@ -87,14 +87,14 @@ class TarsiusServer extends Form {
          case 'SUSPEND' : $t['response'] = 'Client suspended'; break;
          case 'BLOCK' : $t['response'] = 'Client blocked'; break;
          case 'CANCEL' : $t['response'] = 'Client canceled'; break;
-         default : $t['response'] = 'Client not found'; break;
+         default : $t['response'] = 'Client not found: '.$t['error']; break;
       }
       $t['done'] = 1;
       echo json_encode($t);
    }
 
    function billingProcess($client_id) {
-      
+
    }
 }
 ?>

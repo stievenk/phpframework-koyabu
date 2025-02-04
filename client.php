@@ -6,6 +6,7 @@ require_once  $MASTER_PATH . 'autoload.php';
 
 $Client = new TarsiusClient($config);
 $Client->setServerURL('https://app.photoboothmanado.com/');
+
 // $Client->send('ServerInfo',['tes' => 'OK','tes2' => 'OK2']);
 // $res = $Client->send('getClientInfo',['app_id' => 'girsa', 'app_secret' => 'I3xvpFlBve4xplTLzwxB73Yq2BT1X6V9XRlEi6Xo97V4nvno\/IGWh2OtQHhzdY63oZhGUwrI5W9BY2iIjNlU\/ws22IzcwrusgYE3v\/iAxmJqSU57Vqh6y0nO8ggN9Rcr']);
 // $params = ['app_id' => 'girsa', 'app_secret' => 'I3xvpFlBve4xplTLzwxB73Yq2BT1X6V9XRlEi6Xo97V4nvno\/IGWh2OtQHhzdY63oZhGUwrI5W9BY2iIjNlU\/ws22IzcwrusgYE3v\/iAxmJqSU57Vqh6y0nO8ggN9Rcr'];
@@ -16,8 +17,8 @@ $Client->setServerURL('https://app.photoboothmanado.com/');
 //    echo 'Please contact your Administrator ('.$res['response'].')';
 //    exit;
 // }
-// $res = $Client->send('getSecretKey',['app_id' => 'ikm.polres.tabalong', 'password' => 'yohanes316']);
-// print_r($res);
+$res = $Client->send('getSecretKey',['app_id' => 'com.polres.bitung.tarsius', 'password' => 'yohanes316']);
+print_r($res);
 exit;
 
 ?>
