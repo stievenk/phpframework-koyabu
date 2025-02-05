@@ -6,18 +6,20 @@ class RSSparser {
 	var $url = '';
 	var $cache = 0;
 	var $cacheTime = 1; // in hour
+	private $HOME_DIR = '';
 	
-	function __construct($URL,$cache=0) {
+	function __construct($URL,$cache=0,$config=[]) {
 		$this->url = $URL;
 		$this->cache = $cache;
-		
+		$this->config = $config;
+		$this->HOME_DIR = $this->config['HOME_DIR'] . DIRECTORY_SEPARATOR;
 	}
 	
 	function get() {
 		if ($this->cache == 1) {
-			$fn = 'cache/rss_'.md5($this->url).'.xml';
+			$fn = $this->HOME_DIR.'cache/rss_'.md5($this->url).'.xml';
 			if (!file_exists(dirname($fn))) { 
-				@mkdir('cache/'); 
+				@mkdir($this->HOME_DIR.'cache/'); 
 			}
 			$mt = date("U") - filemtime($fn);
 			if (!file_exists($fn) || $mt >= (3600 * $this->cacheTime) || filesize($fn) <= 1) {
