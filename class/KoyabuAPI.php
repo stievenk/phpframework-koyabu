@@ -366,13 +366,16 @@ class KoyabuAPI extends Form {
 		}
 	}
 
-    function fcm($msg,$topicToken = 'test',$tipe ='topic',$param = array('hwm' => '1')) {
+    function fcm($msg,$topicToken = 'test',$tipe ='topic',$param = array('hwm' => '1'),$android = "") {
         $data = array('done' => 0, 'response' => '');
         $project = $this->config['fcm_project_id'];
         foreach($param as $k => $v) {
             $params[$k] = (string) $v;
         }
         $param = $params;
+
+
+        $android = $android != "" ? $android : [ 'notification' => [ 'channel_id' => 'hwm_notif', 'sound' => 'my_sound' ]];
         try {
             if (!is_array($msg)) {
                 throw new \Exception("\$msg invalid arguments", 1);
@@ -394,7 +397,8 @@ class KoyabuAPI extends Form {
                     "message" => array(
                         "topic" => $topicToken,
                         "notification" => $msg,
-                        "data" => $param
+                        "data" => $param,
+                        "android" => $android
                     )
                 );
             } else {
@@ -402,7 +406,8 @@ class KoyabuAPI extends Form {
                     "message" => array(
                         "token" => $topicToken,
                         "notification" => $msg,
-                        "data" => $param
+                        "data" => $param,
+                        "android" => $android
                     )
                 );
             }
