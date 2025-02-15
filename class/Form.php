@@ -973,7 +973,9 @@ class Form {
 				$bytestotal += $object->getSize();
 			}
 		}
+		//
 		return $bytestotal;
+
 	}
 
     function __destruct() {
