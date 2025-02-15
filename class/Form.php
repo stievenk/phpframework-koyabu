@@ -956,22 +956,24 @@ class Form {
 		}
 	}
 
-	function funText($text) {
-		$text = preg_replace("#\*(.+?)\*#s","<b>\\1</b>",$text);
-		$text = preg_replace("#\~(.+?)\~#s","<i>\\1</i>",$text);
-		$text = preg_replace("#\[blue\](.+?)\[\/blue\]#s","<span class=\"text-primary\">\\1</span>",$text);
-		$text = preg_replace("#\[red\](.+?)\[\/red\]#s","<span class=\"text-danger\">\\1</span>",$text);
-		$text = preg_replace("#\[img src=\"(.+?)\"\]#s","<img src=\"\\1\" class=\"img-fluid\">",$text);
-		$text = preg_replace("#\[url=(.+?)\](.+?)\[url\]#s","<span goto-url=\"\\1\" class=\"bg-white ps-1 pe-1 text-primary\">\\2 <i class=\"fa fa-link\"></i></span>",$text);
-		$text = preg_replace("#\[page=(.+?)\](.+?)\[page]\]#s","<span goto-page=\"\\1\" class=\"bg-white ps-1 pe-1 text-primary\">\\2 <i class=\"fa fa-link\"></i></span>",$text);
-		$text = preg_replace("#```(.+?)```#s","<pre class=\"bg-light p-1 border rounded\">\\1</pre>",$text);
+	function numberShort($num,$lan = 'ID') {
+		if ($num >= 1000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'T' : 'Q'); }
+		else if ($num >= 1000000000000) { return round($num / 1000000000000,2). ($lan == 'ID' ? 'T' : 'T'); }
+		else if ($num >= 1000000000) { return round($num / 1000000000,2).($lan == 'ID' ? 'M' : 'B'); }
+		else if ($num >= 1000000) { return round($num / 1000000,2).($lan == 'ID' ? 'Jt' : 'M'); }
+		else if ($num >= 1000) { return round($num / 1000,2).($lan == 'ID' ? 'Rb' : 'K'); }
+		else return $num;
+	}
 
-		$text = preg_replace("#\(\^\.\^\)|\(\^\^\)#si",'<img src="'.$this->serverURL().'images/emot/pappukangi.gif" height="25">',$text);
-		$text = preg_replace("#\[emot=mdc\]#si",'<img src="'.$this->serverURL().'images/logo_mdc.png" onerror="this.src=\''.$this->serverURL().'images/logo.png\'" style="max-height:50px">',$text);
-		$text = preg_replace("#\[emot=(.+?)\]#si",'<img src="'.$this->serverURL().'images/emot/\\1.gif" onerror="this.src=\''.$this->serverURL().'images/logo.png\'" style="max-height:50px">',$text);
-		$text = preg_replace("#\[sticker=(.+?)\]#si",'<img src="'.$this->serverURL().'images/stciker/\\1.png" onerror="this.src=\''.$this->serverURL().'images/logo.png\'" style="max-height:65px">',$text);
-		$text = preg_replace("#\@(.+?) #s","<span class=\"text-primary\" goto-page=\"?call=module&mod=profile&f=view&uname=\\1\">@\\1</span> ",$text);
-		return $text;
+	function GetDirectorySize($path){
+		$bytestotal = 0;
+		$path = realpath($path);
+		if($path!==false && $path!='' && file_exists($path)){
+			foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $object){
+				$bytestotal += $object->getSize();
+			}
+		}
+		return $bytestotal;
 	}
 
     function __destruct() {
