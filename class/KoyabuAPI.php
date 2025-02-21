@@ -64,6 +64,7 @@ class KoyabuAPI extends Form {
                // }
                throw new \Exception("Error Processing Request");
             }
+
          } else {
             $include = $this->HOME_ROOT . 'call' . DIRECTORY_SEPARATOR . basename($page) . '.php';
          }
@@ -149,8 +150,11 @@ class KoyabuAPI extends Form {
                   $g = $this->select("select * from t_member where `username`='". $this->escape_string($_POST['uname']) ."' or `email`='". $this->escape_string($_POST['uname']) ."'");
                   $t = $this->fetch($g);
                if ($t['id']) {
-                  if ($t['tipe'] == 'BANNED') {
-                     throw new \Exception("Your account is BANNED", 1);
+                  if ($t['tipe'] == 'BANNED' || $t['tipe'] == 'SUSPEND') {
+                     throw new \Exception("Your account is BANNED/SUSPEND", 1);
+                  }
+                  if ($t['aktif'] != 'Y') {
+                     throw new \Exception("Your account is not active", 1);
                   }
                   if (md5(trim($_POST['passwd'])) == $t['password']) {
                      $t['user_token'] = md5(uniqid().$t['id'].$_SERVER['REMOTE_ADDR']);
@@ -185,6 +189,9 @@ class KoyabuAPI extends Form {
                 if ($t['tipe'] == 'BANNED') {
                     $this->banned = true; 
                     throw new \Exception("Your account is BANNED", 1);
+                }
+                if ($t['aktif'] != 'Y') {
+                    throw new \Exception("Your account is not active", 1);
                 }
                 if ($t['token'] == $this->Headers['token']) {
                     $token_expire = strtotime($t['token_expire']);
@@ -466,6 +473,23 @@ class KoyabuAPI extends Form {
             }
             return true;
         } else { return false; }
+    }
+
+    function stringPad($string,$maxchar = 30,$pad_post = 'LEFT',$stringrepeat = " ",$linebreak = 1, $cropline = 1) {
+        if ($cropline == 1) { $string = substr($string,0,$maxchar); }
+        switch($pad_post) {
+            default : 
+            case 'START' :
+            case 'LEFT' : 
+                          $string = str_pad($string,$maxchar,$stringrepeat,STR_PAD_LEFT); break;
+            case 'BOTH' : 
+            case 'CENTER' : 
+                $string = str_pad($string,$maxchar,$stringrepeat,STR_PAD_BOTH); break;
+            case 'END' :
+            case 'RIGHT' : $string = str_pad($string,$maxchar,$stringrepeat,STR_PAD_RIGHT); break;
+        }
+        if($linebreak == 1) { $string = $string."\n"; }
+        return $string;
     }
 
 }

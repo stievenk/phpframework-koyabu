@@ -928,9 +928,11 @@ class Form {
 		$client = new \GuzzleHttp\Client($option);
 		$res = $client->request('POST',$url,array(
             'headers' => array(
-                'app_id' => $Headers['app_id'],
-				'Authorization' => $Headers['app_key'], // base64
-                'content-type' => 'application/x-www-form-urlencoded'),
+               'app_id' => $Headers['app_id'],
+					'Authorization' => $Headers['app_key'], // base64
+					'app_version' => $Headers['app_version'],
+					// 'app_secret' => $Headers['app_secret'],
+               'content-type' => 'application/x-www-form-urlencoded'),
             'form_params' => $params
         ));
         $result = $res->getBody();
