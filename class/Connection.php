@@ -78,6 +78,12 @@ class Connection {
 		return $this->conn->real_escape_string($string);
 	}
 
+	public function table_exists($table) {
+		$g = $this->query("show tables like '{$table}");
+		$t = $this->fetch_row($g);
+		return $t[0] > 0 ? true : false;
+	}
+
 	function __destruct() {
 		$this->conn->close();
 	}
