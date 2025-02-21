@@ -94,3 +94,7 @@ while($result = $API->fetch('row')) {
     print_r($result);
 }
 ```
+*Check Table Exists*
+```
+$return = $API->table_exists('table_name'); // return true if exists, false if not exists
+```

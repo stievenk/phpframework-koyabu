@@ -176,7 +176,7 @@ class Form {
 
 	 public function table_exists($table) {
 		$g = $this->query("show tables like '{$table}'");
-		$t = $this->fetch_row($g);
+		$t = $this->fetch($g,'row');
 		return $t[0] > 0 ? true : false;
 	}
 
