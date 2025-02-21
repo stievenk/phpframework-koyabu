@@ -174,6 +174,12 @@ class Form {
         }
     }
 
+	 public function table_exists($table) {
+		$g = $this->query("show tables like '{$table}'");
+		$t = $this->fetch_row($g);
+		return $t[0] > 0 ? true : false;
+	}
+
     function parse($data,$idyes=0) {
 		$id = 0;
         $f = array();
