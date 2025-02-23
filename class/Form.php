@@ -986,6 +986,18 @@ class Form {
 
 	}
 
+	function array_filter_recursive(array $array) {
+		foreach ($array as &$value) {
+			if (is_array($value)) {
+					$value = $this->array_filter_recursive($value);
+			}
+		}
+
+		return array_filter($array, function($value) {
+			return !is_null($value);
+		});
+	}
+
     function __destruct() {
 
     }
