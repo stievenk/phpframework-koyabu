@@ -194,8 +194,8 @@ class KoyabuAPI extends Form {
                 if ($t['aktif'] != 'Y') {
                     throw new \Exception("Your account is not active", 1);
                 }
-                // if ($t['token'] == $this->Headers['token']) {
-                if (openssl_digest($t['id'].$t['password'].$t['username'].'kiss','sha512') == $this->Headers['token']) {
+                if ($t['token'] == $this->Headers['token']) {
+                // if (openssl_digest($t['id'].$t['password'].$t['username'].'kiss','sha512') == $this->Headers['token']) {
                     $token_expire = strtotime($t['token_expire']);
                     if (date("U") > $token_expire) {
                         throw new \Exception("Token expired, silahkan login kembali ", 1);
