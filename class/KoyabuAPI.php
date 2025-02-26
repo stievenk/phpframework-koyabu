@@ -355,7 +355,7 @@ class KoyabuAPI extends Form {
         }
     }
 
-    function notif($m,$tipe='ALL',$cmd = 'send',$data=array('notif' => '1'),$pfx=NULL) {
+    function notif($m,$tipe='ALL',$cmd = 'send',$data=array('notif' => '1'),$pfx=NULL,$android="") {
 		global $config;
 		$PREFIX = $pfx ? $pfx : $this->config['APPS_NAME'];
 		if ($tipe == 'ALL') { $topic = 'notif_'.md5($PREFIX); }
@@ -365,7 +365,7 @@ class KoyabuAPI extends Form {
 		if (is_array($m)) {
 			/**/
 			if ($cmd == 'send') {
-				return $this->fcm($m,$topic,'topic',$data);
+				return $this->fcm($m,$topic,'topic',$data,$android);
 			} else {
 				return $topic;
 			}
@@ -460,7 +460,7 @@ class KoyabuAPI extends Form {
      * 
      * 
     */
-    function userNotif($id_member,$msg,$from) : bool {
+    function userNotif($id_member,$msg,$from,$android="") : bool {
 
         $t = $this->get($id_member,'t_member');
         if ($t['id']) {
@@ -471,7 +471,7 @@ class KoyabuAPI extends Form {
                     'body' => $msg['body'],
                     'image' => $msg['image']
                 );
-                $this->fcm($pesan,$t['fcm_token'],'person');
+                $this->fcm($pesan,$t['fcm_token'],'person',['hwm' => '1'],$android);
             }
             return true;
         } else { return false; }
