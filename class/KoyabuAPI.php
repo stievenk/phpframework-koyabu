@@ -384,7 +384,8 @@ class KoyabuAPI extends Form {
         $param = $params;
 
 
-        $android = $android != "" ? $android : [ 'notification' => [ 'channel_id' => 'hwm_notif', 'sound' => 'my_sound' ]];
+        // $android = $android != "" ? $android : [ 'notification' => [ 'channel_id' => 'hwm_notif', 'sound' => 'my_sound' ]];
+        $android = $android != "" ? $android : [ 'notification' => [ 'channel_id' => 'mynotif', 'sound' => 'my_sound' ]];
         try {
             if (!is_array($msg)) {
                 throw new \Exception("\$msg invalid arguments", 1);
