@@ -59,6 +59,15 @@ class Form {
 
     public function save($data,$table,$method='INSERT',$primary='id') {
         $error = array('done' => 0, 'response' => '');
+		  $field = [];
+			$g = $this->Database->query("select * from `{$table}` limit 1");
+			$r = $this->Database->fetch_fields($g);
+			for ($i = 0; $i < count($r); $i++) {
+					array_push($field,$r[$i]->name);
+			}
+			foreach ($data as $k => $v) {
+					if (!in_array($k,$field)) { unset($data[$k]); }
+			}
         try {
             if (is_array($data)) {
                 $datas = $data;

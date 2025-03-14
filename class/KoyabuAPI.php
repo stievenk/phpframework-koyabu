@@ -480,6 +480,7 @@ class KoyabuAPI extends Form {
 
     function stringPad($string,$maxchar = 30,$pad_post = 'LEFT',$stringrepeat = " ",$linebreak = 1, $cropline = 1) {
         if ($cropline == 1) { $string = substr($string,0,$maxchar); }
+        $stringrepeat = $stringrepeat ? $stringrepeat : ' ';
         switch($pad_post) {
             default : 
             case 'START' :
