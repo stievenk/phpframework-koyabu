@@ -4,10 +4,10 @@ namespace Koyabu\Webapi;
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 require_once  $MASTER_PATH . 'autoload.php';
 
-$config['smtp_host'] = 'dimanado.biz.id';
+$config['smtp_host'] = '';
 $config['smtp_port'] = '465';
-$config['smtp_user'] = 'info@dimanado.biz.id';
-$config['smtp_pass'] = 'angiejowendankenzhi8007';
+$config['smtp_user'] = '';
+$config['smtp_pass'] = '';
 $config['SITE_NAME'] = 'Test Email';
 
 $API = new KoyabuAPI($config);
