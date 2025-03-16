@@ -344,7 +344,9 @@ class KoyabuAPI extends Form {
             $mail->isHTML($option['isHTML'] ? $option['isHTML'] : false);                                 //Set email format to HTML
             $mail->Subject = $option['subject'];
             $mail->Body    = $option['body'];
-            // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            if ($option['alt_body']) {
+                $mail->AltBody = $option['alt_body'];
+            }
 
             $mail->send();
             //echo 'Message has been sent';
