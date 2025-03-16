@@ -309,7 +309,7 @@ class KoyabuAPI extends Form {
         $mail = new PHPMailer(true);
         try {
             //Server settings
-            $mail->SMTPDebug = true; //PHPMailer\PHPMailer\SMTP::DEBUG_SERVER                      //Enable verbose debug output
+            $mail->SMTPDebug = $option['debug'] ? $option['debug'] : false; //PHPMailer\PHPMailer\SMTP::DEBUG_SERVER                      //Enable verbose debug output
             $mail->isSMTP();                                            //Send using SMTP
             $mail->Host       = $this->config['smtp_host'];                     //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
