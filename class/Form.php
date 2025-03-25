@@ -4,7 +4,7 @@ use Koyabu\Webapi;
 use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
- * version: 8.1.2
+ * version: 8.1.1
  * last update: 27 Oktober 2024
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
