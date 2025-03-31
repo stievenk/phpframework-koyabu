@@ -281,7 +281,7 @@ class Form {
 		$this->select_option_list($table,$fld,$default_value,$orderby);
 	}
 
-	public function select_option_list($table,$fld,$default_value='',$orderby='') {
+	public function select_option_list($table,$fld,$default_value='',$orderby='', $attribute = true) {
 		if (is_array($fld)) {
 			$x = explode("|",$fld[1]);
 			if (count($x) > 1) {
@@ -296,8 +296,10 @@ class Form {
 			$g = $this->Database->query($SQL);
 			while($t = $this->Database->fetch_assoc($g)) {
 				$attrib = array();
-				foreach($t as $k => $v) {
-					$attrib[] = 'data-'.$k.'="'.trim($v).'"';
+				if ($attribute == true) {
+					foreach($t as $k => $v) {
+						$attrib[] = 'data-'.$k.'="'. addslashes(trim($v)).'"';
+					}
 				}
 				echo '<option '. implode(" ",$attrib) .' value="'.trim($t[$fld[0]]).'" '. (trim($t[$fld[0]]) == $default_value ? 'selected="selected"' : '') .'>'.trim($t[$fld[1]]).'</option>';
 			}
