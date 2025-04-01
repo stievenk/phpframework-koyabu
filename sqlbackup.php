@@ -93,15 +93,15 @@ while($t = $g->fetch_assoc()) {
     startbackup:
     
     $json['lastbackup'] = date("Y-m-d H:i:s");
-    $exec = "mysqldump -uroot ". ( $config['mysql']['pass'] ? "-p{$config['mysql']['pass']}" : '')  ." {$t['Database']} > {$t['Database']}.sql";
+    $exec = "mysqldump -uroot ". ( $config['mysql']['pass'] ? "-p{$config['mysql']['pass']}" : '')  ." {$t['Database']} > {$BASE_DIR}{$t['Database']}.sql";
     echo "Database {$t['Database']}\n{$exec}\n";
     exec($exec);
-    exec("bzip2 {$t['Database']}.sql");
+    exec("bzip2 {$BASE_DIR}{$t['Database']}.sql");
     // exec("mv {$t['Database']}.sql.bz2 {$BASE_DIR}backup/sql/{$t['Database']}.sql.bz2");
-    copy("{$t['Database']}.sql.bz2","{$BACKUP_PATH}/{$t['Database']}.sql.bz2");
+    copy("{$BASE_DIR}{$t['Database']}.sql.bz2","{$BACKUP_PATH}/{$t['Database']}.sql.bz2");
     $syncFile = "{$BACKUP_PATH}/{$t['Database']}_".date("Y-m-d").".sql.bz2";
-    copy("{$t['Database']}.sql.bz2",$syncFile);
-    unlink("{$t['Database']}.sql.bz2");
+    copy("{$BASE_DIR}{$t['Database']}.sql.bz2",$syncFile);
+    unlink("{$BASE_DIR}{$t['Database']}.sql.bz2");
     $DBX_PATH = '/'.$config['dropbox']['home_dir'].'/'.$t['Database'].'/';
     $p = $DBX->upload("{$BACKUP_PATH}/{$t['Database']}_".date("Y-m-d").".sql.bz2",'overwrite',$DBX_PATH);
     unlink($syncFile);
