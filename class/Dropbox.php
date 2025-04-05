@@ -124,7 +124,7 @@ class Dropbox {
 	function getAccessToken($code='') {
 		global $config;
 		$APP_KEY = $config['dropbox']['app_key'];
-		$url = 'https://www.dropbox.com/oauth2/authorize?client_id='.$APP_KEY.'&token_access_type=offline&response_type=code&scope=files.metadata.write files.content.write sharing.write file_requests.write';
+		$url = 'https://www.dropbox.com/oauth2/authorize?client_id='.$APP_KEY.'&token_access_type=offline&response_type=code&scope='. urlencode('files.metadata.write files.content.write sharing.write file_requests.write');
 		if ($code == '') {
 			return "Please go to: <a href=\"".$url."\">{$url}</a>";
 		} else {

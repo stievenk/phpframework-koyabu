@@ -353,7 +353,7 @@ class Form {
     function save_dbx($file,$dir='',$removeFile=true) {
 		global $config;
         $data = array('done' => 0, 'response' => '');
-        $HOME_DIR = $config['dropbox']['home_dir'].$dir;
+        $HOME_DIR = $this->config['dropbox']['home_dir'].$dir;
 		  $HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
         try {
             if (!$this->config['dropbox']['access_token']) {
@@ -362,9 +362,9 @@ class Form {
             if (!file_exists($file)) {
                 throw new \Exception("File ".basename($file)." not found", 1);
             }
-            $DBX = new Dropbox($config['dropbox']['access_token']); 
+            $DBX = new Dropbox($this->config['dropbox']['access_token']); 
             $DBX->upload($file,'overwrite','/'.$HOME_DIR);
-			$d = $DBX->create_shared_link($HOME_DIR.basename($file));
+				$d = $DBX->create_shared_link($HOME_DIR.basename($file));
             if ($d['url']) {
 				$url = str_replace("dl=0","raw=1",$d['url']);
 				if ($removeFile == true) { if (file_exists($file)) { unlink($file); } }
@@ -372,17 +372,15 @@ class Form {
 			} else {
 				if (preg_match("#already_exists#si",$d['error_summary'])) {
 					$d = $DBX->get_shared_link($HOME_DIR.basename($file));
-					// echo $HOME_DIR;
-					// echo '<pre>'; print_r($d); echo '</pre>';
 					$url = str_replace("dl=0","raw=1",$d['links'][0]['url']);
 					if ($removeFile == true) { if (file_exists($file)) { unlink($file); } }
 					return $url;
 				}
-                else { 
+            else { 
 					throw new \Exception("Dropbox Error, file can not upload ".json_encode($d), 1);
                 	return false; 
 				}
-            }
+         }
         } catch(\Exception $e) {
             $this->error = $e->getMessage();
             $data['response'] = $this->error;
@@ -392,7 +390,7 @@ class Form {
 
     function delete_dbx($url,$dir = '',$replace_dir='') {
 		global $config;
-		$HOME_DIR = $config['dropbox']['home_dir'].$dir;
+		$HOME_DIR = $this->config['dropbox']['home_dir'].$dir;
 		$HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
 		if ($replace_dir != '') { $HOME_DIR = $replace_dir; }
 		if ($this->config['dropbox']['access_token']) {
