@@ -19,7 +19,7 @@ include_once dirname(__FILE__).'/config.php';
 $conn = new mysqli($config['mysql']['host'],$config['mysql']['user'],$config['mysql']['pass'],$config['mysql']['data']);
 
 $BASE_DIR = 'D:/Projects/00_DB_BACKUP/'; //;__DIR__ . DIRECTORY_SEPARATOR; //dirname(__FILE__) . DIRECTORY_SEPARATOR;
-
+//
 
 function delete_FileDBX($dateDelete,$json,$t) {
     global $config,$DBX;
