@@ -974,7 +974,8 @@ class Form {
 	}
 
 	function numberShort($num,$lan = 'ID') {
-		if ($num >= 1000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'T' : 'Q'); }
+		if ($num >= 1000000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'Ki' : 'Q'); }
+		else if ($num >= 1000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'K' : 'Q'); }
 		else if ($num >= 1000000000000) { return round($num / 1000000000000,2). ($lan == 'ID' ? 'T' : 'T'); }
 		else if ($num >= 1000000000) { return round($num / 1000000000,2).($lan == 'ID' ? 'M' : 'B'); }
 		else if ($num >= 1000000) { return round($num / 1000000,2).($lan == 'ID' ? 'Jt' : 'M'); }
