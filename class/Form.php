@@ -4,14 +4,14 @@ use Koyabu\Webapi;
 use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
- * version: 8.1.1
+ * version: 8.2.0
  * last update: 27 Oktober 2024
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
 */
 class Form {
-    public $Version = '8.1.1'; // 27 Oktober 2024
+    public $Version = '8.2.0';
     public $Database;
     public $config;
     public $error;
@@ -23,38 +23,76 @@ class Form {
 
     public function SQLConnection($config) {
         try {
-            if ($config['mysql']) {
-                $this->Database = new Connection($config['mysql']);
-            } else {
-                throw new \Exception("Mysql config error:". json_encode($config['mysql']), 1);
-                
+            if (!isset($config['mysql'])) {
+					throw new \Exception("Mysql config error: no config found", 1);
             }
+				$this->Database = new Connection($config['mysql']);
         } catch (\Exception $e) {
             $error['response'] = $e->getMessage();
             echo json_encode($error);
         }
     }
 
-    public function get($id,$table,$fld='id') {
-        try {
-            if (is_array($id)) {
-                $f = array();
-                foreach($id as $k => $v) {
-                    $f[]="`$k` = '". $this->Database->escape_string($v) ."'";
-                }
-                if (!$g = $this->Database->query("select * from `{$table}` where ". implode(" and ",$f) ."")) {
-                    throw new \Exception($this->Database->error, 1);
-                }
-            } else {
-                if (!$g = $this->Database->query("select * from `{$table}` where `{$fld}`='". $this->Database->escape_string($id) ."'")) {
-                    throw new \Exception($this->Database->error, 1);
-                }
-            }
-            return $this->Database->fetch_assoc($g);
-         } catch (\Exception $e) {
-            $this->error = $e->getMessage();
-            echo json_encode(array('done' => 0, 'response' => $this->error));
-         }
+	 function errorReturn($params) {
+		switch ($params['error_return']) {
+			default : echo json_encode(array('done' => 0, 'response' => $this->error)); break;
+			case 'string' : $this->error; break;
+			case 'array' : return array('done' => 0, 'response' => $this->error); break;
+			case 'true' :
+			case '1' :
+			case 'return' : return $this->error; break;
+		}
+	 }
+
+	 function returnData($data,$return='json') {
+		if (!is_array($data)) {
+			$data[] = $data;
+		}
+		
+		switch ($return) {
+			default : echo json_encode($data); break;
+			case 'string' : return json_encode($data); break;
+			case 'array' : 
+			case 'true' :
+			case '1' :
+			case 'return' : return $data; break;
+		}
+	 }
+
+	 /**
+	  * Get Data from Table
+	  * @params	Array()
+	  * @return	Array() | JSON | String
+	  */
+    public function get($params) {
+		//$id,$table,$fld='id'
+		$params['return'] = isset($params['return']) ? $params['return'] : 'json';
+		$params['error_return'] = isset($params['error_return']) ? $params['error_return'] : 'json';
+		$params['field'] = isset($params['field']) ? $params['field'] : 'id';
+		try {
+			if (is_array($params['data'])) {
+					$f = array();
+					foreach($params['data'] as $k => $v) {
+						$f[]="`$k` = '". $this->Database->escape_string($v) ."'";
+					}
+					if (!$g = $this->Database->query("select * from `{$params['table']}` where ". implode(" and ",$f) ."")) {
+						throw new \Exception($this->Database->error, 1);
+					}
+			} else {
+					if (!isset($params['data']) or !isset($params['field'])) {
+						throw new \Exception("Field and Value can not blank ".__CLASS__."::->get(['field' => 'id', 'data' => '1', 'table' => 'table_name'])", 1);
+					}
+					if (!$g = $this->Database->query("select * from `{$params['table']}` where `{$params['field']}`='". $this->Database->escape_string($params['data']) ."'")) {
+						throw new \Exception($this->Database->error, 1);
+					}
+
+			}
+			$this->returnData($this->Database->fetch_assoc($g),1);
+			
+		} catch (\Exception $e) {
+			$this->error = $e->getMessage();
+			$this->errorReturn($params);
+		}
 	}
 
     public function save($data,$table,$method='INSERT',$primary='id') {
