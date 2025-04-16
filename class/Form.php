@@ -5,13 +5,12 @@ use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
  * version: 8.1.1
- * last update: 27 Oktober 2024
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
 */
 class Form {
-    public $Version = '8.1.1'; // 27 Oktober 2024
+    public $Version = '8.1.1';
     public $Database;
     public $config;
     public $error;
@@ -23,12 +22,10 @@ class Form {
 
     public function SQLConnection($config) {
         try {
-            if ($config['mysql']) {
-                $this->Database = new Connection($config['mysql']);
-            } else {
-                throw new \Exception("Mysql config error:". json_encode($config['mysql']), 1);
-                
+            if (!isset($config['mysql'])) {
+                throw new \Exception("Mysql config error: no config found", 1);
             }
+				$this->Database = new Connection($config['mysql']);
         } catch (\Exception $e) {
             $error['response'] = $e->getMessage();
             echo json_encode($error);
