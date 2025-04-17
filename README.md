@@ -1,7 +1,7 @@
 # Koyabu Framework
 
 ## Installation
-```composer require koyabu/webapi:^v8.2```
+```composer require koyabu/webapi:^v8.2.0.x-dev```
 
 ## composer.json
 If your get error about minimum-stability, edit your ```composer.json```
