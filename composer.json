@@ -33,7 +33,5 @@
         "chillerlan/php-qrcode": "v5.0.x-dev",
         "pragmarx/google2fa": "9.x-dev",
         "intervention/image": "*"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": false
+    }
 }
