@@ -7,6 +7,7 @@ class Connection {
 	public $config;
 	
 	function __construct($config) {
+		$this->config = $config;
 		try {
 			if (!$this->conn = new \mysqli($this->config['host'],$this->config['user'],$this->config['pass'],$this->config['data'])) {
 				throw new \Exception($this->conn->connect_error, 1);
