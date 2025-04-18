@@ -46,20 +46,17 @@ class Form {
 		}
 	 }
 
-	 function returnData($data,$return='json') {
-		if (!is_array($data)) {
-			$data[] = $data;
-		}
-
-		switch ($return) {
-			default : echo json_encode($data); break;
-			case 'string' : return json_encode($data); break;
-			case 'array' : 
-			case true :
-			case 'true' :
-			case 1 :
-			case '1' :
-			case 'return' : return $data; break;
+	 function returnData($data,$return='json', $exit = true) {
+		$data = isset($data) ? $data : ['done' => 0, 'response' => '', 'code' => 404];
+			switch($return) {
+				default : 
+				case 'string' : $d = json_encode($data); break;
+				case 'array' : $d = $data;
+			}
+		if ($exit === true) {
+			echo $d; exit;
+		} else {
+			return $d;
 		}
 	 }
 
