@@ -237,7 +237,7 @@ class Form {
 			else {
 				$k = $this->escape_string(trim($k));
 				if (!is_array($v)) {
-					$f[]="`{$k}` = '". $this->escape_string(trim($this->stripHTML($v))) ."'";
+					$f[]="`{$k}` = '". $this->escape_string(trim($v)) ."'";
 				}
 			}
 		}
@@ -246,6 +246,49 @@ class Form {
 			return array('id' => $id,'field' => $s);
 		} else { return false; }
 	}
+
+	function escape_string($data) {
+		return $this->Database->escape_string($data);
+	}
+
+	function escstr($data) {
+		return $this->Database->escape_string($data);
+	}
+
+	public function serverURL() {
+        /* Thanks to phpBB for this Script */
+		// We have to generate a full HTTP/1.1 header here since we can't guarantee to have any of the information
+		// available as used by the redirect function
+		$server_name = (!empty($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : getenv('SERVER_NAME');
+		$server_port = (!empty($_SERVER['SERVER_PORT'])) ? (int) $_SERVER['SERVER_PORT'] : (int) getenv('SERVER_PORT');
+		$secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0;
+		$script_name = (!empty($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : getenv('PHP_SELF');
+		if (!$script_name)
+		{
+			$script_name = (!empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : getenv('REQUEST_URI');
+		}
+	
+		// Replace any number of consecutive backslashes and/or slashes with a single slash
+		// (could happen on some proxy setups and/or Windows servers)
+		$script_path = trim(dirname($script_name)) . '/';
+		$script_path = preg_replace('#[\\\\/]{2,}#', '/', $script_path);
+		if ($n == 1) {
+			$url = $server_name;
+		} else {
+			$url = (($secure) ? 'https://' : 'http://') . $server_name;
+		}
+	
+		if ($server_port && (($secure && $server_port <> 443) || (!$secure && $server_port <> 80)))
+		{
+			$url .= ':' . $server_port;
+		}
+	
+		$url .= $script_path;
+		$SERVER_URL = $url;
+		unset($url);
+		return $SERVER_URL;
+		/* End of phpBB Script */
+    }
 
 	function numberShort($num,$lan = 'ID') {
 		if ($num >= 1000000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'Ki' : 'Qi'); }
@@ -270,6 +313,166 @@ class Form {
 		}
 		return $str;
 	}
+
+	function table_attrib($data, $prefix = '',$quote='"') {
+		if (is_array($data)) {
+			foreach($data as $k => $v) {
+				if ($quote == '"') {
+					$att[] = "{$prefix}{$k}=\"{$v}\"";
+				} else {
+					$att[] = "{$prefix}{$k}='{$v}'";
+				}
+			}
+			$attrib=implode(" ",$att);
+			return $attrib;
+		} else {
+			return '';
+		}
+	}
+
+	function geoDistance($lat1,$lon1,$lat2,$lon2) {
+		$R = 6371; // Radius of the earth in km
+		$dLat = deg2rad($lat2-$lat1);  // deg2rad below
+		$dLon = deg2rad($lon2-$lon1); 
+		$a = 
+		  sin($dLat/2) * sin($dLat/2) +
+		  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * 
+		  sin($dLon/2) * sin($dLon/2)
+		  ; 
+		$c = 2 * atan2(sqrt($a), sqrt(1-$a)); 
+		$d = $R * $c; // Distance in km
+		return $d;
+	}
+	  
+	function timeShort($u) {
+		$c = strtotime($u);
+		$n = date("U");
+		if ($n > $c) { $time = ($n - $c); }
+		else { $time = ($c - $n); }
+		return $this->timeToShort($time);
+	}
+	
+	function timeToShort($time) {
+		if ($time > (3600 * 24)) { $d = ceil($time / (3600 * 24)) ." hari"; }
+		else if ($time > (3600)) { $d = ceil($time / 3600) ." jam"; }
+		else if ($time > (60)) { $d = ceil($time / 60) ." menit"; }
+		else if ($time > 15) { $d = $time ." detik"; }
+		else { $d = $time.' detik'; }
+		return $d;
+	}
+
+	function SecTimeStamp($time) {
+		$hari = floor($time / 3600 / 24);
+		if ($hari > 0) {
+			$h = "{$hari}d ";
+		}
+		$time = $time - (3600 * 24 * $hari);
+		$jam = floor($time / 3600);
+		$time = $time - (3600 * $jam);
+		$menit = floor($time / 60);
+		$time = $time - (60 * $menit);
+
+		return "{$h}". str_pad($jam,2,'0',STR_PAD_LEFT).":".str_pad($menit,2,'0',STR_PAD_LEFT).":".str_pad($time,2,'0',STR_PAD_LEFT)."";
+	}
+
+	function umur($tgl) {
+		$tgl = date("Y-m-d",strtotime($tgl));
+		list($y,$m,$d)=explode("-",$tgl);
+		$umur = date("Y") - $y;
+		if ($m > date("m")) { $umur = $umur - 1; }
+		if ($m == date("m") and $d > date("d")) { $umur = $umur - 1; }
+		return $umur;
+	}
+
+    public function cekKTP($nik,$tanggal_lahir){
+		if(strlen($nik) != 16){
+		  return false;
+		}
+		$d = substr($nik, 6, 2);
+		$m = substr($nik, 8, 2);
+		$y = substr($nik, 10, 2);
+		
+		$tahun = date("y",strtotime($tanggal_lahir));
+		$bulan = date("m",strtotime($tanggal_lahir));
+		$tanggal = date("d",strtotime($tanggal_lahir));
+		//jika tahun full, ambil 2 digit terakhir
+		if(strlen($tahun) ==4){
+		  $tahun = substr($tahun,2,2);
+		}
+		if ((int) $d > 40) {
+		  //Wanita
+		  $d = (int) $d - 40; 
+		}
+		if((int) $tanggal / (int) $d != 1){
+			
+		  return false;
+		}
+		
+		if((int) $bulan / (int) $m != 1){
+			
+		  return false;
+		}
+		
+		if((int) $tahun / (int) $y != 1){
+			
+		  return false;
+		}
+		
+		return true;
+	  }
+
+	  function QRcode($data,$base64 = true, $filename='') {
+		$options = new QROptions;
+		// $options->version      = 7;
+		$options->outputBase64 = $base64;
+		if ($filename) { 
+			$options->outputBase64 = false;
+			$options->cachefile = $filename;
+			$qrcode = (new QRCode($options))->render($data);
+		} else {
+			$qrcode = (new QRCode($options))->render($data);
+			return $qrcode;
+		}
+	  }
+
+	  function QRcodeRead($file) {
+		try{
+			$result = (new QRCode)->readFromFile($file); // -> DecoderResult
+		
+			// you can now use the result instance...
+			$content = $result->data;
+		
+			// ...or simply cast the result instance to string to get the content
+			// $content = (string)$result;
+			return $content;
+		}
+		catch(Throwable $exception){
+			// handle exception...
+		}
+	  }
+
+	  function G2FA_genQRcode($company,$user) {
+			$google2fa = new \PragmaRX\Google2FA\Google2FA();
+			$secret = $google2fa->generateSecretKey();
+			$g2faUrl = $google2fa->getQRCodeUrl(
+			    $company,
+			    $user,
+			    $secret
+			);
+			$QRcode = $this->QRcode($g2faUrl);
+			$r =  array(
+				'secret' => $secret,
+				'url' => $g2faUrl,
+				'qrcode' => $QRcode
+			);
+			return $r;
+	  }
+
+	  function G2FA_getCurrentOTP($secret) {
+		$google2fa = new \PragmaRX\Google2FA\Google2FA();
+		$currentOTP = $google2fa->getCurrentOtp($secret);
+		return $currentOTP;
+	  }
 
     function __destruct() {
 
