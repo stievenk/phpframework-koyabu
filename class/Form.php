@@ -41,7 +41,6 @@ class Form {
 			case 'true' :
 			case '1' :
 			case 'return' :
-				echo "OKOKO";
 				 return $this->error; break;
 		}
 	 }
@@ -252,6 +251,64 @@ class Form {
 		return $this->Database->escape_string($data);
 	}
 
+	function form_option($option) {
+		$this->form_select($option);
+	}
+
+	function form_select($option) {
+		if (is_array($option)) {
+			if ($option['table']) {
+				$option['query'] = $option['where'];
+				$option['query'] = $option['query'] ? $option['query'] : "";
+				$g = $this->select("select * from `{$option['table']}` {$option['query']}");
+				while($t = $this->fetch($g)) {
+					echo '<option value="'.$t[$option['value']].'" '. $this->table_attrib($t) .'>'.$t[$option['text']].'</option>';
+				}
+				
+			} else {
+				if (is_array($option['data'])) {
+					foreach($option['data'] as $v) {
+						if (is_array($v)) {
+							echo '<option value="'.$v['value'].'">'.$v['text'].'</option>';
+						} else {
+							echo '<option value="'.$v.'">'.$v.'</option>';
+						}
+					}
+				} else {
+					foreach($option as $v) {
+						if (is_array($v)) {
+							echo '<option value="'.$v['value'].'">'.$v['text'].'</option>';
+						} else {
+							echo '<option value="'.$v.'">'.$v.'</option>';
+						}
+					}
+				}
+			}
+		} else if ($option['file']) {
+			if (file_exists($option['file'])) {
+
+			}
+		}
+		else {
+			if (preg_match("#.+?\|.+#si",$option)) {
+				$d = explode("|",$option);
+				foreach($d as $v) {
+					echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+				}
+			} else if (preg_match("#.+?,.+#si",$option)) {
+				$d = explode(",",$option);
+				foreach($d as $v) {
+					echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+				}
+			} else if (preg_match("#.+?;.+#si",$option)) {
+				$d = explode(";",$option);
+				foreach($d as $v) {
+					echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+				}
+			}
+		}
+	}
+
 	public function serverURL() {
         /* Thanks to phpBB for this Script */
 		// We have to generate a full HTTP/1.1 header here since we can't guarantee to have any of the information
@@ -311,9 +368,10 @@ class Form {
 		return $str;
 	}
 
-	function table_attrib($data, $prefix = '',$quote='"') {
+	function table_attrib($data, $unshow = [], $prefix = '',$quote='"') {
 		if (is_array($data)) {
 			foreach($data as $k => $v) {
+				if (in_array($k,$unshow)) continue;
 				if ($quote == '"') {
 					$att[] = "{$prefix}{$k}=\"{$v}\"";
 				} else {
