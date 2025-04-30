@@ -32,7 +32,9 @@
         "bacon/bacon-qr-code": "^3.0",
         "chillerlan/php-qrcode": "v5.0.x-dev",
         "pragmarx/google2fa": "9.x-dev",
-        "intervention/image": "*"
+        "intervention/image": "*",
+        "google/cloud-ai-platform": "dev-main",
+        "koyabu/validator": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": false
