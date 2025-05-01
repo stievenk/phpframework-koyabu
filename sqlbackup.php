@@ -5,11 +5,14 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_PARSE & ~E_CORE_ERROR & ~E_COMPILE_ERROR);
 
 $LIB_PATH = 'vendor/';
+// print_r($argv); exit;
 $config['mysql']['host']="localhost";
 $config['mysql']['user']="root";
 $config['mysql']['pass']="";
 $config['mysql']['port']="3306";
 $config['mysql']['data']="test";
+$config['dropbox']['sync'] = (in_array('dropbox',$argv) ? true : false);
+$config['dropbox']['delete_file'] = (in_array('dropbox-delete-file',$argv) ? true : false);
 
 require_once $LIB_PATH . 'autoload.php';
 
@@ -43,10 +46,10 @@ function delete_FileDBX($dateDelete,$json,$t) {
 $monthStartDate = 1;
 $weekStartDate = 0; // 0 = Sunday, 1 = Monday ... etc
 
-$backupDaily = ['cs_apps','csphotobooth','hwm','panada','panada_cms','panada_klinik','panada_gl'];
-$backupWeekly = ['polisi_online_v4','panada_klinik_origin'];
-$backupMonthly = ['all'];
-
+// $backupDaily = ['cs_apps','csphotobooth','hwm','panada','panada_cms','panada_klinik','panada_gl'];
+// $backupWeekly = ['polisi_online_v4','panada_klinik_origin'];
+// $backupMonthly = ['all'];
+$backupDaily = ['all'];
 // $tgl = date("Y-m-d");
 $g = $conn->query("show databases;");
 while($t = $g->fetch_assoc()) {
@@ -102,11 +105,14 @@ while($t = $g->fetch_assoc()) {
     $syncFile = "{$BACKUP_PATH}/{$t['Database']}_".date("Y-m-d").".sql.bz2";
     copy("{$BASE_DIR}{$t['Database']}.sql.bz2",$syncFile);
     unlink("{$BASE_DIR}{$t['Database']}.sql.bz2");
-    $DBX_PATH = '/'.$config['dropbox']['home_dir'].'/'.$t['Database'].'/';
-    $p = $DBX->upload("{$BACKUP_PATH}/{$t['Database']}_".date("Y-m-d").".sql.bz2",'overwrite',$DBX_PATH);
-    unlink($syncFile);
-    if ($p['name']) {
-        $json['dbx'][date("Y-m-d")] = [ 'dbx_path' => $p['path_display'], 'dbx_file' => $p['name'] ];
+    
+    if ($config['dropbox']['sync']) {
+        $DBX_PATH = '/'.$config['dropbox']['home_dir'].'/'.$t['Database'].'/';
+        $p = $DBX->upload("{$BACKUP_PATH}/{$t['Database']}_".date("Y-m-d").".sql.bz2",'overwrite',$DBX_PATH);
+        if ($config['dropbox']['delete_file']) { unlink($syncFile); }
+        if ($p['name']) {
+            $json['dbx'][date("Y-m-d")] = [ 'dbx_path' => $p['path_display'], 'dbx_file' => $p['name'] ];
+        }
     }
     $json['filename'] = "{$BACKUP_PATH}/{$t['Database']}.sql.bz2";
     $json['md5_sum'] = md5_file("{$BACKUP_PATH}/{$t['Database']}.sql.bz2");
