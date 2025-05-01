@@ -525,10 +525,69 @@ class Form {
 	  }
 
 	  function G2FA_getCurrentOTP($secret) {
-		$google2fa = new \PragmaRX\Google2FA\Google2FA();
-		$currentOTP = $google2fa->getCurrentOtp($secret);
-		return $currentOTP;
-	  }
+			$google2fa = new \PragmaRX\Google2FA\Google2FA();
+			$currentOTP = $google2fa->getCurrentOtp($secret);
+			return $currentOTP;
+			}
+
+	function markdownToHtml($markdownText) {
+			/*
+			You can use this library for more advance
+			Markdown to HTML -> https://github.com/thephpleague/commonmark
+			HTML to Markdown -> https://github.com/thephpleague/html-to-markdown
+			*/
+			$html = '';
+			$lines = explode("\n", $markdownText);
+			$inCodeBlock = false;
+
+			foreach ($lines as $line) {
+				$line = rtrim($line); // Hapus whitespace di akhir baris
+
+				if (strpos($line, '```') === 0) {
+					$inCodeBlock = !$inCodeBlock;
+					if ($inCodeBlock) {
+							$html .= "<pre><code>\n";
+					} else {
+							$html .= "</code></pre>\n";
+					}
+					continue;
+				}
+
+				if ($inCodeBlock) {
+					$html .= htmlspecialchars($line) . "\n";
+					continue;
+				}
+
+				if (preg_match('/^# (.*)$/', $line, $matches)) {
+					$html .= "<h1>" . htmlspecialchars($matches[1]) . "</h1>\n";
+				} elseif (preg_match('/^## (.*)$/', $line, $matches)) {
+					$html .= "<h2>" . htmlspecialchars($matches[1]) . "</h2>\n";
+				} elseif (preg_match('/^### (.*)$/', $line, $matches)) {
+					$html .= "<h3>" . htmlspecialchars($matches[1]) . "</h3>\n";
+				} elseif (preg_match('/^#### (.*)$/', $line, $matches)) {
+					$html .= "<h4>" . htmlspecialchars($matches[1]) . "</h4>\n";
+				} elseif (preg_match('/^##### (.*)$/', $line, $matches)) {
+					$html .= "<h5>" . htmlspecialchars($matches[1]) . "</h5>\n";
+				} elseif (preg_match('/^###### (.*)$/', $line, $matches)) {
+					$html .= "<h6>" . htmlspecialchars($matches[1]) . "</h6>\n";
+				} elseif (preg_match('/^\* (.*)$/', $line, $matches)) {
+					$html .= "<li>" . htmlspecialchars($matches[1]) . "</li>\n";
+				} elseif (preg_match('/\*\*(.*)\*\*/', $line, $matches)) {
+					$line = str_replace($matches[0], "<strong>" . htmlspecialchars(trim($matches[1])) . "</strong>", $line);
+				} elseif (preg_match('/\*(.*)\*/', $line, $matches)) {
+					$line = str_replace($matches[0], "<em>" . htmlspecialchars(trim($matches[1])) . "</em>", $line);
+				} elseif (!empty(trim($line))) {
+					$html .= "<p>" . htmlspecialchars($line) . "</p>\n";
+				} elseif ($line === '') {
+					$html .= "\n"; // Biarkan baris kosong untuk pemisah paragraf
+				}
+			}
+
+			// Tangani unordered list (bungkus dalam <ul></ul>)
+			$html = preg_replace('/(<li>.*?<\/li>\n)(<li>.*?<\/li>\n)+/s', '<ul>$0</ul>', $html);
+
+			return $html;
+		}
 
     function __destruct() {
 
