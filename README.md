@@ -1,4 +1,5 @@
 # Koyabu Framework
+[![Latest Stable Version](https://poser.pugx.org/koyabu/mysqlbackup/downloads)]([https://poser.pugx.org/koyabu/webapi/downloads](https://packagist.org/packages/koyabu/webapi))
 
 ## Installation
 ```composer require koyabu/webapi:^v8.2.0```
