@@ -59,6 +59,10 @@ class Form {
 		}
 	 }
 
+	 public function sel($params,$table) {
+			return $this->get(['data' => $params, 'table' => $table]);
+	 }
+
 	 /**
 	  * Get Data from Table
 	  * @params	Array()
