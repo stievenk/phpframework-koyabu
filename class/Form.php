@@ -269,7 +269,17 @@ class Form {
 					echo '<option '. ($default == $t[$option['value']] ? 'selected' : '') .' value="'.$t[$option['value']].'" '. $this->table_attrib($t,[],'data-') .'>'.$t[$option['text']].'</option>';
 				}
 				
-			} else {
+			} 
+			else if ($option['file']) {
+				if (file_exists($option['file'])) {	
+					$o = file_get_contents($option['file']);
+					$d = explode("\n",$o);
+					foreach($d as $v) {
+						echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+					}
+				}
+			}
+			else {
 				if (is_array($option['data'])) {
 					foreach($option['data'] as $v) {
 						if (is_array($v)) {
@@ -288,12 +298,7 @@ class Form {
 					}
 				}
 			}
-		} else if ($option['file']) {
-			if (file_exists($option['file'])) {
-
-			}
-		}
-		else {
+		} else {
 			if (preg_match("#.+?\|.+#si",$option)) {
 				$d = explode("|",$option);
 				foreach($d as $v) {
