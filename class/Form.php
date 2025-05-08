@@ -302,17 +302,17 @@ class Form {
 			if (preg_match("#.+?\|.+#si",$option)) {
 				$d = explode("|",$option);
 				foreach($d as $v) {
-					echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+					echo '<option value="'.trim($v).'" '. ($default == trim($v) ? 'selected' : '') .'>'.trim($v).'</option>';
 				}
 			} else if (preg_match("#.+?,.+#si",$option)) {
 				$d = explode(",",$option);
 				foreach($d as $v) {
-					echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+					echo '<option value="'.trim($v).'" '. ($default == trim($v) ? 'selected' : '') .'>'.trim($v).'</option>';
 				}
 			} else if (preg_match("#.+?;.+#si",$option)) {
 				$d = explode(";",$option);
 				foreach($d as $v) {
-					echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+					echo '<option value="'.trim($v).'" '. ($default == trim($v) ? 'selected' : '') .'>'.trim($v).'</option>';
 				}
 			}
 		}
