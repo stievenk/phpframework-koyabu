@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b61a4f581c9e415eefee2150e917fda",
+    "content-hash": "f028f8c572f1761b3bf4d5996c53da5a",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -634,12 +634,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client.git",
-                "reference": "4eee42d201eff054428a4836ec132944d271f051"
+                "reference": "e009e9c1345b40481d981167e0858bee391d627c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/4eee42d201eff054428a4836ec132944d271f051",
-                "reference": "4eee42d201eff054428a4836ec132944d271f051",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/e009e9c1345b40481d981167e0858bee391d627c",
+                "reference": "e009e9c1345b40481d981167e0858bee391d627c",
                 "shasum": ""
             },
             "require": {
@@ -694,9 +694,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client/issues",
-                "source": "https://github.com/googleapis/google-api-php-client/tree/v2.18.3"
+                "source": "https://github.com/googleapis/google-api-php-client/tree/main"
             },
-            "time": "2025-04-08T21:59:36+00:00"
+            "time": "2025-05-07T17:49:42+00:00"
         },
         {
             "name": "google/apiclient-services",
@@ -809,12 +809,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-ai-platform.git",
-                "reference": "cc4b33df186010191eba5f693572ae34384919f7"
+                "reference": "09cc78821815ccbacf1030cbcf20cd3692bbd0f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-ai-platform/zipball/cc4b33df186010191eba5f693572ae34384919f7",
-                "reference": "cc4b33df186010191eba5f693572ae34384919f7",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-ai-platform/zipball/09cc78821815ccbacf1030cbcf20cd3692bbd0f5",
+                "reference": "09cc78821815ccbacf1030cbcf20cd3692bbd0f5",
                 "shasum": ""
             },
             "require": {
@@ -850,9 +850,9 @@
             ],
             "description": "Google Cloud Ai Platform Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-ai-platform/tree/v1.23.0"
+                "source": "https://github.com/googleapis/google-cloud-php-ai-platform/tree/v1.24.0"
             },
-            "time": "2025-03-31T16:15:35+00:00"
+            "time": "2025-05-02T20:35:15+00:00"
         },
         {
             "name": "google/common-protos",
@@ -1660,32 +1660,31 @@
         },
         {
             "name": "maennchen/zipstream-php",
-            "version": "3.1.2",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maennchen/ZipStream-PHP.git",
-                "reference": "aeadcf5c412332eb426c0f9b4485f6accba2a99f"
+                "reference": "6187e9cc4493da94b9b63eb2315821552015fca9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/aeadcf5c412332eb426c0f9b4485f6accba2a99f",
-                "reference": "aeadcf5c412332eb426c0f9b4485f6accba2a99f",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/6187e9cc4493da94b9b63eb2315821552015fca9",
+                "reference": "6187e9cc4493da94b9b63eb2315821552015fca9",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-zlib": "*",
-                "php-64bit": "^8.2"
+                "php-64bit": "^8.1"
             },
             "require-dev": {
-                "brianium/paratest": "^7.7",
                 "ext-zip": "*",
                 "friendsofphp/php-cs-fixer": "^3.16",
                 "guzzlehttp/guzzle": "^7.5",
                 "mikey179/vfsstream": "^1.6",
                 "php-coveralls/php-coveralls": "^2.5",
-                "phpunit/phpunit": "^11.0",
-                "vimeo/psalm": "^6.0"
+                "phpunit/phpunit": "^10.0",
+                "vimeo/psalm": "^5.0"
             },
             "suggest": {
                 "guzzlehttp/psr7": "^2.4",
@@ -1726,7 +1725,7 @@
             ],
             "support": {
                 "issues": "https://github.com/maennchen/ZipStream-PHP/issues",
-                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.1.2"
+                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.1.1"
             },
             "funding": [
                 {
@@ -1734,7 +1733,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-27T12:07:53+00:00"
+            "time": "2024-10-10T12:33:01+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -2277,20 +2276,20 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "2.3.8",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "7a700683743bf1c4a21837c84b266916f1aa7d25"
+                "reference": "89343c81f56573b02f2562d3481be0de60339f48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/7a700683743bf1c4a21837c84b266916f1aa7d25",
-                "reference": "7a700683743bf1c4a21837c84b266916f1aa7d25",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/89343c81f56573b02f2562d3481be0de60339f48",
+                "reference": "89343c81f56573b02f2562d3481be0de60339f48",
                 "shasum": ""
             },
             "require": {
-                "composer/pcre": "^1 || ^2 || ^3",
+                "composer/pcre": "^1||^2||^3",
                 "ext-ctype": "*",
                 "ext-dom": "*",
                 "ext-fileinfo": "*",
@@ -2319,9 +2318,10 @@
                 "mitoteam/jpgraph": "^10.3",
                 "mpdf/mpdf": "^8.1.1",
                 "phpcompatibility/php-compatibility": "^9.3",
-                "phpstan/phpstan": "^1.1",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.6 || ^10.5",
+                "phpstan/phpstan": "^1.1 || ^2.0",
+                "phpstan/phpstan-deprecation-rules": "^1.0 || ^2.0",
+                "phpstan/phpstan-phpunit": "^1.0 || ^2.0",
+                "phpunit/phpunit": "^10.5",
                 "squizlabs/php_codesniffer": "^3.7",
                 "tecnickcom/tcpdf": "^6.5"
             },
@@ -2332,6 +2332,7 @@
                 "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
                 "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2376,9 +2377,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/2.3.8"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/master"
             },
-            "time": "2025-02-08T03:01:45+00:00"
+            "time": "2025-05-08T00:10:21+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2386,12 +2387,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "0683baa30962f3d8586ef4765844b8e9459a920c"
+                "reference": "29e193d07d893ad4be8bf8eac2cbcd3ff94983bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/0683baa30962f3d8586ef4765844b8e9459a920c",
-                "reference": "0683baa30962f3d8586ef4765844b8e9459a920c",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/29e193d07d893ad4be8bf8eac2cbcd3ff94983bb",
+                "reference": "29e193d07d893ad4be8bf8eac2cbcd3ff94983bb",
                 "shasum": ""
             },
             "require": {
@@ -2488,7 +2489,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-26T14:58:20+00:00"
+            "time": "2025-05-06T13:51:13+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -3082,12 +3083,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MyIntervals/PHP-CSS-Parser.git",
-                "reference": "f5fc39a4baef45f8fcf5231fa8be266d136f7b46"
+                "reference": "d11477ca6b3e7aa2cdd652d34ca444552d72dafd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/f5fc39a4baef45f8fcf5231fa8be266d136f7b46",
-                "reference": "f5fc39a4baef45f8fcf5231fa8be266d136f7b46",
+                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/d11477ca6b3e7aa2cdd652d34ca444552d72dafd",
+                "reference": "d11477ca6b3e7aa2cdd652d34ca444552d72dafd",
                 "shasum": ""
             },
             "require": {
@@ -3140,7 +3141,7 @@
                 "issues": "https://github.com/MyIntervals/PHP-CSS-Parser/issues",
                 "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.x"
             },
-            "time": "2025-04-12T08:34:04+00:00"
+            "time": "2025-05-05T08:20:10+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3192,7 +3193,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/main"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.6.0-BETA1"
             },
             "funding": [
                 {
@@ -3219,6 +3220,7 @@
         "google/apiclient": 20,
         "google/cloud-ai-platform": 20,
         "koyabu/validator": 20,
+        "phpoffice/phpspreadsheet": 20,
         "pragmarx/google2fa": 20
     },
     "prefer-stable": false,

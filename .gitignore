@@ -1,6 +1,6 @@
 vendor/
 data/
 config.php
-test.php
+test*
 .phpdoc/
 00/
