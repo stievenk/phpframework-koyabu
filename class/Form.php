@@ -275,7 +275,7 @@ class Form {
 					$o = file_get_contents($option['file']);
 					$d = explode("\n",$o);
 					foreach($d as $v) {
-						echo '<option value="'.trim($v).'">'.trim($v).'</option>';
+						echo '<option '. ($default == trim($v) ? 'selected' : '').' value="'.trim($v).'">'.trim($v).'</option>';
 					}
 				}
 			}
