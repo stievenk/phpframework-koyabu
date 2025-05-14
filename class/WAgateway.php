@@ -19,13 +19,21 @@ class WAgateway {
    }
 
    function send($session_name,$text,$to,$isGroup = false) {
-      $URL = $this->WebURI . '/message/send-text?session='.$session_name;
-      $URL .= '&text='.urlencode($text);
-      $URL .= '&to='.urlencode($to);
-      if ($isGroup == true) {
-         $URL .= '&is_group=true';
-      }
-      return $this->run($URL);
+      // $URL = $this->WebURI . '/message/send-text?session='.$session_name;
+      // $URL .= '&text='.urlencode($text);
+      // $URL .= '&to='.urlencode($to);
+      // if ($isGroup == true) {
+      //    $URL .= '&is_group=true';
+      // }
+      // return $this->run($URL);
+      $URL = $this->WebURI . '/message/send-text';
+      $data = [
+         'session' => $session_name,
+         'text' => $text,
+         'to' => $to,
+         'is_group' => $isGroup
+      ];
+      return $this->runPost($URL,$data);
    }
 
    function sendImage($session_name,$text,$to,$image_url,$isGroup = false) {
@@ -56,13 +64,13 @@ class WAgateway {
    function run($URL) {
       $client = new \GuzzleHttp\Client();
       $response = $client->request('GET', $URL, [ 'timeout' => 30]);
-      return $response->getBody();
+      return $response->getBody()->getContents();
    }
 
    function runPost($URL,$data) {
       $client = new \GuzzleHttp\Client();
       $response = $client->request('POST', $URL,[ \GuzzleHttp\RequestOptions::JSON => $data , 'timeout' => 30 ]);
-      return $response->getBody();
+      return $response->getBody()->getContents();
    }
 }
 ?>
