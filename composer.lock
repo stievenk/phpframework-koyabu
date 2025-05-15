@@ -809,12 +809,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-ai-platform.git",
-                "reference": "09cc78821815ccbacf1030cbcf20cd3692bbd0f5"
+                "reference": "fb0affcee6a2341b4772aef19efd7afe421c4353"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-ai-platform/zipball/09cc78821815ccbacf1030cbcf20cd3692bbd0f5",
-                "reference": "09cc78821815ccbacf1030cbcf20cd3692bbd0f5",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-ai-platform/zipball/fb0affcee6a2341b4772aef19efd7afe421c4353",
+                "reference": "fb0affcee6a2341b4772aef19efd7afe421c4353",
                 "shasum": ""
             },
             "require": {
@@ -850,9 +850,9 @@
             ],
             "description": "Google Cloud Ai Platform Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-ai-platform/tree/v1.24.0"
+                "source": "https://github.com/googleapis/google-cloud-php-ai-platform/tree/v1.25.0"
             },
-            "time": "2025-05-02T20:35:15+00:00"
+            "time": "2025-05-09T21:18:44+00:00"
         },
         {
             "name": "google/common-protos",
@@ -2280,12 +2280,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "89343c81f56573b02f2562d3481be0de60339f48"
+                "reference": "3e93d4d85c424344c63c0ebd09e8c9cb41f09b30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/89343c81f56573b02f2562d3481be0de60339f48",
-                "reference": "89343c81f56573b02f2562d3481be0de60339f48",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/3e93d4d85c424344c63c0ebd09e8c9cb41f09b30",
+                "reference": "3e93d4d85c424344c63c0ebd09e8c9cb41f09b30",
                 "shasum": ""
             },
             "require": {
@@ -2379,7 +2379,7 @@
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
                 "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/master"
             },
-            "time": "2025-05-08T00:10:21+00:00"
+            "time": "2025-05-11T22:32:16+00:00"
         },
         {
             "name": "phpseclib/phpseclib",

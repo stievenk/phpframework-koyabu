@@ -255,6 +255,10 @@ class Form {
 		return $this->Database->escape_string($data);
 	}
 
+	function num($result) {
+		return $this->Database->num_rows($result);
+	}
+
 	function form_option($option,$default='') {
 		$this->form_select($option,$default='');
 	}
