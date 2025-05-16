@@ -1061,16 +1061,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v4.31.0RC2",
+            "version": "v4.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "6d559c3af2e439cd90b3f3da14ec241de6ec9c54"
+                "reference": "d59e31ce4bf0e4b48728e90c4d880839edb5be07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/6d559c3af2e439cd90b3f3da14ec241de6ec9c54",
-                "reference": "6d559c3af2e439cd90b3f3da14ec241de6ec9c54",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/d59e31ce4bf0e4b48728e90c4d880839edb5be07",
+                "reference": "d59e31ce4bf0e4b48728e90c4d880839edb5be07",
                 "shasum": ""
             },
             "require": {
@@ -1099,9 +1099,9 @@
                 "proto"
             ],
             "support": {
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.31.0RC2"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.31.0"
             },
-            "time": "2025-04-30T18:07:21+00:00"
+            "time": "2025-05-14T16:17:23+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -1549,12 +1549,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "ae61c580aeceea382d443cfbed7455cc1a6309e1"
+                "reference": "9659e761caaa4a63b9a6996ef89ec877bc716ebc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/ae61c580aeceea382d443cfbed7455cc1a6309e1",
-                "reference": "ae61c580aeceea382d443cfbed7455cc1a6309e1",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/9659e761caaa4a63b9a6996ef89ec877bc716ebc",
+                "reference": "9659e761caaa4a63b9a6996ef89ec877bc716ebc",
                 "shasum": ""
             },
             "require": {
@@ -1618,7 +1618,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2025-05-01T07:29:48+00:00"
+            "time": "2025-05-14T14:21:20+00:00"
         },
         {
             "name": "koyabu/validator",
@@ -2281,12 +2281,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "3e93d4d85c424344c63c0ebd09e8c9cb41f09b30"
+                "reference": "0e570a50cd3cad2791e479794bb88b0435e55239"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/3e93d4d85c424344c63c0ebd09e8c9cb41f09b30",
-                "reference": "3e93d4d85c424344c63c0ebd09e8c9cb41f09b30",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/0e570a50cd3cad2791e479794bb88b0435e55239",
+                "reference": "0e570a50cd3cad2791e479794bb88b0435e55239",
                 "shasum": ""
             },
             "require": {
@@ -2380,7 +2380,7 @@
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
                 "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/master"
             },
-            "time": "2025-05-11T22:32:16+00:00"
+            "time": "2025-05-15T01:31:13+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
