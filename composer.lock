@@ -1061,16 +1061,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v4.31.0RC2",
+            "version": "v4.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "6d559c3af2e439cd90b3f3da14ec241de6ec9c54"
+                "reference": "d59e31ce4bf0e4b48728e90c4d880839edb5be07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/6d559c3af2e439cd90b3f3da14ec241de6ec9c54",
-                "reference": "6d559c3af2e439cd90b3f3da14ec241de6ec9c54",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/d59e31ce4bf0e4b48728e90c4d880839edb5be07",
+                "reference": "d59e31ce4bf0e4b48728e90c4d880839edb5be07",
                 "shasum": ""
             },
             "require": {
@@ -1099,9 +1099,9 @@
                 "proto"
             ],
             "support": {
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.31.0RC2"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.31.0"
             },
-            "time": "2025-04-30T18:07:21+00:00"
+            "time": "2025-05-14T16:17:23+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -1549,12 +1549,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "ae61c580aeceea382d443cfbed7455cc1a6309e1"
+                "reference": "9659e761caaa4a63b9a6996ef89ec877bc716ebc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/ae61c580aeceea382d443cfbed7455cc1a6309e1",
-                "reference": "ae61c580aeceea382d443cfbed7455cc1a6309e1",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/9659e761caaa4a63b9a6996ef89ec877bc716ebc",
+                "reference": "9659e761caaa4a63b9a6996ef89ec877bc716ebc",
                 "shasum": ""
             },
             "require": {
@@ -1618,7 +1618,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2025-05-01T07:29:48+00:00"
+            "time": "2025-05-14T14:21:20+00:00"
         },
         {
             "name": "koyabu/validator",
@@ -1660,32 +1660,31 @@
         },
         {
             "name": "maennchen/zipstream-php",
-            "version": "3.1.2",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maennchen/ZipStream-PHP.git",
-                "reference": "aeadcf5c412332eb426c0f9b4485f6accba2a99f"
+                "reference": "6187e9cc4493da94b9b63eb2315821552015fca9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/aeadcf5c412332eb426c0f9b4485f6accba2a99f",
-                "reference": "aeadcf5c412332eb426c0f9b4485f6accba2a99f",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/6187e9cc4493da94b9b63eb2315821552015fca9",
+                "reference": "6187e9cc4493da94b9b63eb2315821552015fca9",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-zlib": "*",
-                "php-64bit": "^8.2"
+                "php-64bit": "^8.1"
             },
             "require-dev": {
-                "brianium/paratest": "^7.7",
                 "ext-zip": "*",
                 "friendsofphp/php-cs-fixer": "^3.16",
                 "guzzlehttp/guzzle": "^7.5",
                 "mikey179/vfsstream": "^1.6",
                 "php-coveralls/php-coveralls": "^2.5",
-                "phpunit/phpunit": "^11.0",
-                "vimeo/psalm": "^6.0"
+                "phpunit/phpunit": "^10.0",
+                "vimeo/psalm": "^5.0"
             },
             "suggest": {
                 "guzzlehttp/psr7": "^2.4",
@@ -1726,7 +1725,7 @@
             ],
             "support": {
                 "issues": "https://github.com/maennchen/ZipStream-PHP/issues",
-                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.1.2"
+                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.1.1"
             },
             "funding": [
                 {
@@ -1734,7 +1733,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-27T12:07:53+00:00"
+            "time": "2024-10-10T12:33:01+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -2281,12 +2280,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "3e93d4d85c424344c63c0ebd09e8c9cb41f09b30"
+                "reference": "85a9a39b91b8d8980b8c4f499efff87f4ef53f32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/3e93d4d85c424344c63c0ebd09e8c9cb41f09b30",
-                "reference": "3e93d4d85c424344c63c0ebd09e8c9cb41f09b30",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/85a9a39b91b8d8980b8c4f499efff87f4ef53f32",
+                "reference": "85a9a39b91b8d8980b8c4f499efff87f4ef53f32",
                 "shasum": ""
             },
             "require": {
@@ -2380,7 +2379,7 @@
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
                 "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/master"
             },
-            "time": "2025-05-11T22:32:16+00:00"
+            "time": "2025-05-18T19:46:24+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2388,12 +2387,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "29e193d07d893ad4be8bf8eac2cbcd3ff94983bb"
+                "reference": "5e3e63149d844fd163a5424e42413b6d181e7dcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/29e193d07d893ad4be8bf8eac2cbcd3ff94983bb",
-                "reference": "29e193d07d893ad4be8bf8eac2cbcd3ff94983bb",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/5e3e63149d844fd163a5424e42413b6d181e7dcf",
+                "reference": "5e3e63149d844fd163a5424e42413b6d181e7dcf",
                 "shasum": ""
             },
             "require": {
@@ -2490,7 +2489,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-06T13:51:13+00:00"
+            "time": "2025-05-18T17:49:11+00:00"
         },
         {
             "name": "pragmarx/google2fa",
