@@ -2280,12 +2280,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
+<<<<<<< HEAD
                 "reference": "85a9a39b91b8d8980b8c4f499efff87f4ef53f32"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/85a9a39b91b8d8980b8c4f499efff87f4ef53f32",
                 "reference": "85a9a39b91b8d8980b8c4f499efff87f4ef53f32",
+=======
+                "reference": "0e570a50cd3cad2791e479794bb88b0435e55239"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/0e570a50cd3cad2791e479794bb88b0435e55239",
+                "reference": "0e570a50cd3cad2791e479794bb88b0435e55239",
+>>>>>>> f825c41d64976cae49ef325640035ba2d6a03639
                 "shasum": ""
             },
             "require": {
@@ -2379,7 +2388,11 @@
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
                 "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/master"
             },
+<<<<<<< HEAD
             "time": "2025-05-18T19:46:24+00:00"
+=======
+            "time": "2025-05-15T01:31:13+00:00"
+>>>>>>> f825c41d64976cae49ef325640035ba2d6a03639
         },
         {
             "name": "phpseclib/phpseclib",
