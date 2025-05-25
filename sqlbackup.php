@@ -51,6 +51,11 @@ $weekStartDate = 0; // 0 = Sunday, 1 = Monday ... etc
 // $backupMonthly = ['all'];
 $backupDaily = ['all'];
 // $tgl = date("Y-m-d");
+if (!file_exists($BASE_DIR.'files.json')) {
+    file_put_contents($BASE_DIR.'files.json',json_encode([]));
+}
+$files_backup = json_decode(file_get_contents($BASE_DIR.'files.json'),true);
+
 $g = $conn->query("show databases;");
 while($t = $g->fetch_assoc()) {
     // echo $t['Database'].PHP_EOL;
@@ -116,11 +121,23 @@ while($t = $g->fetch_assoc()) {
     }
     $json['filename'] = "{$BACKUP_PATH}/{$t['Database']}.sql.bz2";
     $json['md5_sum'] = md5_file("{$BACKUP_PATH}/{$t['Database']}.sql.bz2");
-    file_put_contents($BACKUP_PATH.'/backup.json',json_encode($json));
+    $json['files'][] = [
+        'filename' => $syncFile,
+        'md5_sum' => md5_file($syncFile)
+    ];
+    $files_backup[] = [
+        'filename' => $syncFile,
+        'md5_sum' => md5_file($syncFile),
+        'date'  => date("Y-m-d H:i:s")
+    ];
+    
+    file_put_contents($BACKUP_PATH.'/backup.json',json_encode($json,JSON_PRETTY_PRINT));
     print_r($p);
 
     endbackup:
     echo "--".PHP_EOL;
 }
+
+file_put_contents($BASE_DIR.'files.json',json_encode($files_backup,JSON_PRETTY_PRINT));
 
 ?>
