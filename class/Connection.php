@@ -38,6 +38,10 @@ class Connection {
 			return false;
 		}
 	}
+
+	public function multi_query($query) {
+		return $this->conn->multi_query($query);
+	}
 	
 	public function insert_id() {
 		return $this->conn->insert_id;
