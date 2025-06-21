@@ -558,21 +558,6 @@ class Form {
 			foreach ($lines as $line) {
 				$line = rtrim($line); // Hapus whitespace di akhir baris
 
-				// if (strpos($line, '```') === 0) {
-				// 	$inCodeBlock = !$inCodeBlock;
-				// 	if ($inCodeBlock) {
-				// 			$html .= "<pre><code>\n";
-				// 	} else {
-				// 			$html .= "</code></pre>\n";
-				// 	}
-				// 	continue;
-				// }
-
-				// if ($inCodeBlock) {
-				// 	$html .= htmlspecialchars($line) . "\n";
-				// 	continue;
-				// }
-
 				if (preg_match('/^# (.*)$/', $line, $matches)) {
 					$html .= "<h1>" . htmlspecialchars($matches[1]) . "</h1>\n";
 				} elseif (preg_match('/^## (.*)$/', $line, $matches)) {
@@ -588,15 +573,15 @@ class Form {
 				} elseif (preg_match('/^\* (.*)$/', $line, $matches)) {
 					$html .= "<li>" . htmlspecialchars($matches[1]) . "</li>\n";
 				} elseif (preg_match('/\*\*(.*)\*\*/', $line, $matches)) {
-					$line = str_replace($matches[0], "<strong>" . htmlspecialchars(trim($matches[1])) . "</strong>", $line);
+					$html .= str_replace($matches[0], "<strong>" . htmlspecialchars(trim($matches[1])) . "</strong>", $line);
 				} elseif (preg_match('/\*(.*)\*/', $line, $matches)) {
-					$line = str_replace($matches[0], "<em>" . htmlspecialchars(trim($matches[1])) . "</em>", $line);
+					$html.= str_replace($matches[0], "<em>" . htmlspecialchars(trim($matches[1])) . "</em>", $line);
 				} elseif (preg_match('/```(.*)```/', $line, $matches)) {
-					$line = str_replace($matches[0], "<pre class=\"text-break text-truncate\">" . htmlspecialchars(trim($matches[1])) . "</pre>", $line);
+					$html .= str_replace($matches[0], "<pre class=\"text-break text-truncate\">" . htmlspecialchars(trim($matches[1])) . "</pre>", $line);
 				} elseif (!empty(trim($line))) {
 					$html .= "<div>" . htmlspecialchars($line) . "</div>\n";
 				} elseif ($line === '') {
-					$html .= "\n"; // Biarkan baris kosong untuk pemisah paragraf
+					$html .= "<br>\n"; // Biarkan baris kosong untuk pemisah paragraf
 				}
 			}
 
