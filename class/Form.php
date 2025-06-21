@@ -4,18 +4,22 @@ use Koyabu\Webapi;
 use chillerlan\QRCode\{QRCode, QROptions};
 /** 
  * Koyabu Framework
- * version: 8.2.0
+ * version: 8.2.1
  * last update: 27 Oktober 2024
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
 */
 class Form {
-    public $Version = '8.2.0';
+    public $Version = '8.2.1';
     public $Database;
     public $config;
     public $error;
 	 public $METHOD;
+
+	 public $debugPathFile = 'cache/debug.log';
+	 public $debugSaveToFile = false;
+	 public $debugShow = false;
 
     function __construct($config) {
         $this->config = $config;
@@ -577,7 +581,7 @@ class Form {
 				} elseif (preg_match('/\*(.*)\*/', $line, $matches)) {
 					$html.= str_replace($matches[0], "<em>" . htmlspecialchars(trim($matches[1])) . "</em>", $line);
 				} elseif (preg_match('/```(.*)```/', $line, $matches)) {
-					$html .= str_replace($matches[0], "<pre class=\"text-break text-truncate\">" . htmlspecialchars(trim($matches[1])) . "</pre>", $line);
+					$html .= str_replace($matches[0], "<pre class=\"text-break\">" . htmlspecialchars(trim($matches[1])) . "</pre>", $line);
 				} elseif (!empty(trim($line))) {
 					$html .= "<div>" . htmlspecialchars($line) . "</div>\n";
 				} elseif ($line === '') {
@@ -590,6 +594,45 @@ class Form {
 
 			return $html;
 		}
+	
+	public function table_exists($table) {
+		$g = $this->query("show tables like '{$table}'");
+		$t = $this->fetch($g,'row');
+		return $t[0] > 0 ? true : false;
+	}
+	
+	public function debug($m,$file='',$line='') {
+			$text = "[".date("Y-m-d H:i:s")."] {$m} ({$file} on line {$line})\n";
+			if (!$this->table_exists('z_debug')) {
+				$this->query("CREATE TABLE if not exists  `z_debug` (
+					`id` bigint(15)NOT NULL AUTO_INCREMENT,
+					`tanggal` datetime NULL DEFAULT NULL,
+					`logtext` text  NULL DEFAULT NULL,
+					`filename` varchar(250)  NULL DEFAULT NULL,
+					`line` char(10)  NULL DEFAULT NULL,
+					  PRIMARY KEY  (`id`)
+				) Engine = MyISAM;");
+			}
+			$this->save([
+				'tanggal' => date("Y-m-d H:i:s"),
+				'logtext' => $m,
+				'filename' => $file,
+				'line' => $line
+			],'z_debug');
+
+			if ($this->debugSaveToFile == true) {
+				if ($this->debugPathFile and file_exists($this->debugPathFile)) {
+					$debug = file_get_contents($this->debugPathFile);
+					file_put_contents($this->debugPathFile,"{$text}{$debug}");
+				} else {
+					file_put_contents($this->debugPathFile,$text);
+				}
+			}
+
+			if ($this->debugShow == true) {
+				echo $text;
+			}
+	}
 
     function __destruct() {
 
