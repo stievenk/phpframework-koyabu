@@ -555,43 +555,63 @@ class Form {
 			Markdown to HTML -> https://github.com/thephpleague/commonmark
 			HTML to Markdown -> https://github.com/thephpleague/html-to-markdown
 			*/
+			$html = $markdownText;
+			 $html = preg_replace_callback("#```(.+?)```#si",function($match) use ($template) {
+				ob_start();
+
+				ob_get_clean();
+				return '<pre>'.$match[1].'</pre>';
+			},$html);
+
+			$html = preg_replace_callback("#\*\*\*(.+?)\*\*\*#si",function($match) use ($template) {
+				return '<strong><em>'.$match[1].'</em></strong>';
+			},$html);
+
+			$html = preg_replace_callback("#\*\*(.+?)\*\*#si",function($match) use ($template) {
+				return '<strong>'.$match[1].'</strong>';
+			},$html);
+
+			$html = preg_replace_callback("#~~(.+?)~~#si",function($match) use ($template) {
+				return '<span style="text-decoration: line-through">'.$match[1].'</span>';
+			},$html);
+
+			$html = preg_replace_callback("#_(.+?)_#si",function($match) use ($template) {
+				return '<span style="text-decoration: underline">'.$match[1].'</span>';
+			},$html);
+
+			$html = preg_replace_callback("#\*(.+?)\*#si",function($match) use ($template) {
+				// ob_start();
+				// ob_get_clean();
+				return '<em>'.$match[1].'</em>';
+			},$html);
+
+			$lines = explode("\n",$html);
 			$html = '';
-			$lines = explode("\n", $markdownText);
-			$inCodeBlock = false;
-
-			foreach ($lines as $line) {
-				$line = rtrim($line); // Hapus whitespace di akhir baris
-
-				if (preg_match('/^# (.*)$/', $line, $matches)) {
-					$html .= "<h1>" . htmlspecialchars($matches[1]) . "</h1>\n";
-				} elseif (preg_match('/^## (.*)$/', $line, $matches)) {
-					$html .= "<h2>" . htmlspecialchars($matches[1]) . "</h2>\n";
-				} elseif (preg_match('/^### (.*)$/', $line, $matches)) {
-					$html .= "<h3>" . htmlspecialchars($matches[1]) . "</h3>\n";
-				} elseif (preg_match('/^#### (.*)$/', $line, $matches)) {
-					$html .= "<h4>" . htmlspecialchars($matches[1]) . "</h4>\n";
-				} elseif (preg_match('/^##### (.*)$/', $line, $matches)) {
-					$html .= "<h5>" . htmlspecialchars($matches[1]) . "</h5>\n";
-				} elseif (preg_match('/^###### (.*)$/', $line, $matches)) {
-					$html .= "<h6>" . htmlspecialchars($matches[1]) . "</h6>\n";
-				} elseif (preg_match('/^\* (.*)$/', $line, $matches)) {
-					$html .= "<li>" . htmlspecialchars($matches[1]) . "</li>\n";
-				} elseif (preg_match('/\*\*(.*)\*\*/', $line, $matches)) {
-					$html .= str_replace($matches[0], "<strong>" . htmlspecialchars(trim($matches[1])) . "</strong>", $line);
-				} elseif (preg_match('/\*(.*)\*/', $line, $matches)) {
-					$html.= str_replace($matches[0], "<em>" . htmlspecialchars(trim($matches[1])) . "</em>", $line);
-				} elseif (preg_match('/```(.*)```/', $line, $matches)) {
-					$html .= str_replace($matches[0], "<pre class=\"text-break\">" . htmlspecialchars(trim($matches[1])) . "</pre>", $line);
-				} elseif (!empty(trim($line))) {
-					$html .= "<div>" . htmlspecialchars($line) . "</div>\n";
-				} elseif ($line === '') {
-					$html .= "<br>\n"; // Biarkan baris kosong untuk pemisah paragraf
+			foreach($lines as $line) {
+				$line = rtrim($line);
+				if (preg_match("/^\# (.*)/",$line,$r)) {
+					$html.="<h1>{$r[1]}</h1>\n";
+				} else if (preg_match("/^\#\# (.*)/",$line,$r)) {
+					$html.="<h2>{$r[1]}</h2>\n";
+				} else if (preg_match("/^\#\#\# (.*)/",$line,$r)) {
+					$html.="<h3>{$r[1]}</h3>\n";
+				} else if (preg_match("/^#### (.*)/",$line,$r)) {
+					$html.="<h4>{$r[1]}</h4>\n";
+				} else if (preg_match("/^##### (.*)/",$line,$r)) {
+					$html.="<h5>{$r[1]}</h5>\n";
+				} else if (preg_match("/^###### (.*)/",$line,$r)) {
+					$html.="<h6>{$r[1]}</h6>\n";
+				} else if (preg_match("/^\- (.*)|^\+ (.*)|^\* (.*)/",$line,$r)) {
+					$res = $r[3] ?? $r[2] ?? $r[1];
+					$html.="<li>{$res}</li>\n";
+				} else if (!empty(trim($line))) {
+					// $html.="<div>{$line}</div>\n";
+					$html.="{$line}\n";
+				} else if ($line === '') {
+					$html.="<br />\n";
 				}
 			}
-
-			// Tangani unordered list (bungkus dalam <ul></ul>)
 			$html = preg_replace('/(<li>.*?<\/li>\n)(<li>.*?<\/li>\n)+/s', '<ul>$0</ul>', $html);
-
 			return $html;
 		}
 	
