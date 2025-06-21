@@ -3,7 +3,7 @@
     "description": "Koyabu API Framework",
     "type": "library",
     "homepage": "https://github.com/stievenk/phpframework-koyabu",
-    "version": "8.2.1",
+    "version": "8.2.0",
     "license":"MIT",
     "autoload": {
         "psr-4": {
