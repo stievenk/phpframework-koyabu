@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16925490da4ad5ec46103fb7697b6875",
+    "content-hash": "28901b58c728a32e6789d3d88f7b82ab",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -412,16 +412,16 @@
         },
         {
             "name": "dompdf/dompdf",
-            "version": "v3.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/dompdf.git",
-                "reference": "a51bd7a063a65499446919286fb18b518177155a"
+                "reference": "3152400098b9a9eae6ef8ccb55455c2027537ac3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/a51bd7a063a65499446919286fb18b518177155a",
-                "reference": "a51bd7a063a65499446919286fb18b518177155a",
+                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/3152400098b9a9eae6ef8ccb55455c2027537ac3",
+                "reference": "3152400098b9a9eae6ef8ccb55455c2027537ac3",
                 "shasum": ""
             },
             "require": {
@@ -447,6 +447,7 @@
                 "ext-imagick": "Improves image processing performance",
                 "ext-zlib": "Needed for pdf stream compression"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -470,9 +471,9 @@
             "homepage": "https://github.com/dompdf/dompdf",
             "support": {
                 "issues": "https://github.com/dompdf/dompdf/issues",
-                "source": "https://github.com/dompdf/dompdf/tree/v3.1.0"
+                "source": "https://github.com/dompdf/dompdf/tree/master"
             },
-            "time": "2025-01-15T14:09:04+00:00"
+            "time": "2025-05-25T21:21:01+00:00"
         },
         {
             "name": "dompdf/php-font-lib",
@@ -1913,7 +1914,7 @@
         },
         {
             "name": "midtrans/midtrans-php",
-            "version": "2.6.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Midtrans/midtrans-php.git",
@@ -1935,6 +1936,7 @@
                 "phpunit/phpunit": "5.7.*",
                 "psy/psysh": "0.4.*"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2195,16 +2197,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.10.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144"
+                "reference": "0ff2d3c8ead628df2493537d9f91db962aa47718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144",
-                "reference": "bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/0ff2d3c8ead628df2493537d9f91db962aa47718",
+                "reference": "0ff2d3c8ead628df2493537d9f91db962aa47718",
                 "shasum": ""
             },
             "require": {
@@ -2234,6 +2236,7 @@
                 "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
                 "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2264,7 +2267,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.10.0"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/master"
             },
             "funding": [
                 {
@@ -2272,7 +2275,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-24T15:19:31+00:00"
+            "time": "2025-06-18T21:02:11+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -3204,9 +3207,6 @@
     "stability-flags": {
         "chillerlan/php-qrcode": 20,
         "google/apiclient": 20,
-        "google/cloud-ai-platform": 20,
-        "koyabu/validator": 20,
-        "phpoffice/phpspreadsheet": 20,
         "pragmarx/google2fa": 20
     },
     "prefer-stable": false,
