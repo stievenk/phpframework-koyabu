@@ -226,6 +226,7 @@ class Koyabu extends Form {
             <a href="index.html" class="btn btn-default">Back <i class="fa fa-home"></i></a>
             </div>';
         }
+        
     }
 
     public function loadFooter() {
