@@ -15,10 +15,12 @@ class Form {
     public $Database;
     public $config;
     public $error;
+	 public $METHOD;
 
     function __construct($config) {
         $this->config = $config;
         $this->SQLConnection($config);
+		  $this->METHOD = $_SERVER['REQUEST_METHOD'];
     }
 
     public function SQLConnection($config) {
@@ -590,7 +592,7 @@ class Form {
 				} elseif (preg_match('/\*(.*)\*/', $line, $matches)) {
 					$line = str_replace($matches[0], "<em>" . htmlspecialchars(trim($matches[1])) . "</em>", $line);
 				} elseif (!empty(trim($line))) {
-					$html .= "<p>" . htmlspecialchars($line) . "</p>\n";
+					$html .= "<div>" . htmlspecialchars($line) . "</div>\n";
 				} elseif ($line === '') {
 					$html .= "\n"; // Biarkan baris kosong untuk pemisah paragraf
 				}
