@@ -34,7 +34,8 @@
         "intervention/image": "*",
         "google/cloud-ai-platform": "*",
         "koyabu/validator": "*",
-        "phpoffice/phpspreadsheet": "*"
+        "phpoffice/phpspreadsheet": "*",
+        "nikic/php-parser": "^5.5"
     },
     "minimum-stability": "dev",
     "prefer-stable": false

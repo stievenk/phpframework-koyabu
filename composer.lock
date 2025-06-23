@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "28901b58c728a32e6789d3d88f7b82ab",
+    "content-hash": "fc56afef6ee82470555ad37ad38b61a5",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2079,6 +2079,64 @@
             "time": "2025-04-03T11:44:45+00:00"
         },
         {
+            "name": "nikic/php-parser",
+            "version": "v5.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "ae59794362fe85e051a58ad36b289443f57be7a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ae59794362fe85e051a58ad36b289443f57be7a9",
+                "reference": "ae59794362fe85e051a58ad36b289443f57be7a9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^9.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/PHP-Parser/issues",
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.5.0"
+            },
+            "time": "2025-05-31T08:24:38+00:00"
+        },
+        {
             "name": "paragonie/constant_time_encoding",
             "version": "v3.0.0",
             "source": {
@@ -2390,12 +2448,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "ee87563b9436c7aae6d949c2247bc49212d21a0e"
+                "reference": "592bb4be03fd1e61892d12c5e3eb9ac845c7f465"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ee87563b9436c7aae6d949c2247bc49212d21a0e",
-                "reference": "ee87563b9436c7aae6d949c2247bc49212d21a0e",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/592bb4be03fd1e61892d12c5e3eb9ac845c7f465",
+                "reference": "592bb4be03fd1e61892d12c5e3eb9ac845c7f465",
                 "shasum": ""
             },
             "require": {
@@ -2492,7 +2550,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-20T16:32:02+00:00"
+            "time": "2025-06-22T22:57:02+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -2993,12 +3051,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "e957fd25b3f0745ce4036acceb64fa0d3ad2c78a"
+                "reference": "7abc2f20357c29ef3d87141b54225ed237628d74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/e957fd25b3f0745ce4036acceb64fa0d3ad2c78a",
-                "reference": "e957fd25b3f0745ce4036acceb64fa0d3ad2c78a",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/7abc2f20357c29ef3d87141b54225ed237628d74",
+                "reference": "7abc2f20357c29ef3d87141b54225ed237628d74",
                 "shasum": ""
             },
             "require": {
@@ -3064,7 +3122,7 @@
                 "issues": "https://github.com/ramsey/uuid/issues",
                 "source": "https://github.com/ramsey/uuid/tree/4.x"
             },
-            "time": "2025-06-17T02:13:49+00:00"
+            "time": "2025-06-22T22:38:46+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
