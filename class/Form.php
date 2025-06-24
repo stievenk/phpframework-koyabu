@@ -130,7 +130,7 @@ class Form {
         try {
             if (is_array($data)) {
                $datas = $data;
-               $f = $this->parse($data);
+               $f = $this->parse($data,($method == 'REPLACE' ? 1 : 0));
                 $fl = array();
                 if (is_array($primary)) {
                     $new = $method == 'REPLACE' ? 1 : 0;
