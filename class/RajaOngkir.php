@@ -13,42 +13,80 @@ class RajaOngkir {
       $this->Komship = $production == true ? $this->prod_URL : $this->sandbox_URL;
    }
 
-   public function komship_searchDest($keyword) {
-      $endpoint = 'tariff/api/v1/destination/search?keyword='.$keyword;
-      $result = $this->httpClient_komship($this->Komship . $endpoint,'GET',$params);
-      echo $result;
-   }
-
-   public function calcDomesticCost($params,$int = 0) {
+   public function calcShipCost($data) {
       try {
-         $endpoint = $int == 1 ? 'calculate/international-cost' : 'calculate/domestic-cost';
-         $result = $this->httpClient($this->URL . $endpoint,'POST',$params);
+         $endpoint = 'tariff/api/v1/calculate';
+         $params = [
+            'shipper_destination_id' => $data['id_pengirim'],
+            'receiver_destination_id' => $data['id_penerima'],
+            'weight' => (float) $data['berat'] ?? 1,
+            'item_value' => $data['harga'],
+            'cod' => ($data['cod'] ?? 'no')
+         ];
+         if ($params['koord_pengirim']) { $params['origin_pin_point'] = $params['koord_pengirim']; }
+         if ($params['koord_penerima']) { $params['destination_pin_point'] = $params['koord_penerima']; }
+         print_r($params);
+         $result = json_decode($this->httpClient_komship($this->Komship . $endpoint,'GET',$params),true);
       } catch (\Exception $e) {
          $result = [
             'status' => 400,
             'message' => $e->getMessage()
          ];
       }
-      return json_decode($result,true);
+      return $result;
+   }
+
+   public function komship_searchDest($keyword) {
+      try {
+         $endpoint = 'tariff/api/v1/destination/search?keyword='.$keyword;
+         $result = json_decode($this->httpClient_komship($this->Komship . $endpoint,'GET',$params),true);
+      } catch (\Exception $e) {
+         $result = [
+            'status' => 400,
+            'message' => $e->getMessage()
+         ];
+      }
+      return $result;
+   }
+
+   public function calcCost($data,$int = 0) {
+      try {
+         $endpoint = $int == 1 ? 'calculate/international-cost' : 'calculate/domestic-cost';
+         $params = [
+            'origin' => $data['id_pengirim'],
+            'destination' => $data['id_penerima'],
+            'weight' => (float) $data['berat'] ?? 1,
+            'courier' => $data['kurir'] ?? 'jne:jnt',
+            'price' => 'lowest'
+         ];
+         //jne:sicepat:ide:sap:jnt:ninja:tiki:lion:anteraja:pos:ncs:rex:rpx:sentral:star:wahana:dse
+         $result = json_decode($this->httpClient($this->URL . $endpoint,'POST',$params),true);
+      } catch (\Exception $e) {
+         $result = [
+            'status' => 400,
+            'message' => $e->getMessage()
+         ];
+      }
+      return $result;
    }
 
    public function trackingBill($params) {
       try {
          $endpoint = 'track/waybill';
-         $result = $this->httpClient($this->URL . $endpoint,'POST',null,$params);
+         $result = json_decode($this->httpClient($this->URL . $endpoint,'POST',null,$params),true);
       } catch (\Exception $e) {
          $result = [
             'status' => 400,
             'message' => $e->getMessage()
          ];
       }
-      return json_decode($result,true);
+      return $result;
    }
 
    public function searchDest($dest,$start = 0,$int = 0) {
       try {
          $endpoint = $int == 1 ? 'destination/international-destination' : 'destination/domestic-destination';
-         $result = $this->httpClient($this->URL . $endpoint,'GET',null,['search' => $dest, 'limit' => 1000, 'offset' => $start]);
+         $result = json_decode($this->httpClient($this->URL . $endpoint,'GET',null,['search' => $dest, 'limit' => 1000, 'offset' => $start]),true);
          if (!is_string($result)) {
             print_r($result);
             throw new \Exception("Invalid data");
@@ -60,7 +98,7 @@ class RajaOngkir {
             'message' => $e->getMessage()
          ];
       }
-      return json_decode($result,true);
+      return $result;
    }
 
    public function httpClient($url,$method = 'GET',$data = '', $query = '') {

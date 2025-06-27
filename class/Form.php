@@ -558,7 +558,6 @@ class Form {
 			$html = $markdownText;
 			 $html = preg_replace_callback("#```(.+?)```#si",function($match) use ($template) {
 				ob_start();
-
 				ob_get_clean();
 				return '<pre>'.$match[1].'</pre>';
 			},$html);
