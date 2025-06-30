@@ -15,7 +15,7 @@ class Form {
     public $Database;
     public $config;
     public $error;
-	 public $METHOD;
+	 public $METHOD, $USER;
 
 	 public $debugPathFile = 'cache/debug.log';
 	 public $debugSaveToFile = false;
@@ -328,7 +328,7 @@ class Form {
 		}
 	}
 
-	public function serverURL() {
+	public function serverURL($path=true) {
         /* Thanks to phpBB for this Script */
 		// We have to generate a full HTTP/1.1 header here since we can't guarantee to have any of the information
 		// available as used by the redirect function
@@ -356,7 +356,9 @@ class Form {
 			$url .= ':' . $server_port;
 		}
 	
-		$url .= $script_path;
+		if ($path === true) { $url .= $script_path; } else {
+			$url .= '/';
+		}
 		$SERVER_URL = $url;
 		unset($url);
 		return $SERVER_URL;
