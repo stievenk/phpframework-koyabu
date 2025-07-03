@@ -42,6 +42,18 @@ class Connection {
 	public function multi_query($query) {
 		return $this->conn->multi_query($query);
 	}
+
+	public function store_result() {
+		return $this->conn->store_result();
+	}
+
+	public function next_result() {
+		return $this->conn->next_result();
+	}
+
+	public function more_results() {
+		return $this->conn->more_results();
+	}
 	
 	public function insert_id() {
 		return $this->conn->insert_id;
