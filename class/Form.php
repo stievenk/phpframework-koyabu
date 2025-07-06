@@ -636,24 +636,26 @@ class Form {
 					  PRIMARY KEY  (`id`)
 				) Engine = MyISAM;");
 			}
-			$this->save([
-				'tanggal' => date("Y-m-d H:i:s"),
-				'logtext' => $m,
-				'filename' => $file,
-				'line' => $line
-			],'z_debug');
+			if (trim($m)) {
+				$this->save([
+					'tanggal' => date("Y-m-d H:i:s"),
+					'logtext' => $m,
+					'filename' => $file,
+					'line' => $line
+				],'z_debug');
 
-			if ($this->debugSaveToFile == true) {
-				if ($this->debugPathFile and file_exists($this->debugPathFile)) {
-					$debug = file_get_contents($this->debugPathFile);
-					file_put_contents($this->debugPathFile,"{$text}{$debug}");
-				} else {
-					file_put_contents($this->debugPathFile,$text);
+				if ($this->debugSaveToFile == true) {
+					if ($this->debugPathFile and file_exists($this->debugPathFile)) {
+						$debug = file_get_contents($this->debugPathFile);
+						file_put_contents($this->debugPathFile,"{$text}{$debug}");
+					} else {
+						file_put_contents($this->debugPathFile,$text);
+					}
 				}
-			}
 
-			if ($this->debugShow == true) {
-				echo $text;
+				if ($this->debugShow == true) {
+					echo $text;
+				}
 			}
 	}
 
