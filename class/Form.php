@@ -507,8 +507,12 @@ class Form {
 		if ($filename) { 
 			$options->outputBase64 = false;
 			$options->cachefile = $filename;
+			$options->scale = 20;
+			$options->outputType = QRCode::OUTPUT_IMAGE_PNG;
 			$qrcode = (new QRCode($options))->render($data);
 		} else {
+			$options->scale = 20;
+			$options->outputType = QRCode::OUTPUT_IMAGE_PNG;
 			$qrcode = (new QRCode($options))->render($data);
 			return $qrcode;
 		}
