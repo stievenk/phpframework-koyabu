@@ -23,6 +23,7 @@ class TarsiusClient {
       if ($s['status'] == 'ON') {
           return true;
       } else {
+         $this->error = $s['response'];
          $this->errorInfo($s);
          return false;
       }
