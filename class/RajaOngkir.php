@@ -72,6 +72,8 @@ class RajaOngkir {
 
    public function trackingBill($params) {
       try {
+         if (!isset($params['awb'])) { throw new \Exception("AWB not found"); }
+         if (!isset($params['courier'])) { throw new \Exception("Courier not found"); }
          $endpoint = 'track/waybill';
          $result = json_decode($this->httpClient($this->URL . $endpoint,'POST',null,$params),true);
       } catch (\Exception $e) {
