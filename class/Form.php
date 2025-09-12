@@ -205,6 +205,7 @@ class Form {
 				} else { throw new \Exception("Invalid Arguments", 1); }
 			} catch (\Exception $e) {
 				$this->error = $e->getMessage();
+				return false;
 			}
 			
 		}
@@ -366,6 +367,180 @@ class Form {
 		return $SERVER_URL;
 		/* End of phpBB Script */
     }
+
+	function resizeAndWatermarkImage($params = []) {
+		// Set nilai default untuk parameter
+		$defaultParams = [
+			'file' => null,
+			'width' => 900,
+			'height' => 900,
+			'newfile' => null,
+			'quality' => 80,
+			'watermark' => [
+					'file' => null,
+					'pos' => 'top-left', // Default position
+					'size' => 0.5,       // Default size as a ratio
+			]
+		];
+
+		// Gabungkan parameter yang diberikan dengan nilai default
+		$options = array_replace_recursive($defaultParams, $params);
+
+		// Ambil parameter dari array $options
+		$file = $options['file'];
+		$w = $options['width'];
+		$h = $options['height'];
+		$newFile = $options['newfile'];
+		$quality = $options['quality'];
+		$watermark = $options['watermark'];
+
+		if (!file_exists($file)) {
+			return false;
+		}
+
+		$imageInfo = getimagesize($file);
+		if (!$imageInfo) {
+			return false;
+		}
+
+		list($originalWidth, $originalHeight) = $imageInfo;
+		$mimeType = $imageInfo['mime'];
+
+		// Menentukan fungsi untuk membuat dan menyimpan gambar berdasarkan MIME type
+		$imageCreateFunc = null;
+		$imageSaveFunc = null;
+		switch ($mimeType) {
+			case 'image/jpeg':
+					$imageCreateFunc = 'imagecreatefromjpeg';
+					$imageSaveFunc = 'imagejpeg';
+					break;
+			case 'image/png':
+					$imageCreateFunc = 'imagecreatefrompng';
+					$imageSaveFunc = 'imagepng';
+					$quality = 9 - ceil($quality / 10); // Konversi kualitas JPEG ke skala PNG (0-9)
+					break;
+			case 'image/gif':
+					$imageCreateFunc = 'imagecreatefromgif';
+					$imageSaveFunc = 'imagegif';
+					break;
+			default:
+					return false; // Jenis file tidak didukung
+		}
+
+		$sourceImage = $imageCreateFunc($file);
+		if (!$sourceImage) {
+			return false;
+		}
+
+		$aspectRatio = $originalWidth / $originalHeight;
+		if ($originalWidth > $w || $originalHeight > $h) {
+			if (($w / $h) > $aspectRatio) {
+					$newWidth = $h * $aspectRatio;
+					$newHeight = $h;
+			} else {
+					$newWidth = $w;
+					$newHeight = $w / $aspectRatio;
+			}
+		} else {
+			$newWidth = $originalWidth;
+			$newHeight = $originalHeight;
+		}
+
+		$targetImage = imagecreatetruecolor($newWidth, $newHeight);
+		
+		// Menjaga transparansi untuk PNG
+		if ($mimeType === 'image/png') {
+			imagealphablending($targetImage, false);
+			imagesavealpha($targetImage, true);
+			$transparent = imagecolorallocatealpha($targetImage, 255, 255, 255, 127);
+			imagefill($targetImage, 0, 0, $transparent);
+		}
+
+		imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+		imagedestroy($sourceImage);
+
+		// Menambahkan watermark jika ada
+		if (!empty($watermark['file']) && file_exists($watermark['file'])) {
+			$watermarkInfo = getimagesize($watermark['file']);
+			if ($watermarkInfo) {
+					$watermarkMime = $watermarkInfo['mime'];
+					$watermarkCreateFunc = ($watermarkMime === 'image/png') ? 'imagecreatefrompng' : 'imagecreatefromjpeg';
+					$watermarkImage = $watermarkCreateFunc($watermark['file']);
+					
+					if ($watermarkImage) {
+						list($logoWidth, $logoHeight) = $watermarkInfo;
+						
+						// Konversi ukuran string ke rasio jika perlu
+						$size = floatval($watermark['size']);
+						if ($size > 1) { // jika ukuran diberikan sebagai persen atau nilai absolut
+							$scale = min($size / $logoWidth, $size / $logoHeight); // Skalakan agar tidak lebih dari 100%
+						} else {
+							$scale = $size;
+						}
+						
+						$watermarkWidth = $logoWidth * $scale;
+						$watermarkHeight = $logoHeight * $scale;
+						
+						$padding = 10;
+						$x = 0;
+						$y = 0;
+
+						switch ($watermark['pos']) {
+							case 'center':
+									$x = ($newWidth - $watermarkWidth) / 2;
+									$y = ($newHeight - $watermarkHeight) / 2;
+									break;
+							case 'top-right':
+									$x = $newWidth - $watermarkWidth - $padding;
+									$y = $padding;
+									break;
+							case 'bottom-right':
+									$x = $newWidth - $watermarkWidth - $padding;
+									$y = $newHeight - $watermarkHeight - $padding;
+									break;
+							case 'bottom-left':
+									$x = $padding;
+									$y = $newHeight - $watermarkHeight - $padding;
+									break;
+							case 'top-center':
+									$x = ($newWidth - $watermarkWidth) / 2;
+									$y = $padding;
+									break;
+							case 'bottom-center':
+									$x = ($newWidth - $watermarkWidth) / 2;
+									$y = $newHeight - $watermarkHeight - $padding;
+									break;
+							case 'middle-left':
+									$x = $padding;
+									$y = ($newHeight - $watermarkHeight) / 2;
+									break;
+							case 'middle-right':
+									$x = $newWidth - $watermarkWidth - $padding;
+									$y = ($newHeight - $watermarkHeight) / 2;
+									break;
+							case 'top-left':
+							default:
+									$x = $padding;
+									$y = $padding;
+									break;
+						}
+
+						imagecopyresampled($targetImage, $watermarkImage, $x, $y, 0, 0, $watermarkWidth, $watermarkHeight, $logoWidth, $logoHeight);
+						imagedestroy($watermarkImage);
+					}
+			}
+		}
+
+		$finalFile = !empty($newFile) ? $newFile : $file;
+		if ($imageSaveFunc === 'imagepng') {
+			$imageSaveFunc($targetImage, $finalFile, $quality);
+		} else {
+			$imageSaveFunc($targetImage, $finalFile, $quality);
+		}
+		
+		imagedestroy($targetImage);
+		return true;
+	}
 
 	function numberShort($num,$lan = 'ID') {
 		if ($num >= 1000000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'Ki' : 'Qi'); }
