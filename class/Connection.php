@@ -13,7 +13,9 @@ class Connection {
 			}
 		} catch (\Exception $e) {
 			$this->error = $e->getMessage();
-			$data = array('done'=> 0, 'response' => $this->error);
+			http_response_code(500);
+			header('Content-Type: application/json');
+			$data = array('done'=> 0, 'response' => $this->error, 'error' => 'Internal server Error 500', 'code' => 500, 'status' => 'error');
 			echo json_encode($data); exit;
 		}
 
