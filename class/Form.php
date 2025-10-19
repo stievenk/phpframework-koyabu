@@ -60,6 +60,7 @@ class Form {
 				case 'array' : $d = $data;
 			}
 		if ($exit === true) {
+			if (ob_get_length()) ob_end_clean();
 			echo $d; exit;
 		} else {
 			return $d;
