@@ -126,12 +126,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-qrcode.git",
+<<<<<<< HEAD
                 "reference": "1e6006d9dff379c610aa510ef90508b965a82458"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/1e6006d9dff379c610aa510ef90508b965a82458",
                 "reference": "1e6006d9dff379c610aa510ef90508b965a82458",
+=======
+                "reference": "390393e97a6e42ccae0e0d6205b8d4200f7ddc43"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/390393e97a6e42ccae0e0d6205b8d4200f7ddc43",
+                "reference": "390393e97a6e42ccae0e0d6205b8d4200f7ddc43",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -142,6 +151,7 @@
             "require-dev": {
                 "chillerlan/php-authenticator": "^5.2.1",
                 "ext-fileinfo": "*",
+<<<<<<< HEAD
                 "intervention/image": "^3.11",
                 "phan/phan": "^5.5.2",
                 "phpbench/phpbench": "^1.4",
@@ -152,6 +162,15 @@
                 "setasign/fpdf": "^1.8.6",
                 "slevomat/coding-standard": "^8.23",
                 "squizlabs/php_codesniffer": "^4.0"
+=======
+                "phan/phan": "^5.5.1",
+                "phpcompatibility/php-compatibility": "10.x-dev",
+                "phpmd/phpmd": "^2.15",
+                "phpunit/phpunit": "^9.6",
+                "setasign/fpdf": "^1.8.2",
+                "slevomat/coding-standard": "^8.23.0",
+                "squizlabs/php_codesniffer": "^4.0.0"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
             },
             "suggest": {
                 "chillerlan/php-authenticator": "Yet another Google authenticator! Also creates URIs for mobile apps.",
@@ -216,7 +235,11 @@
                     "type": "Ko-Fi"
                 }
             ],
+<<<<<<< HEAD
             "time": "2025-10-09T22:06:17+00:00"
+=======
+            "time": "2025-09-19T17:30:27+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "chillerlan/php-settings-container",
@@ -417,12 +440,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/dompdf.git",
+<<<<<<< HEAD
                 "reference": "f349010dff66e9a30aa492fc301bcb1945be8ce6"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/dompdf/dompdf/zipball/f349010dff66e9a30aa492fc301bcb1945be8ce6",
                 "reference": "f349010dff66e9a30aa492fc301bcb1945be8ce6",
+=======
+                "reference": "3e158bb9f235ad9830d8c4ddb3b4782f293cdf22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/3e158bb9f235ad9830d8c4ddb3b4782f293cdf22",
+                "reference": "3e158bb9f235ad9830d8c4ddb3b4782f293cdf22",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -474,7 +506,11 @@
                 "issues": "https://github.com/dompdf/dompdf/issues",
                 "source": "https://github.com/dompdf/dompdf/tree/master"
             },
+<<<<<<< HEAD
             "time": "2025-10-14T13:29:55+00:00"
+=======
+            "time": "2025-09-23T03:11:27+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "dompdf/php-font-lib",
@@ -702,6 +738,7 @@
         },
         {
             "name": "google/apiclient-services",
+<<<<<<< HEAD
             "version": "v0.417.0",
             "source": {
                 "type": "git",
@@ -712,6 +749,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/d09f54168a8886ed758b5973e5231abefb5d5667",
                 "reference": "d09f54168a8886ed758b5973e5231abefb5d5667",
+=======
+            "version": "v0.414.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-api-php-client-services.git",
+                "reference": "5bd542b6d9639b89b95270ae85ed3062b4ca9b8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/5bd542b6d9639b89b95270ae85ed3062b4ca9b8e",
+                "reference": "5bd542b6d9639b89b95270ae85ed3062b4ca9b8e",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -740,9 +789,15 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.417.0"
             },
             "time": "2025-10-20T00:54:22+00:00"
+=======
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.414.0"
+            },
+            "time": "2025-09-28T01:08:30+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "google/auth",
@@ -811,12 +866,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-ai-platform.git",
+<<<<<<< HEAD
                 "reference": "6b4b5e02733f81ff91c71327029e9155fb34f0bd"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/googleapis/google-cloud-php-ai-platform/zipball/6b4b5e02733f81ff91c71327029e9155fb34f0bd",
                 "reference": "6b4b5e02733f81ff91c71327029e9155fb34f0bd",
+=======
+                "reference": "4e6f3b8fadb20e29596660cc0c002f505677d715"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-ai-platform/zipball/4e6f3b8fadb20e29596660cc0c002f505677d715",
+                "reference": "4e6f3b8fadb20e29596660cc0c002f505677d715",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -852,9 +916,15 @@
             ],
             "description": "Google Cloud Ai Platform Client for PHP",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/googleapis/google-cloud-php-ai-platform/tree/v1.40.0"
             },
             "time": "2025-10-07T18:41:09+00:00"
+=======
+                "source": "https://github.com/googleapis/google-cloud-php-ai-platform/tree/v1.39.0"
+            },
+            "time": "2025-10-01T16:57:30+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "google/common-protos",
@@ -1019,6 +1089,7 @@
         },
         {
             "name": "google/longrunning",
+<<<<<<< HEAD
             "version": "0.6.0",
             "source": {
                 "type": "git",
@@ -1029,6 +1100,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/googleapis/php-longrunning/zipball/226d3b5166eaa13754cc5e452b37872478e23375",
                 "reference": "226d3b5166eaa13754cc5e452b37872478e23375",
+=======
+            "version": "0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/php-longrunning.git",
+                "reference": "715519ab4aaf3c4268adb2b551ee0f34135c8c5f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/php-longrunning/zipball/715519ab4aaf3c4268adb2b551ee0f34135c8c5f",
+                "reference": "715519ab4aaf3c4268adb2b551ee0f34135c8c5f",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require-dev": {
@@ -1057,6 +1140,7 @@
             ],
             "description": "Google LongRunning Client for PHP",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/googleapis/php-longrunning/tree/v0.6.0"
             },
             "time": "2025-10-07T18:41:09+00:00"
@@ -1073,6 +1157,24 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/b50269e23204e5ae859a326ec3d90f09efe3047d",
                 "reference": "b50269e23204e5ae859a326ec3d90f09efe3047d",
+=======
+                "source": "https://github.com/googleapis/php-longrunning/tree/v0.5.0"
+            },
+            "time": "2025-09-20T01:29:44+00:00"
+        },
+        {
+            "name": "google/protobuf",
+            "version": "v4.33.0RC1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/protocolbuffers/protobuf-php.git",
+                "reference": "961799df3cc236f5ead1396f54f5b4c6ec0fbdeb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/961799df3cc236f5ead1396f54f5b4c6ec0fbdeb",
+                "reference": "961799df3cc236f5ead1396f54f5b4c6ec0fbdeb",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -1101,9 +1203,15 @@
                 "proto"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.33.0"
             },
             "time": "2025-10-15T20:10:28+00:00"
+=======
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.33.0RC1"
+            },
+            "time": "2025-10-01T14:53:19+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "grpc/grpc",
@@ -2086,12 +2194,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
+<<<<<<< HEAD
                 "reference": "0105ba17b5095f96b67b00010687cd65790b8658"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0105ba17b5095f96b67b00010687cd65790b8658",
                 "reference": "0105ba17b5095f96b67b00010687cd65790b8658",
+=======
+                "reference": "0da2d6679a3df45d6d720aa2e0d4568f82a32e46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0da2d6679a3df45d6d720aa2e0d4568f82a32e46",
+                "reference": "0da2d6679a3df45d6d720aa2e0d4568f82a32e46",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -2137,7 +2254,11 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/master"
             },
+<<<<<<< HEAD
             "time": "2025-10-19T13:43:25+00:00"
+=======
+            "time": "2025-09-08T07:54:25+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -2264,12 +2385,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
+<<<<<<< HEAD
                 "reference": "22b1e59f53524f9bcd09c7a043d5e92ead01e44b"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/22b1e59f53524f9bcd09c7a043d5e92ead01e44b",
                 "reference": "22b1e59f53524f9bcd09c7a043d5e92ead01e44b",
+=======
+                "reference": "5acdb20adf7825c73a60d67b805791169cd26418"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/5acdb20adf7825c73a60d67b805791169cd26418",
+                "reference": "5acdb20adf7825c73a60d67b805791169cd26418",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -2339,7 +2469,11 @@
                     "type": "github"
                 }
             ],
+<<<<<<< HEAD
             "time": "2025-10-15T17:27:26+00:00"
+=======
+            "time": "2025-09-30T15:28:50+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -2347,12 +2481,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
+<<<<<<< HEAD
                 "reference": "eecfb6712ddde900b82257f256c935a2f111b8a5"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/eecfb6712ddde900b82257f256c935a2f111b8a5",
                 "reference": "eecfb6712ddde900b82257f256c935a2f111b8a5",
+=======
+                "reference": "0c459cbd5d3f87079a4860e0cb78f7c313e04f22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/0c459cbd5d3f87079a4860e0cb78f7c313e04f22",
+                "reference": "0c459cbd5d3f87079a4860e0cb78f7c313e04f22",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -2382,7 +2525,7 @@
                 "dealerdirect/phpcodesniffer-composer-installer": "dev-main",
                 "dompdf/dompdf": "^2.0 || ^3.0",
                 "friendsofphp/php-cs-fixer": "^3.2",
-                "mitoteam/jpgraph": "^10.3",
+                "mitoteam/jpgraph": "^10.3 || 10.5.0-beta",
                 "mpdf/mpdf": "^8.1.1",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "phpstan/phpstan": "^1.1 || ^2.0",
@@ -2446,7 +2589,11 @@
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
                 "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/master"
             },
+<<<<<<< HEAD
             "time": "2025-10-16T15:34:20+00:00"
+=======
+            "time": "2025-10-01T16:12:04+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2454,12 +2601,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
+<<<<<<< HEAD
                 "reference": "9d6ca36a6c2dd434765b1071b2644a1c683b385d"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/9d6ca36a6c2dd434765b1071b2644a1c683b385d",
                 "reference": "9d6ca36a6c2dd434765b1071b2644a1c683b385d",
+=======
+                "reference": "5805c0e661cd26b4a893b021e5d8ae9cfbeaea5a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/5805c0e661cd26b4a893b021e5d8ae9cfbeaea5a",
+                "reference": "5805c0e661cd26b4a893b021e5d8ae9cfbeaea5a",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -2556,7 +2712,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2025-10-06T01:07:24+00:00"
+=======
+            "time": "2025-09-28T11:15:58+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "pragmarx/google2fa",
@@ -3057,12 +3217,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
+<<<<<<< HEAD
                 "reference": "cd47a01a1f7c9f54b34b06ec53148a80dc5fe181"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/ramsey/uuid/zipball/cd47a01a1f7c9f54b34b06ec53148a80dc5fe181",
                 "reference": "cd47a01a1f7c9f54b34b06ec53148a80dc5fe181",
+=======
+                "reference": "7ccc0b6be5e995489b7624b1b9a582dc579f22ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/7ccc0b6be5e995489b7624b1b9a582dc579f22ff",
+                "reference": "7ccc0b6be5e995489b7624b1b9a582dc579f22ff",
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
                 "shasum": ""
             },
             "require": {
@@ -3128,7 +3297,11 @@
                 "issues": "https://github.com/ramsey/uuid/issues",
                 "source": "https://github.com/ramsey/uuid/tree/4.x"
             },
+<<<<<<< HEAD
             "time": "2025-10-06T21:07:16+00:00"
+=======
+            "time": "2025-09-30T02:45:36+00:00"
+>>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
         },
         {
             "name": "sabberworm/php-css-parser",

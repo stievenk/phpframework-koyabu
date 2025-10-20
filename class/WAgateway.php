@@ -55,7 +55,7 @@ class WAgateway {
          'text' => $text,
          'to' => $to,
          'document_url' => $document_url,
-         'document_name' => $document_name,
+         'document_name' => $document_name ?? 'file.pdf',
          'is_group' => $isGroup
       ];
       return $this->runPost($URL,$data);

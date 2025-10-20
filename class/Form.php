@@ -60,6 +60,7 @@ class Form {
 				case 'array' : $d = $data;
 			}
 		if ($exit === true) {
+			if (ob_get_length()) ob_end_clean();
 			echo $d; exit;
 		} else {
 			return $d;
@@ -851,7 +852,71 @@ class Form {
 
 	}
 
-    function __destruct() {
+	public function dropbox_save($option) {
+		$HOME_DIR = $option['dir'] ?? $this->config['dropbox']['home_dir'];
+		$HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
+		$remove_file = $option['remove_file'] ?? true;
+		try {
+			if (!isset($this->config['dropbox']['access_token'])) {
+				throw new Exception("Dropbox Access Token not set");
+			}
+			if (!is_array($option)) { throw new \Exception("Invalid Arguments"); }
+			if (!isset($option['file'])) { throw new \Exception("Invalid Arguments File location"); }
+			if (!file_exists($option['file'])) { throw new \Exception("File not found"); }
+			if (!is_file($option['file'])) { throw new \Exception("File invalid format"); }
+
+			$DBX = new Dropbox($this->config['dropbox']['access_token']);
+			$DBX->upload($option['file'],'overwrite','/'.$HOME_DIR);
+
+			// Create or Get Shared Link
+			$d = $DBX->create_shared_link($HOME_DIR.basename($option['file']));
+			if ($d['url']) {
+				$url = str_replace("dl=0","raw=1",$d['url']);
+				if ($remove_file == true) { if (file_exists($option['file'])) { unlink($option['file']); } }
+				return $url;
+			} else {
+				if (preg_match("#already_exists#si",$d['error_summary'])) {
+					$d = $DBX->get_shared_link($HOME_DIR.basename($option['file']));
+					$url = str_replace("dl=0","raw=1",$d['links'][0]['url']);
+					if ($remove_file == true) { if (file_exists($option['file'])) { unlink($option['file']); } }
+					return $url;
+				} else {
+					throw new \Exception($d['error_summary']);
+				}
+			}
+
+		} catch (\Exception $e) {
+			$this->error = $e->getMessage();
+			$this->debug($this->error,__FILE__,__LINE__);
+			return false;
+		}
+	}
+
+	public function dropbox_delete($option) {
+		$HOME_DIR = $option['dir'] ?? $this->config['dropbox']['home_dir'];
+		$HOME_DIR = $HOME_DIR ? $HOME_DIR.'/' : '';
+		try {
+			if (!isset($this->config['dropbox']['access_token'])) {
+				throw new Exception("Dropbox Access Token not set");
+			}
+			if (!is_array($option)) { throw new \Exception("Invalid Arguments"); }
+			if (!isset($option['url'])) { throw new \Exception("Invalid Arguments File URL"); }
+
+			$DBX = new Dropbox($this->config['dropbox']['access_token']);
+			$d = $DBX->get_shared_link_file($option['url']);
+			if ($d['name']) { 
+				return $DBX->delete($HOME_DIR.$d['name']);
+			} else {
+				throw new \Exception($d['error_summary']);
+			}
+		} catch (\Exception $e) {
+			$this->error = $e->getMessage();
+			$this->debug($this->error,__FILE__,__LINE__);
+			return false;
+		}
+	}
+
+	function __destruct() {
 
     }
 }
