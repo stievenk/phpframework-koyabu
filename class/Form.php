@@ -1,11 +1,13 @@
 <?php
 namespace Koyabu\Webapi;
 use Koyabu\Webapi;
-use chillerlan\QRCode\{QRCode, QROptions};
+use chillerlan\QRCode\QROptions;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\Output\QROutputInterface;
 /** 
  * Koyabu Framework
- * version: 8.2.1
- * last update: 27 Oktober 2024
+ * version: 8.2.2
+ * last update: 4 Oktober 2025
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
@@ -118,68 +120,87 @@ class Form {
 		}
 	}
 
-    public function save($data,$table,$method='INSERT',$primary='id') {
-        $error = array('done' => 0, 'response' => '');
-		$field = [];
-		$g = $this->Database->query("select * from `{$table}` limit 1");
-		$r = $this->Database->fetch_fields($g);
-		for ($i = 0; $i < count($r); $i++) {
-				array_push($field,$r[$i]->name);
-		}
-		foreach ($data as $k => $v) {
-				if (!in_array($k,$field)) { unset($data[$k]); }
-		}
-        try {
-            if (is_array($data)) {
-               $datas = $data;
-               $f = $this->parse($data,($method == 'REPLACE' ? 1 : 0));
-                $fl = array();
-                if (is_array($primary)) {
-                    $new = $method == 'REPLACE' ? 1 : 0;
-                    foreach($primary as $v) {
-                        $fl[] = "`{$v}` = '". $this->Database->escape_string($datas[$v]) ."'";
-                        if (!trim($datas[$v])) { $new = 1; }
-                    }
-                    if ($new == 0 or $method == 'UPDATE') { 
-                        $NEW = 0; 
-                        $SQL = "UPDATE `{$table}` SET {$f['field']} WHERE ". implode(" and ",$fl) .""; 
-                        $ID = $datas[$primary[0]];
-                    }
-                    else {
-                        $SQL = "{$method} INTO `{$table}` SET {$f['field']}"; 
-                        $NEW = 1;
-                        $ID = ($method == 'REPLACE') ? $datas[$primary[0]] : 0;
-                    }
-                } else {
-                    if ($datas[$primary] and $method != 'REPLACE') {
-                        $SQL = "UPDATE `{$table}` SET {$f['field']} WHERE `{$primary}`='{$datas[$primary]}'";
-                        $NEW = 0;
-                        $ID = $datas[$primary];
-                    } else {
-                        $SQL = "{$method} INTO `{$table}` SET {$f['field']}"; 
-                        $NEW = 1;
-                        $ID = ($method == 'REPLACE') ? $datas[$primary] : 0;
-                    }
-                }
+	public function saveTable($params) {
+		try {
+			if (!$params['data'] or !is_array($params['data'])) {
+				throw new \Exception("Invalid Parameters", 1);
+			}
+			if (!isset($params['table'])) {
+				throw new \Exception("Table not defined", 1);
+			}
+			$ID = false;
+			$fields = [];
+			$table = $params['table'];
+			$method = isset($params['method']) ? strtoupper($params['method']) : 'INSERT';
+			$primary = isset($params['primary']) ? $params['primary'] : 'id';
+			$data = $params['data'];
+			$this->sanitize = $params['sanitize'] ?? false;
+			$g = $this->Database->query("select * from `{$table}` limit 1");
+			$r = $this->Database->fetch_fields($g);
+			// Filter data sesuai field tabel
+			for ($i = 0; $i < count($r); $i++) {
+					array_push($fields,$r[$i]->name);
+			}
+			foreach ($data as $k => $v) {
+					if (!in_array($k,$fields)) { unset($data[$k]); }
+			}
 
-                if ($this->Database->query($SQL)) {
-                    if ($NEW == 1) {
-                        $this->NEW=1;
-                        $ID = $ID ? $ID : $this->Database->insert_id();
-                    } else {
-                        $log = array('query' => $SQL, 'msg' => "UPDATE RECORD {$table} #{$ID}");
-                    }
-                    return $ID;
-                } else { 
-                    $this->error = $this->Database->error()." ({$SQL})"; 
-                    throw new \Exception($this->error, 1);    
-                }
-            } else {
-                throw new \Exception("Invalid Parameters", 1);
-            }
-        } catch (\Exception $e) {
-            $this->error = $e->getMessage();
-        }
+			$fl = [];
+			foreach ($data as $k => $v) {
+				$v = $this->sanitize == true ? filter_var($v,FILTER_SANITIZE_SPECIAL_CHARS) : $v;
+				$ffl[] = "`{$k}` = '". $this->Database->escape_string(trim($v)) ."'";
+			}
+			$where = '1';
+			if ($primary) {
+				if (is_array($primary)) {
+					$pk = $primary[0];
+					foreach($primary as $v) {
+						$data[$v] = $this->sanitize == true ? filter_var($data[$v],FILTER_SANITIZE_SPECIAL_CHARS) : $data[$v];
+						$where .= " and `{$v}` = '". $this->Database->escape_string($data[$v]) ."'";
+					}
+				} else {
+					$pk = $primary;
+					$data[$pk] = $this->sanitize == true ? filter_var($data[$pk],FILTER_SANITIZE_SPECIAL_CHARS) : $data[$pk];
+					$where .= " and `{$pk}` = '". $this->Database->escape_string($data[$pk]) ."'";
+				}
+				if ($data[$pk] and $method != 'REPLACE') { $method = 'UPDATE';  }
+			}
+ 			switch($method) {
+				default :
+				case 'INSERT' : 
+					$SQL = "INSERT INTO `{$table}` SET ". implode(", ",$ffl) ."";	
+					break;
+				case 'UPDATE' : 
+					if ($params['where']) {
+						$where = $params['where'];
+					}
+					$SQL = "UPDATE `{$table}` SET ". implode(", ",$ffl) ." WHERE {$where}";
+					$ID = $data[$pk];
+					break;
+				case 'REPLACE' : 
+					$SQL = "REPLACE INTO `{$table}` SET ". implode(", ",$ffl) ."";	
+					break;
+			}
+			// $this->error = $SQL;
+			if ($this->Database->query($SQL)) {
+				return $ID ?? $this->Database->insert_id();
+			} else {
+				$this->error = $this->Database->error()." ({$SQL})"; 
+				throw new \Exception($this->error, 1);    
+			}
+		} catch (\Exception $e) {
+			$this->error = $e->getMessage();
+			return false;
+		}
+	}
+
+    public function save($data,$table,$method='INSERT',$primary='id') {	
+		return $this->saveTable([
+			'data' => $data,
+			'table' => $table,
+			'method' => $method,
+			'primary' => $primary
+		]);
 	}
 
     function delete($params,$table) {
@@ -285,11 +306,33 @@ class Form {
 				
 			} 
 			else if ($option['file']) {
-				if (file_exists($option['file'])) {	
-					$o = file_get_contents($option['file']);
-					$d = explode("\n",$o);
-					foreach($d as $v) {
-						echo '<option '. ($default == trim($v) ? 'selected' : '').' value="'.trim($v).'">'.trim($v).'</option>';
+				if (file_exists($option['file'])) {
+					$ext = pathinfo($option['file'], PATHINFO_EXTENSION);
+					switch($ext) {	
+						default :
+							$o = file_get_contents($option['file']);
+							$d = explode("\n",$o);
+							foreach($d as $v) {
+								echo '<option '. ($default == trim($v) ? 'selected' : '').' value="'.trim($v).'">'.trim($v).'</option>';
+							}
+						break;
+						case 'csv' :
+							$namecol = $option['namecol'] ?? 1;
+							$valuecol = $option['valuecol'] ?? 0; 
+							if (($handle = fopen($option['file'], "r")) !== FALSE) {
+								while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+									echo '<option '. ($default == trim($data[$valuecol]) ? 'selected' : '').' value="'.trim($data[$valuecol]).'">'.trim($data[$namecol]).'</option>';
+								}
+								fclose($handle);
+							}
+						break;
+						case 'json' :
+							$o = file_get_contents($option['file']);
+							$d = json_decode($o);
+							foreach($d as $v) {
+								echo '<option '. ($default == $v->value ? 'selected' : '').' value="'.$v->value.'">'.($v->text ?? $v->name).'</option>';
+							}
+						break;
 					}
 				}
 			}
@@ -368,6 +411,12 @@ class Form {
 		return $SERVER_URL;
 		/* End of phpBB Script */
     }
+
+         
+	/* Alias */
+	function resizeImage($params = []) {
+		return $this->resizeAndWatermarkImage($params);
+	}
 
 	function resizeAndWatermarkImage($params = []) {
 		// Set nilai default untuk parameter
@@ -684,11 +733,11 @@ class Form {
 			$options->outputBase64 = false;
 			$options->cachefile = $filename;
 			$options->scale = 20;
-			$options->outputType = QRCode::OUTPUT_IMAGE_PNG;
+			$options->outputType = QROutputInterface::OUTPUT_IMAGE_PNG; //QRCode::OUTPUT_IMAGE_PNG;
 			$qrcode = (new QRCode($options))->render($data);
 		} else {
 			$options->scale = 20;
-			$options->outputType = QRCode::OUTPUT_IMAGE_PNG;
+			$options->outputType = QROutputInterface::OUTPUT_IMAGE_PNG; // QRCode::OUTPUT_IMAGE_PNG;
 			$qrcode = (new QRCode($options))->render($data);
 			return $qrcode;
 		}

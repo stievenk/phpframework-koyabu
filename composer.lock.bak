@@ -440,21 +440,13 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/dompdf.git",
-<<<<<<< HEAD
                 "reference": "f349010dff66e9a30aa492fc301bcb1945be8ce6"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/dompdf/dompdf/zipball/f349010dff66e9a30aa492fc301bcb1945be8ce6",
                 "reference": "f349010dff66e9a30aa492fc301bcb1945be8ce6",
-=======
-                "reference": "3e158bb9f235ad9830d8c4ddb3b4782f293cdf22"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/3e158bb9f235ad9830d8c4ddb3b4782f293cdf22",
-                "reference": "3e158bb9f235ad9830d8c4ddb3b4782f293cdf22",
->>>>>>> 3ab36bc1f719087d0255e4e6c133bdfa5e77a5b9
+
                 "shasum": ""
             },
             "require": {
