@@ -6,7 +6,7 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\Output\QROutputInterface;
 /** 
  * Koyabu Framework
- * version: 8.2.2
+ * version: 8.2.3
  * last update: 4 Oktober 2025
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
