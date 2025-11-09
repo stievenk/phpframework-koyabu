@@ -148,7 +148,16 @@ class Form {
 			$fl = [];
 			foreach ($data as $k => $v) {
 				$v = $this->sanitize == true ? filter_var($v,FILTER_SANITIZE_SPECIAL_CHARS) : $v;
-				$ffl[] = "`{$k}` = '". $this->Database->escape_string(trim($v)) ."'";
+				
+				if (is_array($primary)) {
+					if (!in_array($k,$primary)) {
+						$ffl[] = "`{$k}` = '". $this->Database->escape_string(trim($v)) ."'";	
+					}
+				} else {
+					if (($v !== null and $v != '') or $k != $primary) {
+						$ffl[] = "`{$k}` = '". $this->Database->escape_string(trim($v)) ."'";
+					}
+				}
 			}
 			$where = '1';
 			if ($primary) {
@@ -179,11 +188,13 @@ class Form {
 					break;
 				case 'REPLACE' : 
 					$SQL = "REPLACE INTO `{$table}` SET ". implode(", ",$ffl) ."";	
+					$ID = $data[$pk];
 					break;
 			}
 			// $this->error = $SQL;
 			if ($this->Database->query($SQL)) {
-				return $ID ?? $this->Database->insert_id();
+				$ID = $ID ? $ID : $this->Database->insert_id();
+				return $ID;
 			} else {
 				$this->error = $this->Database->error()." ({$SQL})"; 
 				throw new \Exception($this->error, 1);    
@@ -509,6 +520,30 @@ class Form {
 		imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
 		imagedestroy($sourceImage);
 
+		if ($params['filter']['pixelate']) {
+			imagefilter($targetImage, IMG_FILTER_PIXELATE, $params['filter']['pixelate'], true);
+		}
+		if ($params['filter']['negatif']) {
+			imagefilter($targetImage, IMG_FILTER_NEGATE);
+		}
+		if ($params['filter']['smooth']) {
+			imagefilter($targetImage, IMG_FILTER_SMOOTH, $param['filter']['smooth']);
+		}
+		if ($params['filter']['color']) {
+			imagefilter($targetImage, IMG_FILTER_COLORIZE, $params['filter']['color']['red'] ?? 255, $params['filter']['color']['green'] ?? 255, $params['filter']['color']['blue'] ?? 255,$params['filter']['color']['alpha'] ?? 50);
+		}
+		
+		if ($params['filter']['blur']) {
+			for ($i = 0; $i < ($params['filter']['blur'] ?? 2); $i++) {
+				imagefilter($targetImage, IMG_FILTER_GAUSSIAN_BLUR);
+			}
+		}
+		if ($params['filter']['selective_blur']) {
+			for ($i = 0; $i < ($params['filter']['selective_blur'] ?? 2); $i++) {
+				imagefilter($targetImage, IMG_FILTER_SELECTIVE_BLUR);
+			}
+		}
+
 		// Menambahkan watermark jika ada
 		if (!empty($watermark['file']) && file_exists($watermark['file'])) {
 			$watermarkInfo = getimagesize($watermark['file']);
@@ -733,11 +768,11 @@ class Form {
 			$options->outputBase64 = false;
 			$options->cachefile = $filename;
 			$options->scale = 20;
-			$options->outputType = QROutputInterface::OUTPUT_IMAGE_PNG; //QRCode::OUTPUT_IMAGE_PNG;
+			// $options->outputType = QRCode::OUTPUT_IMAGE_PNG;
 			$qrcode = (new QRCode($options))->render($data);
 		} else {
 			$options->scale = 20;
-			$options->outputType = QROutputInterface::OUTPUT_IMAGE_PNG; // QRCode::OUTPUT_IMAGE_PNG;
+			// $options->outputType = QRCode::OUTPUT_IMAGE_PNG;
 			$qrcode = (new QRCode($options))->render($data);
 			return $qrcode;
 		}
@@ -782,70 +817,221 @@ class Form {
 			return $currentOTP;
 			}
 
-	function markdownToHtml($markdownText) {
-			/*
-			You can use this library for more advance
-			Markdown to HTML -> https://github.com/thephpleague/commonmark
-			HTML to Markdown -> https://github.com/thephpleague/html-to-markdown
-			*/
-			$html = $markdownText;
-			 $html = preg_replace_callback("#```(.+?)```#si",function($match) use ($template) {
-				ob_start();
-				ob_get_clean();
-				return '<pre>'.$match[1].'</pre>';
-			},$html);
+	function markdownToHtml($markdown) {
+		// Penyimpanan placeholder
+		$placeholders = [];
+		$phIndex = 0;
+		$makePh = function($html) use (&$placeholders, &$phIndex) {
+			$key = "%%PH{$phIndex}%%";
+			$placeholders[$key] = $html;
+			$phIndex++;
+			return $key;
+		};
 
-			$html = preg_replace_callback("#\*\*\*(.+?)\*\*\*#si",function($match) use ($template) {
-				return '<strong><em>'.$match[1].'</em></strong>';
-			},$html);
+		// 1) EXTRACT CODE BLOCKS ```...``` (escape isi)
+		$markdown = preg_replace_callback('/```(.*?)```/si', function($m) use ($makePh) {
+			$inner = htmlspecialchars(trim($m[1]), ENT_QUOTES, 'UTF-8');
+			return $makePh("<pre><code>{$inner}</code></pre>");
+		}, $markdown);
 
-			$html = preg_replace_callback("#\*\*(.+?)\*\*#si",function($match) use ($template) {
-				return '<strong>'.$match[1].'</strong>';
-			},$html);
+		// 2) EXTRACT INLINE CODE `...`
+		$markdown = preg_replace_callback('/`([^`\n]+)`/i', function($m) use ($makePh) {
+			$inner = htmlspecialchars($m[1], ENT_QUOTES, 'UTF-8');
+			return $makePh("<code>{$inner}</code>");
+		}, $markdown);
 
-			$html = preg_replace_callback("#~~(.+?)~~#si",function($match) use ($template) {
-				return '<span style="text-decoration: line-through">'.$match[1].'</span>';
-			},$html);
+		// 3) [link=url]text[/link]  and [link=url] (prioritize)
+		$markdown = preg_replace_callback('/\[link=(https?:\/\/[^\]\s]+)\](.*?)\[\/link\]/si', function($m) use ($makePh) {
+			$url = $m[1];
+			$label = $m[2] !== '' ? $m[2] : $m[1];
+			return $makePh('<a href="javascript:void(0)" goto-link="'.htmlspecialchars($url, ENT_QUOTES).'">'.htmlspecialchars($label, ENT_QUOTES).'</a>');
+		}, $markdown);
 
-			$html = preg_replace_callback("#_(.+?)_#si",function($match) use ($template) {
-				return '<span style="text-decoration: underline">'.$match[1].'</span>';
-			},$html);
+		$markdown = preg_replace_callback('/\[link=(https?:\/\/[^\]\s]+)\]/si', function($m) use ($makePh) {
+			$url = $m[1];
+			return $makePh('<a href="javascript:void(0)" goto-link="'.htmlspecialchars($url, ENT_QUOTES).'">'.htmlspecialchars($url, ENT_QUOTES).'</a>');
+		}, $markdown);
 
-			$html = preg_replace_callback("#\*(.+?)\*#si",function($match) use ($template) {
-				// ob_start();
-				// ob_get_clean();
-				return '<em>'.$match[1].'</em>';
-			},$html);
-
-			$lines = explode("\n",$html);
-			$html = '';
-			foreach($lines as $line) {
-				$line = rtrim($line);
-				if (preg_match("/^\# (.*)/",$line,$r)) {
-					$html.="<h1>{$r[1]}</h1>\n";
-				} else if (preg_match("/^\#\# (.*)/",$line,$r)) {
-					$html.="<h2>{$r[1]}</h2>\n";
-				} else if (preg_match("/^\#\#\# (.*)/",$line,$r)) {
-					$html.="<h3>{$r[1]}</h3>\n";
-				} else if (preg_match("/^#### (.*)/",$line,$r)) {
-					$html.="<h4>{$r[1]}</h4>\n";
-				} else if (preg_match("/^##### (.*)/",$line,$r)) {
-					$html.="<h5>{$r[1]}</h5>\n";
-				} else if (preg_match("/^###### (.*)/",$line,$r)) {
-					$html.="<h6>{$r[1]}</h6>\n";
-				} else if (preg_match("/^\- (.*)|^\+ (.*)|^\* (.*)/",$line,$r)) {
-					$res = $r[3] ?? $r[2] ?? $r[1];
-					$html.="<li>{$res}</li>\n";
-				} else if (!empty(trim($line))) {
-					// $html.="<div>{$line}</div>\n";
-					$html.="{$line}\n";
-				} else if ($line === '') {
-					$html.="<br />\n";
-				}
+		// 4) [wa=...] (support formats: 0812..., +62812..., 62812...)
+		$markdown = preg_replace_callback('/\[wa=([^\]\s]+)\]/i', function($m) use ($makePh) {
+			$raw = $m[1];
+			// normalize: remove non-digits and leading +
+			$digits = preg_replace('/\D+/', '', $raw);
+			if (preg_match('/^0[0-9]+$/', $digits)) {
+				$norm = '62' . substr($digits, 1);
+			} elseif (preg_match('/^62[0-9]+$/', $digits)) {
+				$norm = $digits;
+			} else {
+				// if starts with country code without +, keep
+				$norm = $digits;
 			}
-			$html = preg_replace('/(<li>.*?<\/li>\n)(<li>.*?<\/li>\n)+/s', '<ul>$0</ul>', $html);
-			return $html;
+			$label = htmlspecialchars($raw, ENT_QUOTES);
+			return $makePh('<a href="javascript:void(0)" goto-link="https://wa.me/'.$norm.'">'.$label.'</a>');
+		}, $markdown);
+
+		// 5) [tel=...]
+		$markdown = preg_replace_callback('/\[tel=([^\]\s]+)\]/i', function($m) use ($makePh) {
+			$raw = $m[1];
+			$clean = preg_replace('/\s+/', '', $raw);
+			$label = htmlspecialchars($raw, ENT_QUOTES);
+			return $makePh('<a href="javascript:void(0)" goto-link="tel:'.$clean.'">'.$label.'</a>');
+		}, $markdown);
+
+		// 6) [email=...]
+		$markdown = preg_replace_callback('/\[email=([^\]\s]+)\]/i', function($m) use ($makePh) {
+			$raw = $m[1];
+			$label = htmlspecialchars($raw, ENT_QUOTES);
+			return $makePh('<a href="javascript:void(0)" goto-link="mailto:'.$raw.'">'.$label.'</a>');
+		}, $markdown);
+
+		// 7) IMAGE ![alt](url)
+		$markdown = preg_replace_callback('/!\[(.*?)\]\((https?:\/\/[^\)]+)\)/i', function($m) use ($makePh) {
+			$alt = htmlspecialchars($m[1], ENT_QUOTES);
+			$url = htmlspecialchars($m[2], ENT_QUOTES);
+			return $makePh('<img src="'.$url.'" alt="'.$alt.'" style="max-width:100%;">');
+		}, $markdown);
+
+		// 8) AUTO LINKS https?://...
+		$markdown = preg_replace_callback('/(?<!="|goto-link=")(https?:\/\/[^\s<>\)\]]+)/i', function($m) use ($makePh) {
+			$url = $m[1];
+			return $makePh('<a href="javascript:void(0)" goto-link="'.htmlspecialchars($url, ENT_QUOTES).'">'.htmlspecialchars($url, ENT_QUOTES).'</a>');
+		}, $markdown);
+
+		// 9) AUTO EMAILS (only those not inside placeholders)
+		$markdown = preg_replace_callback('/([A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,})/i', function($m) use ($makePh) {
+			$email = $m[1];
+			return $makePh('<a href="javascript:void(0)" goto-link="mailto:'.htmlspecialchars($email, ENT_QUOTES).'">'.htmlspecialchars($email, ENT_QUOTES).'</a>');
+		}, $markdown);
+
+		// 10) AUTO PHONE / WA detection for Indonesian numbers
+		// pattern matches +62xxxx or 0xxxx (7..15 digits)
+		$markdown = preg_replace_callback('/(?<![\\w\%\>])(\+?62[0-9]{7,15}|0[0-9]{7,15})(?!\w)/', function($m) use ($makePh) {
+			$raw = $m[1];
+			// keep display original, normalize for wa.me
+			$digits = preg_replace('/\D+/', '', $raw);
+			if (preg_match('/^0[0-9]+$/', $digits)) {
+				$norm = '62'.substr($digits,1);
+			} else {
+				$norm = preg_replace('/^\+/', '', $digits);
+			}
+			// prefer WA link (as requested)
+			$label = htmlspecialchars($raw, ENT_QUOTES);
+			return $makePh('<a href="javascript:void(0)" goto-link="https://wa.me/'.$norm.'">'.$label.'</a>');
+		}, $markdown);
+
+		// At this point, bracketed forms and auto forms have been tokenized + safe.
+
+		// 11) TABLES - detect contiguous lines that look like table (|...|)
+		$markdown = preg_replace_callback('/((?:\|.*\|\s*\n)+)/', function($m) use ($makePh) {
+			$block = trim($m[1]);
+			$rows = array_filter(array_map('rtrim', explode("\n", trim($block))));
+			if (count($rows) === 0) return $m[0];
+
+			$html = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"6\">";
+			$theadDone = false;
+
+			// Find header (first row) and separator (second row with ---)
+			if (count($rows) >= 2 && preg_match('/^\s*\|?[\s:-]+\|?[\s:-\|]*$/', $rows[1])) {
+				// header present
+				$headers = array_map('trim', explode('|', trim($rows[0], "| \t")));
+				$html .= "<thead><tr>";
+				foreach ($headers as $h) {
+					$html .= "<th>".trim($h)."</th>";
+				}
+				$html .= "</tr></thead><tbody>";
+				for ($i = 2; $i < count($rows); $i++) {
+					$cols = array_map('trim', explode('|', trim($rows[$i], "| \t")));
+					$html .= "<tr>";
+					foreach ($cols as $c) $html .= "<td>{$c}</td>";
+					$html .= "</tr>";
+				}
+				$html .= "</tbody></table>";
+				return $makePh($html);
+			} else {
+				// simple table without header
+				foreach ($rows as $r) {
+					$cols = array_map('trim', explode('|', trim($r, "| \t")));
+					if ($r === '') continue;
+					$html .= "<tr>";
+					foreach ($cols as $c) $html .= "<td>{$c}</td>";
+					$html .= "</tr>";
+				}
+				$html .= "</table>";
+				return $makePh($html);
+			}
+		}, $markdown);
+
+		// 12) Block-level parsing: lines -> headings, lists, blockquote, hr, paragraphs
+		$lines = preg_split("/\r\n|\n|\r/", $markdown);
+		$out = "";
+		$inUL = false; $inOL = false;
+
+		foreach ($lines as $line) {
+			$trim = rtrim($line);
+
+			// Heading
+			if (preg_match('/^######\s+(.*)$/', $trim, $m)) { $out .= "<h6>{$m[1]}</h6>\n"; continue; }
+			if (preg_match('/^#####\s+(.*)$/', $trim, $m))  { $out .= "<h5>{$m[1]}</h5>\n"; continue; }
+			if (preg_match('/^####\s+(.*)$/', $trim, $m))   { $out .= "<h4>{$m[1]}</h4>\n"; continue; }
+			if (preg_match('/^###\s+(.*)$/', $trim, $m))    { $out .= "<h3>{$m[1]}</h3>\n"; continue; }
+			if (preg_match('/^##\s+(.*)$/', $trim, $m))     { $out .= "<h2>{$m[1]}</h2>\n"; continue; }
+			if (preg_match('/^#\s+(.*)$/', $trim, $m))      { $out .= "<h1>{$m[1]}</h1>\n"; continue; }
+
+			// Horizontal rule
+			if (preg_match('/^\s*(\-\-\-|\*\*\*|___)\s*$/', $trim)) {
+				// close lists if open
+				if ($inUL) { $out .= "</ul>\n"; $inUL = false; }
+				if ($inOL) { $out .= "</ol>\n"; $inOL = false; }
+				$out .= "<hr />\n"; continue;
+			}
+
+			// Blockquote
+			if (preg_match('/^\>\s?(.*)$/', $trim, $m)) {
+				if ($inUL) { $out .= "</ul>\n"; $inUL = false; }
+				if ($inOL) { $out .= "</ol>\n"; $inOL = false; }
+				$out .= "<blockquote>{$m[1]}</blockquote>\n"; continue;
+			}
+
+			// UL
+			if (preg_match('/^[\-\+\*]\s+(.*)$/', $trim, $m)) {
+				if ($inOL) { $out .= "</ol>\n"; $inOL = false; }
+				if (!$inUL) { $out .= "<ul>\n"; $inUL = true; }
+				$out .= "<li>{$m[1]}</li>\n"; continue;
+			}
+
+			// OL
+			if (preg_match('/^\d+\.\s+(.*)$/', $trim, $m)) {
+				if ($inUL) { $out .= "</ul>\n"; $inUL = false; }
+				if (!$inOL) { $out .= "<ol>\n"; $inOL = true; }
+				$out .= "<li>{$m[1]}</li>\n"; continue;
+			}
+
+			// empty line closes lists
+			if (trim($trim) === '') {
+				if ($inUL) { $out .= "</ul>\n"; $inUL = false; }
+				if ($inOL) { $out .= "</ol>\n"; $inOL = false; }
+				$out .= "\n";
+				continue;
+			}
+
+			// normal paragraph (line may contain placeholders)
+			$out .= "<p>{$trim}</p>\n";
 		}
+
+		// close open lists
+		if ($inUL) $out .= "</ul>\n";
+		if ($inOL) $out .= "</ol>\n";
+
+		// 13) Restore placeholders
+		if (!empty($placeholders)) {
+			// replace keys by values
+			$out = str_replace(array_keys($placeholders), array_values($placeholders), $out);
+		}
+
+		return $out;
+	}
+
+
 	
 	public function table_exists($table) {
 		$g = $this->query("show tables like '{$table}'");
