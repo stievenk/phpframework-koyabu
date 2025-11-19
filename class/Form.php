@@ -6,8 +6,8 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\Output\QROutputInterface;
 /** 
  * Koyabu Framework
- * version: 8.2.3
- * last update: 4 Oktober 2025
+ * version: 8.2.4
+ * last update: 19 November 2025
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
@@ -155,7 +155,11 @@ class Form {
 					}
 				} else {
 					if (($v !== null and $v != '') or $k != $primary) {
-						$ffl[] = "`{$k}` = '". $this->Database->escape_string(trim($v)) ."'";
+						if ($v == 'NULL') {
+							$ffl[] = "`{$k}` = NULL";
+						} else {
+							$ffl[] = "`{$k}` = '". $this->Database->escape_string(trim($v)) ."'";
+						}
 					}
 				}
 			}
@@ -302,7 +306,7 @@ class Form {
 	}
 
 	function form_option($option,$default='') {
-		$this->form_select($option,$default='');
+		$this->form_select($option,$default);
 	}
 
 	function form_select($option,$default='') {
@@ -361,7 +365,7 @@ class Form {
 						if (is_array($v)) {
 							echo '<option '.($default == $v['value'] ? 'selected' : '').' value="'.$v['value'].'">'.$v['text'].'</option>';
 						} else {
-							echo '<option '.($default == $v ? 'selected' : '').' value="'.$v.'">'.$v.'</option>';
+							echo '<option '.(trim($default) == trim($v) ? 'selected' : '').' value="'.$v.'">'.$v.'</option>';
 						}
 					}
 				}
