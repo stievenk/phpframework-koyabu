@@ -23,7 +23,8 @@ class PDF {
       $this->dompdf->loadHTML($this->options['html'] ?? '');
       $this->dompdf->render();
       if ($this->options['htmlview'] == true) {
-         return $html;
+         echo $this->options['html'] ?? '';
+         return;
       }
 
       if ($this->options['download'] == true) {
@@ -33,13 +34,13 @@ class PDF {
          if ($this->options['writeToFile'] == true) {
             file_put_contents($this->options['filename'], $output);
          } else {
-            ob_start();
+            if (ob_get_length()) ob_clean();
             header('Content-type:application/pdf');
             header('Content-disposition: inline; filename="'.basename($this->options['filename']).'"');
             header('content-Transfer-Encoding:binary');
             header('Accept-Ranges:bytes');
+            // ob_end_clean();
             echo $output;
-            ob_end_clean();
          }
       }
    }
