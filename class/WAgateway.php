@@ -13,8 +13,22 @@ class WAgateway {
       $this->WebURI = $this->URL . ':' . $this->PORT;
    }
 
-   function startSession($session_name) {
-      $URL = $this->WebURI . '/session/start?session='.$session_name;
+   function startSession($session_name, $method = 'GET') {
+      $URL = $this->WebURI . '/session/start';
+      if ($method == 'POST') {
+         return $this->runPost($URL,['session' => $session_name]);
+      } else {
+         return $this->runPost($URL.'?session='.$session_name);
+      }
+   }
+
+   function checkSession($session_name) {
+      $URL = $this->WebURI . '/session/check?session='.$session_name;
+      return $this->run($URL);
+   }
+
+   function logoutSession($session_name) {
+      $URL = $this->WebURI . '/session/logout?session='.$session_name;
       return $this->run($URL);
    }
 
