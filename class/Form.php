@@ -6,8 +6,8 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\Output\QROutputInterface;
 /** 
  * Koyabu Framework
- * version: 8.2.4
- * last update: 19 November 2025
+ * version: 8.2.5
+ * last update: 9 December 2025
  * min-require: PHP 8.1 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
@@ -27,15 +27,25 @@ class Form {
     function __construct($config) {
         $this->config = $config;
         $this->SQLConnection($config);
-		  $this->METHOD = $_SERVER['REQUEST_METHOD'];
+		$this->METHOD = $_SERVER['REQUEST_METHOD'];
     }
 
     public function SQLConnection($config) {
         try {
-            if (!isset($config['mysql'])) {
-					throw new \Exception("Mysql config error: no config found", 1);
+            if (empty($config['mysql'] ?? $config['database'])) {
+					throw new \Exception("Database config error: no config found", 1);
             }
-				$this->Database = new Connection($config['mysql']);
+			$dbs = $config['mysql'] ?? $config['database'];
+			switch ($dbs['driver']) {
+				default :
+				case 'mysql' :
+				case 'mysqli':
+					$this->Database =  new Connection($dbs); break;
+				case 'pdo':
+					$this->Database = new ConnectionPDO($dbs); break;
+				case 'odbc':
+					$this->Database = new ConnectionODBC($dbs); break;
+			}
         } catch (\Exception $e) {
             $error['response'] = $e->getMessage();
             echo json_encode($error);
