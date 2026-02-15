@@ -186,7 +186,10 @@ class Form {
 					$data[$pk] = $this->sanitize == true ? filter_var($data[$pk],FILTER_SANITIZE_SPECIAL_CHARS) : $data[$pk];
 					$where .= " and `{$pk}` = '". $this->Database->escape_string($data[$pk]) ."'";
 				}
-				if ($data[$pk] and $method != 'REPLACE') { $method = 'UPDATE';  }
+				if ($data[$pk] and $method != 'REPLACE') { 
+					// $method = $method || 'UPDATE';  
+					$method = 'DUPLICATEUPDATE';
+				}
 			}
  			switch($method) {
 				default :
@@ -210,8 +213,9 @@ class Form {
 					$ID = $data[$pk];
 				break;
 			}
-			// $this->error = $SQL;
+			// echo $method." = ".$SQL."\n";
 			if ($this->Database->query($SQL)) {
+				// $this->error = $SQL;
 				$ID = $ID ? $ID : $this->Database->insert_id();
 				return $ID;
 			} else {
