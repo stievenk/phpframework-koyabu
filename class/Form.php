@@ -204,6 +204,11 @@ class Form {
 					$SQL = "REPLACE INTO `{$table}` SET ". implode(", ",$ffl) ."";	
 					$ID = $data[$pk];
 					break;
+				case 'DUPLICATEUPDATE' :
+				case 'INSERTUPDATE' :
+					$SQL = "INSERT INTO `{$table}` SET ". implode(", ",$ffl) . " ON DUPLICATE KEY UPDATE ". implode(", ",$ffl) ."";
+					$ID = $data[$pk];
+				break;
 			}
 			// $this->error = $SQL;
 			if ($this->Database->query($SQL)) {
