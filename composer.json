@@ -36,7 +36,8 @@
         "koyabu/validator": "*",
         "phpoffice/phpspreadsheet": "*",
         "nikic/php-parser": "^5.5",
-        "spatie/ssh": "dev-main"
+        "spatie/ssh": "dev-main",
+        "cboden/ratchet": "0.4.x-dev"
     },
     "minimum-stability": "dev",
     "prefer-stable": false
