@@ -235,7 +235,12 @@ class Connection {
 
         if (!$stmt) return false;
 
-        return $stmt->get_result();
+        if (method_exists($stmt,'get_result')) {
+			return $stmt->get_result();
+		}
+
+		$stmt->store_result();
+		return $stmt;
     }
 
 

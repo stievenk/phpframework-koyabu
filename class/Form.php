@@ -405,6 +405,14 @@ class Form {
 				foreach($d as $v) {
 					echo '<option value="'.trim($v).'" '. ($default == trim($v) ? 'selected' : '') .'>'.trim($v).'</option>';
 				}
+			} else if (strtoupper($option) == 'MONTH') {
+				for($i = 1; $i <= 12; $i++) {
+					echo '<option value="'.$i.'" '. ($default == $i ? 'selected' : '') .'>'.date("M",mktime(0,0,0,$i,1,date(("Y")))).'</option>';
+				}
+			} else if (strtoupper($option) == 'DAY') {
+				for($i = 1; $i <= 31; $i++) {
+					echo '<option value="'.$i.'" '. ($default == $i ? 'selected' : '') .'>'.date("d",mktime(0,0,0,0,$i,date(("Y")))).'</option>';
+				}
 			}
 		}
 	}

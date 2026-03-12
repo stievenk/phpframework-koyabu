@@ -13,5 +13,5 @@ If your get error about minimum-stability, edit your ```composer.json```
 }
 ```
 
-## Version 8.2.0
+## Version 8.2.x
 Currently Working
