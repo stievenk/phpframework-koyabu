@@ -725,6 +725,7 @@ class Form {
 
 	// detik  -> jam:mnt:dtk
 	function SecTimeStamp($time) {
+		$h = '';
 		$hari = floor($time / 3600 / 24);
 		if ($hari > 0) {
 			$h = "{$hari}d ";
