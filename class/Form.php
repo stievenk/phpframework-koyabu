@@ -13,7 +13,7 @@ use chillerlan\QRCode\Output\QROutputInterface;
  * Author: stieven.kalengkian@gmail.com
 */
 class Form {
-    public $Version = '8.2.1';
+    public $Version = '8.2.2';
     public $Database;
     public $config;
     public $error;
