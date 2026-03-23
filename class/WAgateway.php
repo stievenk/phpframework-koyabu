@@ -18,12 +18,12 @@ class WAgateway {
       if ($method == 'POST') {
          return $this->runPost($URL,['session' => $session_name]);
       } else {
-         return $this->runPost($URL.'?session='.$session_name);
+         return $this->run($URL.'?session='.$session_name);
       }
    }
 
    function checkSession($session_name) {
-      $URL = $this->WebURI . '/session/check?session='.$session_name;
+      $URL = $this->WebURI . '/session';
       return $this->run($URL);
    }
 
