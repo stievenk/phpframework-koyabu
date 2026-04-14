@@ -13,7 +13,7 @@ use chillerlan\QRCode\Output\QROutputInterface;
  * Author: stieven.kalengkian@gmail.com
 */
 class Form {
-    public $Version = '8.2.1';
+    public $Version = '8.2.2';
     public $Database;
     public $config;
     public $error;
@@ -213,9 +213,8 @@ class Form {
 					$ID = $data[$pk];
 				break;
 			}
-			// echo $method." = ".$SQL."\n";
+		
 			if ($this->Database->query($SQL)) {
-				// $this->error = $SQL;
 				$ID = $ID ? $ID : $this->Database->insert_id();
 				return $ID;
 			} else {
@@ -404,6 +403,14 @@ class Form {
 				$d = explode(";",$option);
 				foreach($d as $v) {
 					echo '<option value="'.trim($v).'" '. ($default == trim($v) ? 'selected' : '') .'>'.trim($v).'</option>';
+				}
+			} else if (strtoupper($option) == 'MONTH') {
+				for($i = 1; $i <= 12; $i++) {
+					echo '<option value="'.$i.'" '. ($default == $i ? 'selected' : '') .'>'.date("M",mktime(0,0,0,$i,1,date(("Y")))).'</option>';
+				}
+			} else if (strtoupper($option) == 'DAY') {
+				for($i = 1; $i <= 31; $i++) {
+					echo '<option value="'.$i.'" '. ($default == $i ? 'selected' : '') .'>'.date("d",mktime(0,0,0,0,$i,date(("Y")))).'</option>';
 				}
 			}
 		}
@@ -650,16 +657,6 @@ class Form {
 		return true;
 	}
 
-	function numberShort($num,$lan = 'ID') {
-		if ($num >= 1000000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'Ki' : 'Qi'); }
-		else if ($num >= 1000000000000000) { return round($num / 1000000000000000,2). ($lan == 'ID' ? 'K' : 'Q'); }
-		else if ($num >= 1000000000000) { return round($num / 1000000000000,2). ($lan == 'ID' ? 'T' : 'T'); }
-		else if ($num >= 1000000000) { return round($num / 1000000000,2).($lan == 'ID' ? 'M' : 'B'); }
-		else if ($num >= 1000000) { return round($num / 1000000,2).($lan == 'ID' ? 'Jt' : 'M'); }
-		else if ($num >= 1000) { return round($num / 1000,2).($lan == 'ID' ? 'Rb' : 'K'); }
-		else return $num;
-	}
-
 	public function normalize_str($str,$remove_space = 0) {
 		if (trim($str)) {
 			$str = strip_tags($str);
@@ -705,7 +702,8 @@ class Form {
 		$d = $R * $c; // Distance in km
 		return $d;
 	}
-	  
+	
+	// time Y-m-d H:i:s to -> x hari/jam/menit/detik
 	function timeShort($u) {
 		$c = strtotime($u);
 		$n = date("U");
@@ -714,6 +712,7 @@ class Form {
 		return $this->timeToShort($time);
 	}
 	
+	// Detik -> x hari/jam/menit/detik
 	function timeToShort($time) {
 		if ($time > (3600 * 24)) { $d = ceil($time / (3600 * 24)) ." hari"; }
 		else if ($time > (3600)) { $d = ceil($time / 3600) ." jam"; }
@@ -723,7 +722,9 @@ class Form {
 		return $d;
 	}
 
+	// detik  -> jam:mnt:dtk
 	function SecTimeStamp($time) {
+		$h = '';
 		$hari = floor($time / 3600 / 24);
 		if ($hari > 0) {
 			$h = "{$hari}d ";
@@ -736,7 +737,8 @@ class Form {
 
 		return "{$h}". str_pad($jam,2,'0',STR_PAD_LEFT).":".str_pad($menit,2,'0',STR_PAD_LEFT).":".str_pad($time,2,'0',STR_PAD_LEFT)."";
 	}
-
+	
+	// Hitung umur dari tanggal lahir
 	function umur($tgl) {
 		$tgl = date("Y-m-d",strtotime($tgl));
 		list($y,$m,$d)=explode("-",$tgl);
@@ -744,6 +746,33 @@ class Form {
 		if ($m > date("m")) { $umur = $umur - 1; }
 		if ($m == date("m") and $d > date("d")) { $umur = $umur - 1; }
 		return $umur;
+	}
+	
+	// detik -> x Tahun x Bulan x Hari x Jam x Menit x Detik
+	function formatWaktu($detik) {
+		if ($detik < 0) return "Minus " . formatWaktu(abs($detik));
+		if ($detik == 0) return "0 Detik";
+
+		$satuan = array(
+			'Tahun' => 365 * 24 * 60 * 60,
+			'Bulan' => 30 * 24 * 60 * 60,
+			'Hari'  => 24 * 60 * 60,
+			'Jam'   => 60 * 60,
+			'Menit' => 60,
+			'Detik' => 1
+		);
+
+		$hasil = array();
+
+		foreach ($satuan as $nama => $nilai_satuan) {
+			if ($detik >= $nilai_satuan) {
+				$jumlah = floor($detik / $nilai_satuan);
+				$detik %= $nilai_satuan;
+				$hasil[] = "$jumlah $nama";
+			}
+		}
+
+		return implode(' ', $hasil);
 	}
 
     public function cekKTP($nik,$tanggal_lahir){
@@ -1054,49 +1083,12 @@ class Form {
 		return $out;
 	}
 
-
-	
 	public function table_exists($table) {
 		$g = $this->query("show tables like '{$table}'");
 		$t = $this->fetch($g,'row');
 		return $t[0] > 0 ? true : false;
 	}
 	
-	public function debug($m,$file='',$line='') {
-			$text = "[".date("Y-m-d H:i:s")."] {$m} ({$file} on line {$line})\n";
-			if (!$this->table_exists('z_debug')) {
-				$this->query("CREATE TABLE if not exists  `z_debug` (
-					`id` bigint(15)NOT NULL AUTO_INCREMENT,
-					`tanggal` datetime NULL DEFAULT NULL,
-					`logtext` text  NULL DEFAULT NULL,
-					`filename` varchar(250)  NULL DEFAULT NULL,
-					`line` char(10)  NULL DEFAULT NULL,
-					  PRIMARY KEY  (`id`)
-				) Engine = MyISAM;");
-			}
-			if (trim($m)) {
-				$this->save([
-					'tanggal' => date("Y-m-d H:i:s"),
-					'logtext' => $m,
-					'filename' => $file,
-					'line' => $line
-				],'z_debug');
-
-				if ($this->debugSaveToFile == true) {
-					if ($this->debugPathFile and file_exists($this->debugPathFile)) {
-						$debug = file_get_contents($this->debugPathFile);
-						file_put_contents($this->debugPathFile,"{$text}{$debug}");
-					} else {
-						file_put_contents($this->debugPathFile,$text);
-					}
-				}
-
-				if ($this->debugShow == true) {
-					echo $text;
-				}
-			}
-	}
-
 	function GetDirectorySize($path){
 		$bytestotal = 0;
 		$path = realpath($path);
@@ -1172,6 +1164,170 @@ class Form {
 			$this->debug($this->error,__FILE__,__LINE__);
 			return false;
 		}
+	}
+	
+	function numberShort($num, $lan = 'ID', $decnum = 1, $tipe = 'SHORT', $currency = '') {
+		$is_negative = $num < 0;
+		$num = abs($num);
+		
+		// Tentukan prefix (Simbol Mata Uang + Tanda Negatif)
+		$symbol = $currency !== '' ? $currency . ' ' : '';
+		$prefix = $is_negative ? '-' . $symbol : $symbol;
+
+		$units = [
+			[1000000000000000000, 'ID' => ['Ki', ' Kuintiliun'], 'EN' => ['Qi', ' Quintillion']],
+			[1000000000000000,    'ID' => ['Kd', ' Kuadriliun'], 'EN' => ['Q', ' Quadrillion']],
+			[1000000000000,       'ID' => ['Tr', ' Triliun'],    'EN' => ['T', ' Trillion']],
+			[1000000000,          'ID' => ['Ml', ' Miliar'],     'EN' => ['B', ' Billion']],
+			[1000000,             'ID' => ['Jt', ' Juta'],       'EN' => ['M', ' Million']],
+			[1000,                'ID' => ['Rb', ' Ribu'],       'EN' => ['K', ' Thousand']],
+		];
+
+		foreach ($units as $unit) {
+			$value = $unit[0];
+			if ($num >= $value) {
+				$names = $unit[$lan];
+				$label = ($tipe == 'SHORT') ? $names[0] : $names[1];
+				
+				// Format angka dengan desimal yang ditentukan
+				$formatted = number_format($num / $value, $decnum, '.', ',');
+				
+				// Bersihkan .00 jika tidak diperlukan (Opsional)
+				$formatted = rtrim(rtrim($formatted, '0'), '.');
+
+				return $prefix . $formatted . $label;
+			}
+		}
+
+		// Jika angka di bawah 1000, tetap tampilkan desimal jika ada
+		return $prefix . number_format($num, ($num == floor($num) ? 0 : $decnum), '.', ',');
+	}
+
+
+	private function penyebut($nilai) {
+		$nilai = abs((float) $nilai);
+		$huruf = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+		$temp = "";
+		
+		if ($nilai < 12) {
+			$temp = " ". $huruf[$nilai];
+		} else if ($nilai < 20) {
+			$temp = $this->penyebut($nilai - 10). " belas";
+		} else if ($nilai < 100) {
+			$temp = $this->penyebut($nilai/10)." puluh". $this->penyebut($nilai % 10);
+		} else if ($nilai < 200) {
+			$temp = " seratus" . $this->penyebut($nilai - 100);
+		} else if ($nilai < 1000) {
+			$temp = $this->penyebut($nilai/100) . " ratus" . $this->penyebut($nilai % 100);
+		} else if ($nilai < 2000) {
+			$temp = " seribu" . $this->penyebut($nilai - 1000);
+		} else if ($nilai < 1000000) {
+			$temp = $this->penyebut($nilai/1000) . " ribu" . $this->penyebut($nilai % 1000);
+		} else if ($nilai < 1000000000) {
+			$temp = $this->penyebut($nilai/1000000) . " juta" . $this->penyebut($nilai % 1000000);
+		} else if ($nilai < 1000000000000) {
+			$temp = $this->penyebut($nilai/1000000000) . " miliar" . $this->penyebut($nilai % 1000000000);
+		} else if ($nilai < 1000000000000000) {
+			$temp = $this->penyebut($nilai/1000000000000) . " triliun" . $this->penyebut($nilai % 1000000000000);
+		}     
+		return $temp;
+	}
+
+	public function terbilang($nilai) {
+		if($nilai < 0) {
+			$hasil = "minus ". trim($this->penyebut($nilai));
+		} else {
+			$hasil = trim($this->penyebut($nilai));
+		}
+		
+		// Logika Desimal (Koma)
+		if (fmod($nilai, 1) !== 0.0) {
+			$hasil .= " koma";
+			
+			// Ambil angka di belakang koma saja
+			$str_nilai = (string)$nilai;
+			$bagian_desimal = explode('.', $str_nilai)[1];
+			$arr_desimal = str_split($bagian_desimal);
+			$huruf_desimal = array("nol", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan");
+			
+			foreach ($arr_desimal as $digit) {
+				$hasil .= " " . $huruf_desimal[$digit];
+			}
+		}
+		
+		return $hasil;
+	}
+
+	public function normalizePhoneNumber($number) {
+		// hapus spasi, strip, dll
+		$number = preg_replace('/[^0-9]/', '', $number);
+
+		// jika diawali 08 -> ubah ke 628
+		if (str_starts_with($number, '08')) {
+			return '628' . substr($number, 2);
+		}
+
+		// jika diawali 8 (kadang user tulis tanpa 0) -> ubah ke 628
+		if (str_starts_with($number, '8')) {
+			return '628' . substr($number, 1);
+		}
+
+		// jika diawali 628 -> sudah benar
+		if (str_starts_with($number, '628')) {
+			return $number;
+		}
+
+		return null;
+	}
+
+	public function start_transaction() {
+		$this->Database->start_transaction();
+	}
+
+	public function commit_transaction() {
+		$this->Database->commit_transaction();
+	}
+
+	public function rollback_transaction() {
+		$this->Database->rollback_transaction();
+	}
+
+
+	public function debug($m,$file='',$line='') {
+			$text = "[".date("Y-m-d H:i:s")."][{$_SERVER['REMOTE_ADDR']}] {$m} ({$file} on line {$line})\n";
+			if (!$this->table_exists('z_debug')) {
+				$this->query("CREATE TABLE if not exists  `z_debug` (
+					`id` bigint(15)NOT NULL AUTO_INCREMENT,
+					`tanggal` datetime NULL DEFAULT current_timestamp(),
+					`logtext` longtext  NULL DEFAULT NULL,
+					`ipaddress` varchar(250) NULL DEFAULT NULL,
+					`filename` varchar(250)  NULL DEFAULT NULL,
+					`line` char(10)  NULL DEFAULT NULL,
+					  PRIMARY KEY  (`id`)
+				) Engine = MyISAM;");
+			}
+			if (trim($m)) {
+				$this->save([
+					'tanggal' => date("Y-m-d H:i:s"),
+					'logtext' => $m,
+					'filename' => $file,
+					'ipaddress' => $_SERVER['REMOTE_ADDR'] ?? 'NULL',
+					'line' => $line
+				],'z_debug');
+
+				if ($this->debugSaveToFile == true) {
+					if ($this->debugPathFile and file_exists($this->debugPathFile)) {
+						$debug = file_get_contents($this->debugPathFile);
+						file_put_contents($this->debugPathFile,"{$text}{$debug}");
+					} else {
+						file_put_contents($this->debugPathFile,$text);
+					}
+				}
+
+				if ($this->debugShow == true) {
+					echo $text;
+				}
+			}
 	}
 
 	function __destruct() {
