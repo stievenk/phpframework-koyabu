@@ -266,6 +266,18 @@ class Connection {
        TRANSACTION SAFE
        ============================= */
 
+    public function start_transaction() {
+		$this->conn->begin_transaction();
+	}
+
+	public function commit_transaction() {
+		$this->conn->commit();
+	}
+
+	public function rollback_transaction() {
+		$this->conn->rollback();
+	}
+
     public function transaction($callback) {
 
         try {

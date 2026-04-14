@@ -1263,23 +1263,36 @@ class Form {
 		// hapus spasi, strip, dll
 		$number = preg_replace('/[^0-9]/', '', $number);
 
-		// jika diawali 08 → ubah ke 628
+		// jika diawali 08 -> ubah ke 628
 		if (str_starts_with($number, '08')) {
 			return '628' . substr($number, 2);
 		}
 
-		// jika diawali 8 (kadang user tulis tanpa 0)
+		// jika diawali 8 (kadang user tulis tanpa 0) -> ubah ke 628
 		if (str_starts_with($number, '8')) {
 			return '628' . substr($number, 1);
 		}
 
-		// jika diawali 628 → sudah benar
+		// jika diawali 628 -> sudah benar
 		if (str_starts_with($number, '628')) {
 			return $number;
 		}
 
-		return $number;
+		return null;
 	}
+
+	public function start_transaction() {
+		$this->Database->start_transaction();
+	}
+
+	public function commit_transaction() {
+		$this->Database->commit_transaction();
+	}
+
+	public function rollback_transaction() {
+		$this->Database->rollback_transaction();
+	}
+
 
 	public function debug($m,$file='',$line='') {
 			$text = "[".date("Y-m-d H:i:s")."][{$_SERVER['REMOTE_ADDR']}] {$m} ({$file} on line {$line})\n";
