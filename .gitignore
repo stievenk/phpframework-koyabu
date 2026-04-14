@@ -5,3 +5,4 @@ test*
 .phpdoc/
 00/
 composer.lock*
+test*
