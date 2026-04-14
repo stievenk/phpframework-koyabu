@@ -4,3 +4,4 @@ config.php
 test*
 .phpdoc/
 00/
+composer.lock*

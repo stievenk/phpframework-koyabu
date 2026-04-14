@@ -3,7 +3,7 @@
     "description": "Koyabu API Framework",
     "type": "library",
     "homepage": "https://github.com/stievenk/phpframework-koyabu",
-    "version": "8.2.1",
+    "version": "8.2.2",
     "license":"MIT",
     "autoload": {
         "psr-4": {
@@ -21,9 +21,12 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.3",
         "ext-curl": "*",
         "ext-json": "*",
+        "ext-imagick": "*",
+        "ext-gd": "*",
+        "ext-mysqli": "*",       
         "google/apiclient": "^2.0@dev",
         "phpmailer/phpmailer": ">=6.10",
         "midtrans/midtrans-php": ">=2.5",
