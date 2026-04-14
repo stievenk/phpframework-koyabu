@@ -213,9 +213,8 @@ class Form {
 					$ID = $data[$pk];
 				break;
 			}
-			// echo $method." = ".$SQL."\n";
+		
 			if ($this->Database->query($SQL)) {
-				// $this->error = $SQL;
 				$ID = $ID ? $ID : $this->Database->insert_id();
 				return $ID;
 			} else {
