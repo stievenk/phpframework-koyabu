@@ -37,7 +37,7 @@ class Connection {
                 $qry = $this->conn->query($query);
                 if ($qry) { return $qry; } else {
                     throw new \Exception($this->conn->error, 1);
-                    return false;
+                    // return false;
                 }
             }
         } catch (\Exception $e) {

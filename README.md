@@ -5,9 +5,9 @@
 **Koyabu Framework** adalah library PHP utilitas yang dirancang untuk mempercepat pengembangan aplikasi web melalui abstraksi database, pengolahan gambar, manajemen waktu, dan integrasi API pihak ketiga seperti Dropbox, QR Code, dan Google 2FA.
 
 ## Informasi Versi
-* **Versi Core**: 8.2.5
+* **Versi Core**: 8.2.2
 * **Terakhir Diperbarui**: 14 April 2026
-* **Kebutuhan Minimum**: PHP 8.1+
+* **Kebutuhan Minimum**: PHP 8.3+
 * **Rekomendasi Database**: MariaDB 10+ atau MySQL 8+
 
 ---
@@ -83,7 +83,15 @@ echo $form->formatWaktu(90061);
 
 ## Instalasi
 ```bash
-composer require koyabu/webapi:^v8.2.5
+composer require koyabu/webapi:^v8.2.2
+```
+
+### composer.json
+```json
+{
+    "minimum-stability": "dev",
+    "prefer-stable": false
+}
 ```
 
 **Author**: stieven.kalengkian@gmail.com

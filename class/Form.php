@@ -6,9 +6,9 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\Output\QROutputInterface;
 /** 
  * Koyabu Framework
- * version: 8.2.5
- * last update: 9 December 2025
- * min-require: PHP 8.1 
+ * version: 8.2.2
+ * last update: 14 April 2026
+ * min-require: PHP 8.3+ 
  * MariaDB: 10+ (recommended) or MySQL : 8+
  * Author: stieven.kalengkian@gmail.com
 */
@@ -655,6 +655,136 @@ class Form {
 		
 		imagedestroy($targetImage);
 		return true;
+	}
+	
+	public function fileUpload($params)
+	{
+		$files          = $params['files'] ?? $_FILES;
+		$max_size       = $params['max_size'] ?? 2000000; // default 2MB
+		$target_upload  = $params['target_upload'] ?? 'uploads/';
+		$unique_name    = $params['unique_name'] ?? false;
+		$overwrite      = $params['overwrite'] ?? true;
+		$type_allow     = $params['type_allow'] ?? ['jpg','jpeg','png','pdf'];
+		$input_name     = $params['input_name'] ?? null;
+		
+		// MIME mapping (lengkap + audio & video)
+		$mime_allow_map = [
+
+			// ===== IMAGE =====
+			'jpg'  => ['image/jpeg'],
+			'jpeg' => ['image/jpeg'],
+			'png'  => ['image/png'],
+			'gif'  => ['image/gif'],
+			'webp' => ['image/webp'],
+
+			// ===== DOCUMENT =====
+			'pdf'  => ['application/pdf'],
+			'doc'  => ['application/msword'],
+			'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+			'xls'  => ['application/vnd.ms-excel'],
+			'xlsx' => ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+			'ppt'  => ['application/vnd.ms-powerpoint'],
+			'pptx' => ['application/vnd.openxmlformats-officedocument.presentationml.presentation'],
+			'txt'  => ['text/plain'],
+			'csv'  => ['text/csv'],
+
+			// ===== ARCHIVE =====
+			'zip'  => ['application/zip'],
+			'rar'  => ['application/x-rar-compressed'],
+
+			// ===== AUDIO =====
+			'mp3'  => ['audio/mpeg'],
+			'wav'  => ['audio/wav','audio/x-wav'],
+			'ogg'  => ['audio/ogg'],
+			'm4a'  => ['audio/mp4','audio/x-m4a'],
+			'aac'  => ['audio/aac'],
+			'flac' => ['audio/flac'],
+
+			// ===== VIDEO =====
+			'mp4'  => ['video/mp4'],
+			'mkv'  => ['video/x-matroska'],
+			'avi'  => ['video/x-msvideo'],
+			'mov'  => ['video/quicktime'],
+			'wmv'  => ['video/x-ms-wmv'],
+			'webm' => ['video/webm'],
+			'3gp'  => ['video/3gpp']
+		];
+
+		// pastikan folder ada
+		if (!is_dir($target_upload)) {
+			mkdir($target_upload, 0755, true);
+		}
+
+		if ($input_name && isset($files[$input_name])) {
+			$file = $files[$input_name];
+		} else {
+			$file = reset($files);
+		}
+
+		if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
+			throw new Exception('Upload file gagal');
+		}
+
+		// validasi size
+		if ($file['size'] > $max_size) {
+			throw new Exception('Ukuran file terlalu besar');
+		}
+
+		// ambil extension
+		$ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+		// ambil MIME type asli
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mime  = finfo_file($finfo, $file['tmp_name']);
+		finfo_close($finfo);
+
+		// validasi type
+		if (!in_array('all', $type_allow)) {
+
+			if (!in_array($ext, $type_allow)) {
+				throw new Exception('Extension tidak diizinkan');
+			}
+
+			// cek MIME cocok dengan extension
+			if (isset($mime_allow_map[$ext])) {
+				if (!in_array($mime, $mime_allow_map[$ext])) {
+					throw new Exception('MIME type tidak valid / file palsu');
+				}
+			}
+		}
+
+		// nama file
+		if ($unique_name) {
+			$clean_name = preg_replace("/[^a-zA-Z0-9]/", "_", pathinfo($file['name'], PATHINFO_FILENAME));
+			$filename = $clean_name . '_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+		} else {
+			$filename = basename($file['name']);
+		}
+
+		$target_file = rtrim($target_upload, '/') . '/' . $filename;
+
+		// overwrite check
+		if (!$overwrite && file_exists($target_file)) {
+			throw new Exception('File sudah ada');
+		}
+
+		// upload
+		if (!move_uploaded_file($file['tmp_name'], $target_file)) {
+			throw new Exception('Gagal menyimpan file');
+		}
+
+		if (is_array($params['resize'])) {
+			$params['resize']['file'] = $target_file;
+			$this->resizeAndWatermarkImage($params['resize']);
+		}
+
+		return [
+			'path' => $target_file,
+			'name' => $filename,
+			'size' => $file['size'],
+			'mime' => $mime,
+			'ext'  => $ext
+		];
 	}
 
 	public function normalize_str($str,$remove_space = 0) {
