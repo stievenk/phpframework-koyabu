@@ -95,7 +95,12 @@ class Connection {
     }
 
     public function escape_string($string) {
-        return $this->conn->real_escape_string($string);
+        if (is_array($string)) {
+            return array_map([$this, 'escape_string'], $string);
+        }
+        
+        // Pastikan nilai dikonversi ke string sebelum di-escape
+        return $this->conn->real_escape_string((string) $string);
     }
 
 

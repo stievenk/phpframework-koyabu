@@ -312,10 +312,16 @@ class Form {
 	}
 
 	function escape_string($data) {
+		if (is_array($data)) {
+			return $data;
+		}
 		return $this->Database->escape_string($data);
 	}
 
 	function escstr($data) {
+		if (is_array($data)) {
+			return $data;
+		}
 		return $this->Database->escape_string($data);
 	}
 
