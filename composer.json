@@ -24,7 +24,6 @@
         "php": ">=8.3",
         "ext-curl": "*",
         "ext-json": "*",
-        "ext-imagick": "*",
         "ext-gd": "*",
         "ext-mysqli": "*",       
         "google/apiclient": "^2.0@dev",
@@ -41,7 +40,9 @@
         "nikic/php-parser": "^5.5",
         "spatie/ssh": "dev-main",
         "cboden/ratchet": "0.4.x-dev",
-        "kreait/firebase-php": "8.x-dev"
+        "kreait/firebase-php": "8.x-dev",
+        "koyabu/dropboxapi": "dev-master",
+        "koyabu/googledriveapi": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": false

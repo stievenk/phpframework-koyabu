@@ -1,5 +1,6 @@
 <?php
 namespace Koyabu\Webapi;
+use Exception;
 use Koyabu\Webapi;
 use chillerlan\QRCode\QROptions;
 use chillerlan\QRCode\QRCode;
@@ -672,6 +673,7 @@ class Form {
 		$overwrite      = $params['overwrite'] ?? true;
 		$type_allow     = $params['type_allow'] ?? ['jpg','jpeg','png','pdf'];
 		$input_name     = $params['input_name'] ?? null;
+		$custom_name	= $params['custom_name'] ?? null;
 		
 		// MIME mapping (lengkap + audio & video)
 		$mime_allow_map = [
@@ -764,7 +766,7 @@ class Form {
 			$clean_name = preg_replace("/[^a-zA-Z0-9]/", "_", pathinfo($file['name'], PATHINFO_FILENAME));
 			$filename = $clean_name . '_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
 		} else {
-			$filename = basename($file['name']);
+			$filename = basename($custom_name ?? $file['name']);
 		}
 
 		$target_file = rtrim($target_upload, '/') . '/' . $filename;
@@ -779,7 +781,7 @@ class Form {
 			throw new Exception('Gagal menyimpan file');
 		}
 
-		if (is_array($params['resize'])) {
+		if (is_array($params['resize']) && str_starts_with($mime, 'image/')) {
 			$params['resize']['file'] = $target_file;
 			$this->resizeAndWatermarkImage($params['resize']);
 		}
