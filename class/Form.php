@@ -187,7 +187,7 @@ class Form {
 					$data[$pk] = $this->sanitize == true ? filter_var($data[$pk],FILTER_SANITIZE_SPECIAL_CHARS) : $data[$pk];
 					$where .= " and `{$pk}` = '". $this->Database->escape_string($data[$pk]) ."'";
 				}
-				if ($data[$pk] and $method != 'REPLACE') { 
+				if ($data[$pk] and  !in_array($method,['REPLACE','UPDATE'])) { 
 					// $method = $method || 'UPDATE';  
 					$method = 'DUPLICATEUPDATE';
 				}
