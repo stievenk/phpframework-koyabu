@@ -28,7 +28,7 @@ class Form {
     function __construct($config) {
         $this->config = $config;
         $this->SQLConnection($config);
-		$this->METHOD = $_SERVER['REQUEST_METHOD'];
+		$this->METHOD = $_SERVER['REQUEST_METHOD'] ?? '';
     }
 
     public function SQLConnection($config) {
@@ -37,6 +37,7 @@ class Form {
 					throw new \Exception("Database config error: no config found", 1);
             }
 			$dbs = $config['mysql'] ?? $config['database'];
+			$dbs['driver'] = $dbs['driver'] ?? 'mysql';
 			switch ($dbs['driver']) {
 				default :
 				case 'mysql' :
@@ -1432,6 +1433,9 @@ class Form {
 
 
 	public function debug($m,$file='',$line='') {
+			if (is_array($m)) {
+				$m = json_encode($m, JSON_PRETTY_PRINT);
+			}
 			$text = "[".date("Y-m-d H:i:s")."][{$_SERVER['REMOTE_ADDR']}] {$m} ({$file} on line {$line})\n";
 			if (!$this->table_exists('z_debug')) {
 				$this->query("CREATE TABLE if not exists  `z_debug` (
