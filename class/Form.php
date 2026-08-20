@@ -313,18 +313,38 @@ class Form {
 		} else { return false; }
 	}
 
-	function escape_string($data) {
+	function escape_string($data, $htmlspecialchar = false, $shell = false)
+	{
 		if (is_array($data)) {
+			foreach ($data as $key => $value) {
+				$data[$key] = $this->escape_string($value, $htmlspecialchar, $shell);
+			}
 			return $data;
 		}
-		return $this->Database->escape_string($data);
+
+		if ($data === null) {
+			return null;
+		}
+
+		$data = (string) $data;
+
+		if ($htmlspecialchar) {
+			$data = htmlspecialchars((string) $data,ENT_QUOTES | ENT_SUBSTITUTE,'UTF-8');
+		}
+
+		// SQL Injection protection
+		$data = $this->Database->escape_string($data);
+
+		// Shell Injection protection
+		if ($shell) {
+			$data = escapeshellarg($data);
+		}
+
+		return $data;
 	}
 
-	function escstr($data) {
-		if (is_array($data)) {
-			return $data;
-		}
-		return $this->Database->escape_string($data);
+	function escstr($data, $htmlspecialchar = false, $shell = false) {
+		return $this->escape_string($data, $htmlspecialchar, $shell);
 	}
 
 	function num($result) {
